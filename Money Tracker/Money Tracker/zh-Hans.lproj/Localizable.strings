@@ -1,0 +1,75 @@
+/*
+  Localizable.strings
+  Money Tracker
+
+  Created by Banghua Zhao on 10/5/20.
+
+*/
+
+"Add Transaction" = "添加记账";
+"All" = "全部";
+"Amount" = "金额";
+"Amount: High to Low" = "金额: 从高到低";
+"Amount: Low to High" = "金额: 从低到高";
+"Cancel" = "取消";
+"Car insurance" = "汽车保险";
+"Categories" = "类别";
+"Category" = "类别";
+"Choose a Transcation Detail" = "查看详细的记账信息";
+"Consumer Electronics" = "消费电子产品";
+"Date" = "日期";
+"Date: New to Old" = "日期: 由近到远";
+"Date: Old to New" = "日期: 由远到近";
+"Dividend from stock" = "股票分红";
+"Do you want to delete this transaction?" = "想要删除这条记账吗?";
+"Do you want to watch an advertisement to support this App?" = "想通过收看一条视频广告支持我们的App吗?";
+"Done" = "完成";
+"Edit Transaction" = "编辑记账";
+"Education" = "教育";
+"Entertainment" = "娱乐";
+"Expense" = "支出";
+"Feedback" = "反馈";
+"Flight to Silicon Valley" = "去硅谷的机票支出";
+"Food, snacks and fruits" = "食品，零食和水果";
+"Gift" = "礼物";
+"Grocery" = "日用品";
+"House Rent" = "房租";
+"Income" = "收入";
+"Insurance" = "保险";
+"Investment Income" = "投资收益";
+"List" = "列表";
+"Loading the advertisement" = "加载广告";
+"Medicine" = "药品";
+"Money Tracker" = "极简记账";
+"Net Worth" = "净资产";
+"New iPhone" = "新苹果手机";
+"Other Expense" = "其他支出";
+"Other Income" = "其他收入";
+"Payment for an article" = "稿费";
+"Pick Date" = "选择日期";
+"Pie Chart" = "饼图";
+"Pie Chart (Expense)" = "饼图 (支出)";
+"Pie Chart (Income)" = "饼图 (收入)";
+"Rate the App" = "给App评分";
+"Restaurant" = "餐馆";
+"Salary" = "工资";
+"Search a transaction" = "搜索记账";
+"Select a Category" = "选择类别";
+"Settings" = "Settings";
+"Share the App" = "分享App";
+"Sort By" = "排序";
+"Support the App" = "支持这个App";
+"Support this App" = "支持这个App";
+"Thanks for Your Support!" = "谢谢你的支持!";
+"Transaction Description" = "记账描述";
+"Transactions" = "记账";
+"Transportation" = "通勤";
+"Travel" = "旅游";
+"Travel to Hawaii" = "到夏威夷旅游";
+"Type" = "类型";
+"Watched a new moive" = "观看新上映的电影";
+"We will constantly optimize and maintain our App and make sure users have the best experience." = "我们的团队会持续优化APP，确保用户得到最好的使用体验.";
+"Yes" = "是的";
+"clothes and vegetable" = "衣服和蔬菜";
+"Change currency symbol" = "改变货币符号";
+"Currencies" = "货币";

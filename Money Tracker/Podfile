@@ -1,0 +1,23 @@
+# Uncomment the next line to define a global platform for your project
+# platform :ios, '13.0'
+
+target 'Money Tracker' do
+  # Comment the next line if you don't want to use dynamic frameworks
+  use_frameworks!
+
+  pod 'Hue'
+  pod 'Localize-Swift', '~> 2.0'
+  pod 'Google-Mobile-Ads-SDK'
+  pod 'SnapKit', '~> 5.0.0'
+  pod 'Then'
+  pod 'SwiftDate', '~> 5.0'
+  pod 'SVProgressHUD'
+  pod 'IQKeyboardManagerSwift'
+  pod "Sheeeeeeeeet"
+  pod 'DatePickerDialog'
+  pod 'AAInfographics', :git => 'https://github.com/AAChartModel/AAChartKit-Swift.git'
+  pod 'Bugly'
+
+  # Pods for Financial Statements Go
+
+end

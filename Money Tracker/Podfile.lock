@@ -1,0 +1,102 @@
+PODS:
+  - AAInfographics (5.0.3)
+  - Bugly (2.5.2)
+  - DatePickerDialog (3.0)
+  - Google-Mobile-Ads-SDK (7.53.1):
+    - GoogleAppMeasurement (~> 6.0)
+  - GoogleAppMeasurement (6.1.7):
+    - GoogleUtilities/AppDelegateSwizzler (~> 6.0)
+    - GoogleUtilities/MethodSwizzler (~> 6.0)
+    - GoogleUtilities/Network (~> 6.0)
+    - "GoogleUtilities/NSData+zlib (~> 6.0)"
+    - nanopb (= 0.3.9011)
+  - GoogleUtilities/AppDelegateSwizzler (6.4.0):
+    - GoogleUtilities/Environment
+    - GoogleUtilities/Logger
+    - GoogleUtilities/Network
+  - GoogleUtilities/Environment (6.4.0)
+  - GoogleUtilities/Logger (6.4.0):
+    - GoogleUtilities/Environment
+  - GoogleUtilities/MethodSwizzler (6.4.0):
+    - GoogleUtilities/Logger
+  - GoogleUtilities/Network (6.4.0):
+    - GoogleUtilities/Logger
+    - "GoogleUtilities/NSData+zlib"
+    - GoogleUtilities/Reachability
+  - "GoogleUtilities/NSData+zlib (6.4.0)"
+  - GoogleUtilities/Reachability (6.4.0):
+    - GoogleUtilities/Logger
+  - Hue (5.0.0)
+  - IQKeyboardManagerSwift (6.5.4)
+  - Localize-Swift (2.0.0)
+  - nanopb (0.3.9011):
+    - nanopb/decode (= 0.3.9011)
+    - nanopb/encode (= 0.3.9011)
+  - nanopb/decode (0.3.9011)
+  - nanopb/encode (0.3.9011)
+  - Sheeeeeeeeet (3.1.2)
+  - SnapKit (5.0.1)
+  - SVProgressHUD (2.2.5)
+  - SwiftDate (5.1.0)
+  - Then (2.6.0)
+
+DEPENDENCIES:
+  - AAInfographics (from `https://github.com/AAChartModel/AAChartKit-Swift.git`)
+  - Bugly
+  - DatePickerDialog
+  - Google-Mobile-Ads-SDK
+  - Hue
+  - IQKeyboardManagerSwift
+  - Localize-Swift (~> 2.0)
+  - Sheeeeeeeeet
+  - SnapKit (~> 5.0.0)
+  - SVProgressHUD
+  - SwiftDate (~> 5.0)
+  - Then
+
+SPEC REPOS:
+  trunk:
+    - Bugly
+    - DatePickerDialog
+    - Google-Mobile-Ads-SDK
+    - GoogleAppMeasurement
+    - GoogleUtilities
+    - Hue
+    - IQKeyboardManagerSwift
+    - Localize-Swift
+    - nanopb
+    - Sheeeeeeeeet
+    - SnapKit
+    - SVProgressHUD
+    - SwiftDate
+    - Then
+
+EXTERNAL SOURCES:
+  AAInfographics:
+    :git: https://github.com/AAChartModel/AAChartKit-Swift.git
+
+CHECKOUT OPTIONS:
+  AAInfographics:
+    :commit: 08d458e70178771fffa6dc416dc8711ef14b7084
+    :git: https://github.com/AAChartModel/AAChartKit-Swift.git
+
+SPEC CHECKSUMS:
+  AAInfographics: 7e0fdd1afab38f77539364cbef8380b22110478d
+  Bugly: dbac48b55ad469a97cc4321045cd50df8f63d44f
+  DatePickerDialog: 03dbb8350bfa80302ab2a8c83cee1fec70184444
+  Google-Mobile-Ads-SDK: fac081606dbd438d8db57198b83ba8b5f875a601
+  GoogleAppMeasurement: db118eb61a97dd8c4f7014e368d3c335cbbcf80a
+  GoogleUtilities: 29bd0d8f850efbd28cff6d99e8b7da1f8d236bcf
+  Hue: c129cb67be7d093a82bbbc30ce8a96757bf6f37a
+  IQKeyboardManagerSwift: 2dde0fc70110e8eac7ccce2a46fdbec6a850b414
+  Localize-Swift: c798ec9286494866f7068f85f7c71283ac5bdab4
+  nanopb: 18003b5e52dab79db540fe93fe9579f399bd1ccd
+  Sheeeeeeeeet: 32140933792b9cf3928d306af71ba9dd9edc9b9d
+  SnapKit: 97b92857e3df3a0c71833cce143274bf6ef8e5eb
+  SVProgressHUD: 1428aafac632c1f86f62aa4243ec12008d7a51d6
+  SwiftDate: 6329e58969a2de31cea7f1ee1143b247693196e7
+  Then: 90cd104fd951cec1980a03f57704ad8f784d4d79
+
+PODFILE CHECKSUM: 7463b5296c812a797b822405806b6ce6a46f3a51
+
+COCOAPODS: 1.8.3

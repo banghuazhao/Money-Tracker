@@ -1,0 +1,6 @@
+site_name: Money Tracker
+nav:
+    - Home: index.md
+    - License: license.md
+    - Privacy: privacy.md
+    - Contact: contact.md

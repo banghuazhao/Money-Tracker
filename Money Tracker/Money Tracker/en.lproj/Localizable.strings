@@ -1,0 +1,75 @@
+/*
+  Localizable.strings
+  Money Tracker
+
+  Created by Banghua Zhao on 10/5/20.
+
+*/
+
+"Add Transaction" = "Add Transaction";
+"All" = "All";
+"Amount" = "Amount";
+"Amount: High to Low" = "Amount: High to Low";
+"Amount: Low to High" = "Amount: Low to High";
+"Cancel" = "Cancel";
+"Car insurance" = "Car insurance";
+"Categories" = "Categories";
+"Category" = "Category";
+"Choose a Transcation Detail" = "Choose a Transcation Detail";
+"Consumer Electronics" = "Consumer Electronics";
+"Date" = "Date";
+"Date: New to Old" = "Date: New to Old";
+"Date: Old to New" = "Date: Old to New";
+"Dividend from stock" = "Dividend from stock";
+"Do you want to delete this transaction?" = "Do you want to delete this transaction?";
+"Do you want to watch an advertisement to support this App?" = "Do you want to watch an advertisement to support this App?";
+"Done" = "Done";
+"Edit Transaction" = "Edit Transaction";
+"Education" = "Education";
+"Entertainment" = "Entertainment";
+"Expense" = "Expense";
+"Feedback" = "Feedback";
+"Flight to Silicon Valley" = "Flight to Silicon Valley";
+"Food, snacks and fruits" = "Food, snacks and fruits";
+"Gift" = "Gift";
+"Grocery" = "Grocery";
+"House Rent" = "House Rent";
+"Income" = "Income";
+"Insurance" = "Insurance";
+"Investment Income" = "Investment Income";
+"List" = "List";
+"Loading the advertisement" = "Loading the advertisement";
+"Medicine" = "Medicine";
+"Money Tracker" = "Money Tracker";
+"Net Worth" = "Net Worth";
+"New iPhone" = "New iPhone";
+"Other Expense" = "Other Expense";
+"Other Income" = "Other Income";
+"Payment for an article" = "Payment for an article";
+"Pick Date" = "Pick Date";
+"Pie Chart" = "Pie Chart";
+"Pie Chart (Expense)" = "Pie Chart (Expense)";
+"Pie Chart (Income)" = "Pie Chart (Income)";
+"Rate the App" = "Rate the App";
+"Restaurant" = "Restaurant";
+"Salary" = "Salary";
+"Search a transaction" = "Search a transaction";
+"Select a Category" = "Select a Category";
+"Settings" = "Settings";
+"Share the App" = "Share the App";
+"Sort By" = "Sort By";
+"Support the App" = "Support the App";
+"Support this App" = "Support this App";
+"Thanks for Your Support!" = "Thanks for Your Support!";
+"Transaction Description" = "Transaction Description";
+"Transactions" = "Transactions";
+"Transportation" = "Transportation";
+"Travel" = "Travel";
+"Travel to Hawaii" = "Travel to Hawaii";
+"Type" = "Type";
+"Watched a new moive" = "Watched a new moive";
+"We will constantly optimize and maintain our App and make sure users have the best experience." = "We will constantly optimize and maintain our App and make sure users have the best experience.";
+"Yes" = "Yes";
+"clothes and vegetable" = "clothes and vegetable";
+"Change currency symbol" = "Change currency symbol";
+"Currencies" = "Currencies";
