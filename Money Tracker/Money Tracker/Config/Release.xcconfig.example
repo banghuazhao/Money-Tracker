@@ -1,0 +1,18 @@
+//
+// Created by Banghua Zhao on 18/08/2024
+// Copyright Apps Bay Limited. All rights reserved.
+//
+//
+// TEMPLATE — copy this file to `Release.xcconfig` (same folder) and fill in
+// your production AdMob IDs. `Release.xcconfig` is git-ignored so real
+// production IDs never get committed.
+//
+
+// Configuration settings file format documentation can be found at:
+// https://help.apple.com/xcode/#/dev745c5c974
+
+GADApplicationIdentifier = ca-app-pub-XXXXXXXXXXXXXXXX~XXXXXXXXXX
+bannerViewAdUnitID = ca-app-pub-XXXXXXXXXXXXXXXX/XXXXXXXXXX
+appOpenAdID = ca-app-pub-XXXXXXXXXXXXXXXX/XXXXXXXXXX
+interstitialAdID = ca-app-pub-XXXXXXXXXXXXXXXX/XXXXXXXXXX
+rewardAdUnitID = ca-app-pub-XXXXXXXXXXXXXXXX/XXXXXXXXXX

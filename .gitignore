@@ -1,0 +1,10 @@
+# macOS
+.DS_Store
+
+# Xcode user state
+xcuserdata/
+*.xcuserstate
+
+# AdMob production config — contains real release ad unit IDs, keep out of git.
+# Copy Config/Release.xcconfig.example to Config/Release.xcconfig and fill in.
+Release.xcconfig
