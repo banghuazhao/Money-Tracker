@@ -11,6 +11,16 @@ import UIKit
 struct Constants {
     static let appID = "1534244892"
 
+    static let facebookPageID = "104357371640600"
+
+    struct AppID {
+        static let financeGoAppID = "1519476344"
+        static let finanicalRatiosGoMacOSAppID = "1486184864"
+        static let financialRatiosGoAppID = "1481582303"
+        static let countdownDaysAppID = "1525084657"
+        static let moneyTrackerAppID = "1534244892"
+    }
+
     // google ads app id: ca-app-pub-4766086782456413~7297740247
     #if DEBUG
         static let bannerViewAdUnitID = ""
@@ -30,6 +40,7 @@ struct Constants {
 struct UserDefaultsKeys {
     static let FETCH_COUNT = "FETCH_COUNT"
     static let CURRENCY = "CURRENCY"
+    static let timesToOpenInterstitialAds = "timesToOpenInterstitialAds"
 }
 
 let categoryExpenses: [String] = [
@@ -51,3 +62,25 @@ let categoryIncomes: [String] = [
     "Investment Income",
     "Other Income",
 ]
+
+struct JustForLocalization {
+    let categoryExpensesLocalization: [String] = [
+        "Grocery".localized(),
+        "Transportation".localized(),
+        "Entertainment".localized(),
+        "Restaurant".localized(),
+        "House Rent".localized(),
+        "Insurance".localized(),
+        "Travel".localized(),
+        "Education".localized(),
+        "Consumer Electronics".localized(),
+        "Gift".localized(),
+        "Medicine".localized(),
+        "Other Expense".localized(),
+    ]
+    let categoryIncomesLocalization: [String] = [
+        "Salary".localized(),
+        "Investment Income".localized(),
+        "Other Income".localized(),
+    ]
+}

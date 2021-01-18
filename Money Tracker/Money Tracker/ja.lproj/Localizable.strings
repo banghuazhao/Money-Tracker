@@ -6,12 +6,56 @@
 
 */
 
+/* setting 相关 */
+"Settings" = "設定";
+
+"Yes" = "はい";
+"Cancel" = "キャンセル";
+
+"Rate this App" = "アプリを評価する";
+
+"Share this App" = "アプリを共有する";
+
+"Support this App" = "アプリをサポートする";
+"Do you want to watch an advertisement to support this App" = "このアプリをサポートする広告を見たいですか?";
+"Loading the advertisement" = "広告を読み込んでいます";
+"Thanks for Your Support" = "ご協力ありがとうございました!";
+"We will constantly optimize and maintain our App and make sure users have the best experience" = "私たちは常にアプリを最適化して維持し、ユーザーが最高のエクスペリエンスを楽しめるようにします。";
+
+
+/* 更多 Apps*/
+"More Apps" = "More アプリ";
+"Check out more Apps made by us" = "他のアプリをチェックしてください";
+
+"Ratios Go (macOS App)" = "Ratios Go (macOS アプリ)";
+
+"Finance Go" = "米国株の達人";
+"Financial Reports & Investing" = "ニュース、投資財務諸表情報&米国株投資";
+
+"Countdown Days" = "日数のカウントダウン";
+"Events, Anniversary & Big Days" = "イベント、記念日、祭り、活動のスケジュール管理 アプリ";
+
+"Money Tracker" = "マネートラッカー";
+"Budget, Expense & Bill Planner" = "経費,予算プランナーとお金管理";
+
+"Financial Ratios Go" = "Financial Ratios Go";
+"Finance, Ratios, Investing" = "ファイナンス, 財務分析, 株式投資";
+
+/* 反馈 */
+"Feedback" = "フィードバック";
+"Facebook Page" = "Facebookページ";
+"Send message to Apps Bay Facebook page"  = "Facebookページにメッセージを送信する";
+
+"Email" = "Email";
+"Write an email to appsbayarea@gmail.com" = "appsbayarea@gmail.comにメールを書く";
+"Thanks for Your Feedback" = "ご意見ありがとうございます";
+
+/* App 专用 */
 "Add Transaction" = "記録を追加";
 "All" = "すべて";
 "Amount" = "お金の総額";
 "Amount: High to Low" = "お金の総額: 降順で並べ替え";
 "Amount: Low to High" = "お金の総額: 昇順で並べ替え";
-"Cancel" = "キャンセル";
 "Car insurance" = "自動車保険";
 "Categories" = "カテゴリー";
 "Category" = "カテゴリー";
@@ -22,25 +66,21 @@
 "Date: Old to New" = "日付: 昇順で並べ替え";
 "Dividend from stock" = "株式からの配当金";
 "Do you want to delete this transaction?" = "これを削除しますか?";
-"Do you want to watch an advertisement to support this App?" = "このアプリをサポートする広告を見たいですか?";
 "Done" = "完了しました";
 "Edit Transaction" = "編集";
 "Education" = "教育";
 "Entertainment" = "エンターテインメント";
 "Expense" = "費用";
-"Feedback" = "フィードバック";
 "Flight to Silicon Valley" = "シリコンバレーへの航空運賃";
 "Food, snacks and fruits" = "食べ物、軽食と果物";
 "Gift" = "贈り物";
 "Grocery" = "食料品";
 "House Rent" = "家賃";
-"Income" = "収入";
+"Income" = "收入";
 "Insurance" = "保険";
 "Investment Income" = "投資収益";
 "List" = "リスト";
-"Loading the advertisement" = "広告を読み込んでいます";
 "Medicine" = "薬";
-"Money Tracker" = "マネートラッカー";
 "Net Worth" = "純資産";
 "New iPhone" = "新しいiPhone";
 "Other Expense" = "ほかの費用";
@@ -50,17 +90,11 @@
 "Pie Chart" = "チャートを選びます";
 "Pie Chart (Expense)" = "パイチャート (費用)";
 "Pie Chart (Income)" = "パイチャート (収入)";
-"Rate the App" = "アプリを評価する";
 "Restaurant" = "レストラン";
 "Salary" = "給料";
 "Search a transaction" = "検索";
 "Select a Category" = "カテゴリーを選びます";
-"Settings" = "設定";
-"Share the App" = "アプリを共有する";
 "Sort By" = "並び替え";
-"Support the App" = "アプリをサポートする";
-"Support this App" = "アプリをサポートする";
-"Thanks for Your Support!" = "ご協力ありがとうございました!";
 "Transaction Description" = "詳しい説明";
 "Transactions" = "記録";
 "Transportation" = "通勤";
@@ -68,8 +102,9 @@
 "Travel to Hawaii" = "ハワイへの旅行";
 "Type" = "タイプ";
 "Watched a new moive" = "映画を見る";
-"We will constantly optimize and maintain our App and make sure users have the best experience." = "私たちは常にアプリを最適化して維持し、ユーザーが最高のエクスペリエンスを楽しめるようにします。";
-"Yes" = "はい";
 "clothes and vegetable" = "服と野菜";
 "Change currency symbol" = "通貨記号を変更する";
 "Currencies" = "通貨";
+"Select a Date" = "日付を選択";
+"Bar Chart (Expense)" = "バーチャート（費用）";
+"Bar Chart (Income)" = "バーチャート（収入）";

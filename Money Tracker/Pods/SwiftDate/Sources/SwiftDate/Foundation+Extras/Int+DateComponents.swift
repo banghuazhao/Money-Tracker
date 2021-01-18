@@ -1,9 +1,13 @@
 //
-//  DateComponents+Int.swift
 //  SwiftDate
+//  Parse, validate, manipulate, and display dates, time and timezones in Swift
 //
-//  Created by Daniele Margutti on 07/06/2018.
-//  Copyright © 2018 SwiftDate. All rights reserved.
+//  Created by Daniele Margutti
+//   - Web: https://www.danielemargutti.com
+//   - Twitter: https://twitter.com/danielemargutti
+//   - Mail: hello@danielemargutti.com
+//
+//  Copyright © 2019 Daniele Margutti. Licensed under MIT License.
 //
 
 import Foundation
@@ -22,52 +26,54 @@ public extension Int {
 	/// - returns: return self value in form of `DateComponents` where given `Calendar.Component` has `self` as value
 	internal func toDateComponents(type: Calendar.Component) -> DateComponents {
 		var dateComponents = DateComponents()
-		dateComponents.setValue(self, for: type)
+        DateComponents.allComponents.forEach( { dateComponents.setValue(0, for: $0 )})
+        dateComponents.setValue(self, for: type)
+        dateComponents.setValue(0, for: .era)
 		return dateComponents
 	}
 
 	/// Create a `DateComponents` with `self` value set as nanoseconds
-	public var nanoseconds: DateComponents {
+	var nanoseconds: DateComponents {
 		return toDateComponents(type: .nanosecond)
 	}
 
 	/// Create a `DateComponents` with `self` value set as seconds
-	public var seconds: DateComponents {
+	var seconds: DateComponents {
 		return toDateComponents(type: .second)
 	}
 
 	/// Create a `DateComponents` with `self` value set as minutes
-	public var minutes: DateComponents {
+	var minutes: DateComponents {
 		return toDateComponents(type: .minute)
 	}
 
 	/// Create a `DateComponents` with `self` value set as hours
-	public var hours: DateComponents {
+	var hours: DateComponents {
 		return toDateComponents(type: .hour)
 	}
 
 	/// Create a `DateComponents` with `self` value set as days
-	public var days: DateComponents {
+	var days: DateComponents {
 		return toDateComponents(type: .day)
 	}
 
 	/// Create a `DateComponents` with `self` value set as weeks
-	public var weeks: DateComponents {
+	var weeks: DateComponents {
 		return toDateComponents(type: .weekOfYear)
 	}
 
 	/// Create a `DateComponents` with `self` value set as months
-	public var months: DateComponents {
+	var months: DateComponents {
 		return toDateComponents(type: .month)
 	}
 
 	/// Create a `DateComponents` with `self` value set as years
-	public var years: DateComponents {
+	var years: DateComponents {
 		return toDateComponents(type: .year)
 	}
 
 	/// Create a `DateComponents` with `self` value set as quarters
-	public var quarters: DateComponents {
+	var quarters: DateComponents {
 		return toDateComponents(type: .quarter)
 	}
 

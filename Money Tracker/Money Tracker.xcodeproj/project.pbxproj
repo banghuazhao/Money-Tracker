@@ -19,7 +19,6 @@
 		9930BFC8252D5DC80035365F /* CurrencyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9930BFC7252D5DC80035365F /* CurrencyViewController.swift */; };
 		9930BFCB252D5F4C0035365F /* CurrencyCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9930BFCA252D5F4C0035365F /* CurrencyCell.swift */; };
 		99A93D172526B1CB00E6C455 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99A93D162526B1CB00E6C455 /* AppDelegate.swift */; };
-		99A93D192526B1CB00E6C455 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99A93D182526B1CB00E6C455 /* SceneDelegate.swift */; };
 		99A93D1B2526B1CB00E6C455 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99A93D1A2526B1CB00E6C455 /* HomeViewController.swift */; };
 		99A93D202526B1CD00E6C455 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 99A93D1F2526B1CD00E6C455 /* Assets.xcassets */; };
 		99A93D232526B1CD00E6C455 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 99A93D212526B1CD00E6C455 /* LaunchScreen.storyboard */; };
@@ -34,7 +33,6 @@
 		99A93D732526F79000E6C455 /* TitleCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99A93D722526F79000E6C455 /* TitleCell.swift */; };
 		99A93D772526F7AB00E6C455 /* TransactionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99A93D762526F7AB00E6C455 /* TransactionCell.swift */; };
 		99A93D7B2526FD2400E6C455 /* AmountCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99A93D7A2526FD2400E6C455 /* AmountCell.swift */; };
-		99A93D8D2527291C00E6C455 /* Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99A93D8C2527291C00E6C455 /* Extension.swift */; };
 		99A93DA2252818F300E6C455 /* UIButtonLargerArea.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99A93DA1252818F300E6C455 /* UIButtonLargerArea.swift */; };
 		99A93DB7252A0A8200E6C455 /* Other.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99A93DB6252A0A8200E6C455 /* Other.swift */; };
 		99A93DBD252A107500E6C455 /* MyMenuItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99A93DBC252A107500E6C455 /* MyMenuItem.swift */; };
@@ -43,6 +41,17 @@
 		99A93DD7252B50D600E6C455 /* AddOrEditTransactionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99A93DD6252B50D500E6C455 /* AddOrEditTransactionViewController.swift */; };
 		99A93DDF252B5DA000E6C455 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 99A93DE1252B5DA000E6C455 /* Localizable.strings */; };
 		99A93DE3252B5DA400E6C455 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 99A93DE5252B5DA400E6C455 /* InfoPlist.strings */; };
+		99EC95672568B3E000126971 /* BarChartViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99EC95662568B3E000126971 /* BarChartViewController.swift */; };
+		99FD2B3D25B4279400D0AC0C /* InterstitialAdsRequestHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99FD2B3C25B4279400D0AC0C /* InterstitialAdsRequestHelper.swift */; };
+		99FD2B4225B427BE00D0AC0C /* Double+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99FD2B4125B427BE00D0AC0C /* Double+Extension.swift */; };
+		99FD2B4625B427D400D0AC0C /* UIViewController+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99FD2B4525B427D400D0AC0C /* UIViewController+Extension.swift */; };
+		99FD2BD025B42BD300D0AC0C /* AppItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99FD2BCF25B42BD300D0AC0C /* AppItem.swift */; };
+		99FD2BD125B42BD300D0AC0C /* FeedbackItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99FD2BCE25B42BD100D0AC0C /* FeedbackItem.swift */; };
+		99FD2BD525B42BF600D0AC0C /* FeedbackItemCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99FD2BD425B42BF600D0AC0C /* FeedbackItemCell.swift */; };
+		99FD2BD625B42BF600D0AC0C /* AppItemCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99FD2BD325B42BF400D0AC0C /* AppItemCell.swift */; };
+		99FD2BDA25B42BFD00D0AC0C /* FeedbackViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99FD2BD825B42BFC00D0AC0C /* FeedbackViewController.swift */; };
+		99FD2BDB25B42BFD00D0AC0C /* MoreAppsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99FD2BD925B42BFD00D0AC0C /* MoreAppsViewController.swift */; };
+		99FD2BDF25B42C7300D0AC0C /* UIFont+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99FD2BDE25B42C7300D0AC0C /* UIFont+Extension.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -62,7 +71,6 @@
 		9930BFD2252D6C110035365F /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/Localizable.strings; sourceTree = "<group>"; };
 		99A93D132526B1CB00E6C455 /* Money Tracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Money Tracker.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		99A93D162526B1CB00E6C455 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		99A93D182526B1CB00E6C455 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		99A93D1A2526B1CB00E6C455 /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
 		99A93D1F2526B1CD00E6C455 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		99A93D222526B1CD00E6C455 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -78,7 +86,6 @@
 		99A93D722526F79000E6C455 /* TitleCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TitleCell.swift; sourceTree = "<group>"; };
 		99A93D762526F7AB00E6C455 /* TransactionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionCell.swift; sourceTree = "<group>"; };
 		99A93D7A2526FD2400E6C455 /* AmountCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AmountCell.swift; sourceTree = "<group>"; };
-		99A93D8C2527291C00E6C455 /* Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extension.swift; sourceTree = "<group>"; };
 		99A93DA1252818F300E6C455 /* UIButtonLargerArea.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIButtonLargerArea.swift; sourceTree = "<group>"; };
 		99A93DB6252A0A8200E6C455 /* Other.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Other.swift; sourceTree = "<group>"; };
 		99A93DBC252A107500E6C455 /* MyMenuItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyMenuItem.swift; sourceTree = "<group>"; };
@@ -91,6 +98,18 @@
 		99A93DE8252B5DDF00E6C455 /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		99A93DEC252B5E1B00E6C455 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
 		99A93DED252B5E1B00E6C455 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Localizable.strings"; sourceTree = "<group>"; };
+		99EC95662568B3E000126971 /* BarChartViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BarChartViewController.swift; sourceTree = "<group>"; };
+		99FD2B3C25B4279400D0AC0C /* InterstitialAdsRequestHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InterstitialAdsRequestHelper.swift; sourceTree = "<group>"; };
+		99FD2B4125B427BE00D0AC0C /* Double+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Double+Extension.swift"; sourceTree = "<group>"; };
+		99FD2B4525B427D400D0AC0C /* UIViewController+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Extension.swift"; sourceTree = "<group>"; };
+		99FD2BCE25B42BD100D0AC0C /* FeedbackItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedbackItem.swift; sourceTree = "<group>"; };
+		99FD2BCF25B42BD300D0AC0C /* AppItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppItem.swift; sourceTree = "<group>"; };
+		99FD2BD325B42BF400D0AC0C /* AppItemCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppItemCell.swift; sourceTree = "<group>"; };
+		99FD2BD425B42BF600D0AC0C /* FeedbackItemCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedbackItemCell.swift; sourceTree = "<group>"; };
+		99FD2BD825B42BFC00D0AC0C /* FeedbackViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedbackViewController.swift; sourceTree = "<group>"; };
+		99FD2BD925B42BFD00D0AC0C /* MoreAppsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoreAppsViewController.swift; sourceTree = "<group>"; };
+		99FD2BDE25B42C7300D0AC0C /* UIFont+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIFont+Extension.swift"; sourceTree = "<group>"; };
+		99FD2BE125B46D0300D0AC0C /* Money Tracker.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Money Tracker.entitlements"; sourceTree = "<group>"; };
 		C6A5783781D35AF009172AF1 /* Pods_Money_Tracker.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Money_Tracker.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -135,15 +154,6 @@
 			path = PieChart;
 			sourceTree = "<group>";
 		};
-		9930BFCE252D5F510035365F /* Menu */ = {
-			isa = PBXGroup;
-			children = (
-				99A93DBF252A107A00E6C455 /* MenuCell.swift */,
-				9930BFCA252D5F4C0035365F /* CurrencyCell.swift */,
-			);
-			path = Menu;
-			sourceTree = "<group>";
-		};
 		99A93D0A2526B1CB00E6C455 = {
 			isa = PBXGroup;
 			children = (
@@ -165,12 +175,11 @@
 		99A93D152526B1CB00E6C455 /* Money Tracker */ = {
 			isa = PBXGroup;
 			children = (
+				99FD2BE125B46D0300D0AC0C /* Money Tracker.entitlements */,
 				99A93D162526B1CB00E6C455 /* AppDelegate.swift */,
-				99A93D182526B1CB00E6C455 /* SceneDelegate.swift */,
 				99A93D2E2526B1DF00E6C455 /* Utilities */,
-				99A93D2B2526B1D300E6C455 /* Model */,
-				99A93D2C2526B1D700E6C455 /* View */,
-				99A93D2D2526B1DB00E6C455 /* Controller */,
+				99FD2BC825B42AC400D0AC0C /* Home */,
+				99FD2BC925B42AD600D0AC0C /* Menu */,
 				99A93D1F2526B1CD00E6C455 /* Assets.xcassets */,
 				99A93D212526B1CD00E6C455 /* LaunchScreen.storyboard */,
 				99A93D242526B1CD00E6C455 /* Info.plist */,
@@ -185,7 +194,6 @@
 			isa = PBXGroup;
 			children = (
 				99A93D492526BA9600E6C455 /* UserTransaction.swift */,
-				99A93DBC252A107500E6C455 /* MyMenuItem.swift */,
 				9930BFB2252C9CEE0035365F /* TransactionCategory.swift */,
 			);
 			path = Model;
@@ -195,7 +203,6 @@
 			isa = PBXGroup;
 			children = (
 				9930BFAB252C99810035365F /* Home */,
-				9930BFCE252D5F510035365F /* Menu */,
 				9930BFBE252CA0D40035365F /* PieChart */,
 			);
 			path = View;
@@ -205,10 +212,10 @@
 			isa = PBXGroup;
 			children = (
 				99A93D1A2526B1CB00E6C455 /* HomeViewController.swift */,
-				99A93DC4252A10C200E6C455 /* MenuViewController.swift */,
 				99A93DD6252B50D500E6C455 /* AddOrEditTransactionViewController.swift */,
 				9930BFA2252C72A30035365F /* ListViewController.swift */,
 				9930BFA5252C97D30035365F /* PieChartViewController.swift */,
+				99EC95662568B3E000126971 /* BarChartViewController.swift */,
 				9930BFC0252CABA40035365F /* SingleCategoryViewController.swift */,
 				9930BFC7252D5DC80035365F /* CurrencyViewController.swift */,
 			);
@@ -222,13 +229,83 @@
 				99A93D3C2526B64C00E6C455 /* Constants.swift */,
 				99A93D3E2526B64D00E6C455 /* CoreDataManager.swift */,
 				99A93D3B2526B64C00E6C455 /* StoreReviewHelper.swift */,
-				99A93D6C2526D3FC00E6C455 /* MyNavigationController.swift */,
-				99A93D8C2527291C00E6C455 /* Extension.swift */,
-				99A93DA1252818F300E6C455 /* UIButtonLargerArea.swift */,
-				9930BFC3252CC5F30035365F /* UITextFieldWithPadding.swift */,
+				99FD2B3C25B4279400D0AC0C /* InterstitialAdsRequestHelper.swift */,
+				99FD2B3F25B4279900D0AC0C /* Extensions */,
+				99FD2B4025B427A200D0AC0C /* Class */,
 				99A93DB6252A0A8200E6C455 /* Other.swift */,
 			);
 			path = Utilities;
+			sourceTree = "<group>";
+		};
+		99FD2B3F25B4279900D0AC0C /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				99FD2B4125B427BE00D0AC0C /* Double+Extension.swift */,
+				99FD2B4525B427D400D0AC0C /* UIViewController+Extension.swift */,
+				99FD2BDE25B42C7300D0AC0C /* UIFont+Extension.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
+		99FD2B4025B427A200D0AC0C /* Class */ = {
+			isa = PBXGroup;
+			children = (
+				99A93D6C2526D3FC00E6C455 /* MyNavigationController.swift */,
+				99A93DA1252818F300E6C455 /* UIButtonLargerArea.swift */,
+				9930BFC3252CC5F30035365F /* UITextFieldWithPadding.swift */,
+			);
+			path = Class;
+			sourceTree = "<group>";
+		};
+		99FD2BC825B42AC400D0AC0C /* Home */ = {
+			isa = PBXGroup;
+			children = (
+				99A93D2B2526B1D300E6C455 /* Model */,
+				99A93D2C2526B1D700E6C455 /* View */,
+				99A93D2D2526B1DB00E6C455 /* Controller */,
+			);
+			path = Home;
+			sourceTree = "<group>";
+		};
+		99FD2BC925B42AD600D0AC0C /* Menu */ = {
+			isa = PBXGroup;
+			children = (
+				99FD2BCC25B42AED00D0AC0C /* Model */,
+				99FD2BCB25B42AE900D0AC0C /* View */,
+				99FD2BCA25B42AE300D0AC0C /* Controller */,
+			);
+			path = Menu;
+			sourceTree = "<group>";
+		};
+		99FD2BCA25B42AE300D0AC0C /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				99A93DC4252A10C200E6C455 /* MenuViewController.swift */,
+				99FD2BD825B42BFC00D0AC0C /* FeedbackViewController.swift */,
+				99FD2BD925B42BFD00D0AC0C /* MoreAppsViewController.swift */,
+			);
+			path = Controller;
+			sourceTree = "<group>";
+		};
+		99FD2BCB25B42AE900D0AC0C /* View */ = {
+			isa = PBXGroup;
+			children = (
+				99A93DBF252A107A00E6C455 /* MenuCell.swift */,
+				9930BFCA252D5F4C0035365F /* CurrencyCell.swift */,
+				99FD2BD325B42BF400D0AC0C /* AppItemCell.swift */,
+				99FD2BD425B42BF600D0AC0C /* FeedbackItemCell.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		99FD2BCC25B42AED00D0AC0C /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				99A93DBC252A107500E6C455 /* MyMenuItem.swift */,
+				99FD2BCF25B42BD300D0AC0C /* AppItem.swift */,
+				99FD2BCE25B42BD100D0AC0C /* FeedbackItem.swift */,
+			);
+			path = Model;
 			sourceTree = "<group>";
 		};
 		A5B329B5721F8970151085CF /* Pods */ = {
@@ -360,32 +437,41 @@
 			files = (
 				99A93DA2252818F300E6C455 /* UIButtonLargerArea.swift in Sources */,
 				9930BFB3252C9CEE0035365F /* TransactionCategory.swift in Sources */,
-				99A93D8D2527291C00E6C455 /* Extension.swift in Sources */,
 				99A93D702526F77B00E6C455 /* ChartCell.swift in Sources */,
+				99FD2B4225B427BE00D0AC0C /* Double+Extension.swift in Sources */,
 				99A93D402526B8FA00E6C455 /* Constants.swift in Sources */,
 				99A93D1B2526B1CB00E6C455 /* HomeViewController.swift in Sources */,
 				9930BFAD252C999F0035365F /* SingleTitleCell.swift in Sources */,
 				99A93D3F2526B8FA00E6C455 /* StoreReviewHelper.swift in Sources */,
 				9930BFC1252CABA40035365F /* SingleCategoryViewController.swift in Sources */,
+				99FD2BD125B42BD300D0AC0C /* FeedbackItem.swift in Sources */,
+				99FD2BDA25B42BFD00D0AC0C /* FeedbackViewController.swift in Sources */,
 				9930BFA9252C997D0035365F /* PieChartCell.swift in Sources */,
 				9930BFA6252C97D30035365F /* PieChartViewController.swift in Sources */,
 				9930BFC4252CC5F30035365F /* UITextFieldWithPadding.swift in Sources */,
 				99A93DB7252A0A8200E6C455 /* Other.swift in Sources */,
 				99A93D6D2526D3FC00E6C455 /* MyNavigationController.swift in Sources */,
+				99FD2BD525B42BF600D0AC0C /* FeedbackItemCell.swift in Sources */,
 				99A93D462526B97400E6C455 /* Model.xcdatamodeld in Sources */,
 				9930BFCB252D5F4C0035365F /* CurrencyCell.swift in Sources */,
+				99FD2BD025B42BD300D0AC0C /* AppItem.swift in Sources */,
 				99A93DBD252A107500E6C455 /* MyMenuItem.swift in Sources */,
+				99FD2BDB25B42BFD00D0AC0C /* MoreAppsViewController.swift in Sources */,
+				99FD2B4625B427D400D0AC0C /* UIViewController+Extension.swift in Sources */,
 				99A93DC5252A10C200E6C455 /* MenuViewController.swift in Sources */,
+				99EC95672568B3E000126971 /* BarChartViewController.swift in Sources */,
 				99A93D4A2526BA9600E6C455 /* UserTransaction.swift in Sources */,
+				99FD2BD625B42BF600D0AC0C /* AppItemCell.swift in Sources */,
 				99A93D172526B1CB00E6C455 /* AppDelegate.swift in Sources */,
 				9930BFC8252D5DC80035365F /* CurrencyViewController.swift in Sources */,
 				9930BFBA252C9F480035365F /* TransactionCategoryCell.swift in Sources */,
-				99A93D192526B1CB00E6C455 /* SceneDelegate.swift in Sources */,
 				9930BFA3252C72A30035365F /* ListViewController.swift in Sources */,
 				99A93DC0252A107B00E6C455 /* MenuCell.swift in Sources */,
+				99FD2B3D25B4279400D0AC0C /* InterstitialAdsRequestHelper.swift in Sources */,
 				99A93D7B2526FD2400E6C455 /* AmountCell.swift in Sources */,
 				99A93D422526B8FA00E6C455 /* CoreDataManager.swift in Sources */,
 				99A93DD7252B50D600E6C455 /* AddOrEditTransactionViewController.swift in Sources */,
+				99FD2BDF25B42C7300D0AC0C /* UIFont+Extension.swift in Sources */,
 				99A93D772526F7AB00E6C455 /* TransactionCell.swift in Sources */,
 				99A93D412526B8FA00E6C455 /* Color.swift in Sources */,
 				99A93D732526F79000E6C455 /* TitleCell.swift in Sources */,
@@ -552,8 +638,9 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = "Money Tracker/Money Tracker.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1.0.1;
+				CURRENT_PROJECT_VERSION = 1.0.70;
 				DEVELOPMENT_TEAM = E6968P466E;
 				INFOPLIST_FILE = "Money Tracker/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
@@ -561,9 +648,10 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0.0;
+				MARKETING_VERSION = 1.0.7;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.Banghua-Zhao.Money-Tracker";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTS_MACCATALYST = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -575,8 +663,9 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = "Money Tracker/Money Tracker.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1.0.1;
+				CURRENT_PROJECT_VERSION = 1.0.70;
 				DEVELOPMENT_TEAM = E6968P466E;
 				INFOPLIST_FILE = "Money Tracker/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
@@ -584,9 +673,10 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0.0;
+				MARKETING_VERSION = 1.0.7;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.Banghua-Zhao.Money-Tracker";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTS_MACCATALYST = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};

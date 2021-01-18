@@ -6,18 +6,40 @@ target 'Money Tracker' do
   use_frameworks!
 
   pod 'Hue'
-  pod 'Localize-Swift', '~> 2.0'
+  pod 'Localize-Swift'
   pod 'Google-Mobile-Ads-SDK'
   pod 'SnapKit', '~> 5.0.0'
   pod 'Then'
-  pod 'SwiftDate', '~> 5.0'
+  pod 'SwiftDate'
   pod 'SVProgressHUD'
   pod 'IQKeyboardManagerSwift'
   pod "Sheeeeeeeeet"
   pod 'DatePickerDialog'
+  pod 'DateTimePicker'
   pod 'AAInfographics', :git => 'https://github.com/AAChartModel/AAChartKit-Swift.git'
   pod 'Bugly'
 
   # Pods for Financial Statements Go
 
+end
+
+post_install do |installer|
+
+    installer.pods_project.targets.each do |target|
+      target.build_configurations.each do |config|
+        config.build_settings.delete 'IPHONEOS_DEPLOYMENT_TARGET'
+      end
+    end
+
+    installer.pods_project.targets.each do |target|
+        if target.name.start_with?("Pods")
+            puts "Updating #{target.name} OTHER_LDFLAGS to OTHER_LDFLAGS[sdk=iphone*]"
+            target.build_configurations.each do |config|
+                xcconfig_path = config.base_configuration_reference.real_path
+                xcconfig = File.read(xcconfig_path)
+                new_xcconfig = xcconfig.sub('OTHER_LDFLAGS =', 'OTHER_LDFLAGS[sdk=iphone*] =')
+                File.open(xcconfig_path, "w") { |file| file << new_xcconfig }
+            end
+        end
+    end
 end

@@ -2,14 +2,12 @@
 
 If you have any questions or suggestions, feel free to contact us by the emails below:
 
-### Lulin Yang
+### Gmail
 
-iday4633@gmail.com
+appsbayarea@gmail.com
 
-### Banghua Zhao
+### QQ Mail
 
-banghua.zhao@gmail.com
-
-wadn-zbh@qq.com
+appsbay@qq.com
 
 

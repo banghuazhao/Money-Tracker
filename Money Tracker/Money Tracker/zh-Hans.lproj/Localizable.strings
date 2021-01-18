@@ -6,12 +6,56 @@
 
 */
 
+/* setting 相关 */
+"Settings" = "Settings";
+
+"Yes" = "是的";
+"Cancel" = "取消";
+
+"Rate this App" = "给应用评分";
+
+"Share this App" = "分享这个应用";
+
+"Support this App" = "支持这个应用";
+"Do you want to watch an advertisement to support this App" = "看一个广告支持一下这个应用";
+"Loading the advertisement" = "广告载入中";
+"Thanks for Your Support" = "谢谢你的支持";
+"We will constantly optimize and maintain our App and make sure users have the best experience" = "我们的团队会持续优化和维护此应用，希望给用户带来最好的体验";
+
+
+/* 更多 Apps*/
+"More Apps" = "更多应用";
+"Check out more Apps made by us" = "发现更多我们的 App";
+
+"Ratios Go (macOS App)" = "财务比率计算器 (macOS 应用)";
+
+"Finance Go" = "美股财报通";
+"Financial Reports & Investing" = "专注财经资讯与价值投资";
+
+"Countdown Days" = "日期倒计时";
+"Events, Anniversary & Big Days" = "记录纪念日和重要日子的工具";
+
+"Money Tracker" = "极简记账";
+"Budget, Expense & Bill Planner" = "预算管理&存钱计划专家";
+
+"Financial Ratios Go" = "财务比率计算器";
+"Finance, Ratios, Investing" = "金融, 比率计算, 投资";
+
+/* 反馈 */
+"Feedback" = "反馈";
+"Facebook Page" = "Facebook Page";
+"Send message to Apps Bay Facebook page"  = "在 Apps Bay 的 Facebook page 留言";
+
+"Email" = "电子邮件";
+"Write an email to appsbayarea@gmail.com" = "给 appsbayarea@gmail.com 发电子邮件";
+"Thanks for Your Feedback" = "谢谢您的反馈";
+
+/* App 专用 */
 "Add Transaction" = "添加记账";
 "All" = "全部";
 "Amount" = "金额";
 "Amount: High to Low" = "金额: 从高到低";
 "Amount: Low to High" = "金额: 从低到高";
-"Cancel" = "取消";
 "Car insurance" = "汽车保险";
 "Categories" = "类别";
 "Category" = "类别";
@@ -22,13 +66,11 @@
 "Date: Old to New" = "日期: 由远到近";
 "Dividend from stock" = "股票分红";
 "Do you want to delete this transaction?" = "想要删除这条记账吗?";
-"Do you want to watch an advertisement to support this App?" = "想通过收看一条视频广告支持我们的App吗?";
 "Done" = "完成";
 "Edit Transaction" = "编辑记账";
 "Education" = "教育";
 "Entertainment" = "娱乐";
 "Expense" = "支出";
-"Feedback" = "反馈";
 "Flight to Silicon Valley" = "去硅谷的机票支出";
 "Food, snacks and fruits" = "食品，零食和水果";
 "Gift" = "礼物";
@@ -38,9 +80,7 @@
 "Insurance" = "保险";
 "Investment Income" = "投资收益";
 "List" = "列表";
-"Loading the advertisement" = "加载广告";
 "Medicine" = "药品";
-"Money Tracker" = "极简记账";
 "Net Worth" = "净资产";
 "New iPhone" = "新苹果手机";
 "Other Expense" = "其他支出";
@@ -50,17 +90,11 @@
 "Pie Chart" = "饼图";
 "Pie Chart (Expense)" = "饼图 (支出)";
 "Pie Chart (Income)" = "饼图 (收入)";
-"Rate the App" = "给App评分";
 "Restaurant" = "餐馆";
 "Salary" = "工资";
 "Search a transaction" = "搜索记账";
 "Select a Category" = "选择类别";
-"Settings" = "Settings";
-"Share the App" = "分享App";
 "Sort By" = "排序";
-"Support the App" = "支持这个App";
-"Support this App" = "支持这个App";
-"Thanks for Your Support!" = "谢谢你的支持!";
 "Transaction Description" = "记账描述";
 "Transactions" = "记账";
 "Transportation" = "通勤";
@@ -68,8 +102,9 @@
 "Travel to Hawaii" = "到夏威夷旅游";
 "Type" = "类型";
 "Watched a new moive" = "观看新上映的电影";
-"We will constantly optimize and maintain our App and make sure users have the best experience." = "我们的团队会持续优化APP，确保用户得到最好的使用体验.";
-"Yes" = "是的";
 "clothes and vegetable" = "衣服和蔬菜";
 "Change currency symbol" = "改变货币符号";
 "Currencies" = "货币";
+"Select a Date" = "选择日期";
+"Bar Chart (Expense)" = "条形图 (支出)";
+"Bar Chart (Income)" = "条形图 (收入)";

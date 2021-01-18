@@ -32,6 +32,42 @@
       "idiom" : "universal",
       "locale" : "zh-Hans",
       "scale" : "3x"
+    },
+    {
+      "filename" : "save_button-tc.png",
+      "idiom" : "universal",
+      "locale" : "zh-Hant",
+      "scale" : "1x"
+    },
+    {
+      "filename" : "save_button-tc@2x.png",
+      "idiom" : "universal",
+      "locale" : "zh-Hant",
+      "scale" : "2x"
+    },
+    {
+      "filename" : "save_button-tc@3x.png",
+      "idiom" : "universal",
+      "locale" : "zh-Hant",
+      "scale" : "3x"
+    },
+    {
+      "filename" : "save_button-jp.png",
+      "idiom" : "universal",
+      "locale" : "ja",
+      "scale" : "1x"
+    },
+    {
+      "filename" : "save_button-jp@2x.png",
+      "idiom" : "universal",
+      "locale" : "ja",
+      "scale" : "2x"
+    },
+    {
+      "filename" : "save_button-jp@3x.png",
+      "idiom" : "universal",
+      "locale" : "ja",
+      "scale" : "3x"
     }
   ],
   "info" : {
