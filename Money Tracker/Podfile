@@ -1,19 +1,19 @@
-# Uncomment the next line to define a global platform for your project
-# platform :ios, '13.0'
+platform :ios, '16.0'
 
 target 'Money Tracker' do
   # Comment the next line if you don't want to use dynamic frameworks
   use_frameworks!
 
   pod 'Hue'
-  pod 'Localize-Swift'
-  pod 'Google-Mobile-Ads-SDK'
-  pod 'SnapKit', '~> 5.0.0'
+  pod 'Localize-Swift', '~> 3.2'
+  pod 'Google-Mobile-Ads-SDK', '~> 11.0'
+  pod 'SnapKit', '~> 5.7'
   pod 'Then'
   pod 'SwiftDate'
-  pod 'SVProgressHUD'
-  pod 'IQKeyboardManagerSwift'
-  pod "Sheeeeeeeeet"
+  pod 'SVProgressHUD', '~> 2.2'
+  pod 'IQKeyboardManagerSwift', '~> 8.0'
+  # Sheeeeeeeeet pinned to 3.x — v4 has breaking API changes requiring a larger migration
+  pod "Sheeeeeeeeet", '~> 3.1'
   pod 'DatePickerDialog'
   pod 'DateTimePicker'
   pod 'AAInfographics', :git => 'https://github.com/AAChartModel/AAChartKit-Swift.git'

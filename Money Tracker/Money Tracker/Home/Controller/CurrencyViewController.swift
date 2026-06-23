@@ -53,9 +53,12 @@ class CurrencyViewController: UIViewController {
         let curr = Locale
             .availableIdentifiers
             .map { Locale(identifier: $0) }
-            .filter { $0.currencyCode != nil && $0.currencySymbol != nil }
-            .filter { $0.currencyCode! != $0.currencySymbol! }
-            .map { $0.currencyCode! }
+            .compactMap { locale -> String? in
+                guard let id = locale.currency?.identifier,
+                      let symbol = locale.currencySymbol,
+                      id != symbol else { return nil }
+                return id
+            }
 
         currencyCodes = Array(Set(curr))
         currencyCodes.sort()

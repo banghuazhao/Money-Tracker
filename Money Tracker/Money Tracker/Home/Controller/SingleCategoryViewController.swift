@@ -11,7 +11,7 @@ import SnapKit
 import SwiftDate
 import UIKit
 
-protocol SingleCategoryViewControllerDelegate: class {
+protocol SingleCategoryViewControllerDelegate: AnyObject {
     func didEditOrDeleteUserTransactionFromSingleCategory()
 }
 

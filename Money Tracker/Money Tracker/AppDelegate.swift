@@ -19,18 +19,15 @@ import UIKit
 class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        // Override point for customization after application launch.
-
         #if !targetEnvironment(macCatalyst)
             GADMobileAds.sharedInstance().start(completionHandler: nil)
             IQKeyboardManager.shared.enable = true
             #if !DEBUG
                 let config = BuglyConfig()
-                config.reportLogLevel = .warn // 报告级别
+                config.reportLogLevel = .warn
                 config.debugMode = false
                 Bugly.start(withAppId: "62893b4dad", config: config)
             #endif
-
         #endif
 
         StoreReviewHelper.incrementFetchCount()
@@ -42,7 +39,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         navigationController.setBackground(color: .systemBackground)
         navigationController.setTintColor(color: .themeColor)
 
-        window = UIWindow(frame: UIScreen.main.bounds)
+        window = UIWindow()
         window?.rootViewController = navigationController
         window?.makeKeyAndVisible()
 
@@ -60,7 +57,7 @@ extension AppDelegate {
         guard UserDefaults.standard.bool(forKey: "firstRun") else { return }
 
         let currentLocale = Locale.current
-        if let currencyCode = currentLocale.currencyCode {
+        if let currencyCode = currentLocale.currency?.identifier {
             print("first setup currencyCode: \(currencyCode)")
             UserDefaults.standard.set(currencyCode, forKey: UserDefaultsKeys.CURRENCY)
         } else {
@@ -87,19 +84,15 @@ extension AppDelegate {
         ]
 
         for userTransaction in userTransactions {
-            let transaction = NSEntityDescription.insertNewObject(forEntityName: "Transaction", into: context) as! Transaction
-
-            transaction.setValue(userTransaction.date, forKey: "date")
-            transaction.setValue(userTransaction.amount, forKey: "amount")
-            transaction.setValue(userTransaction.category, forKey: "category")
-            transaction.setValue(userTransaction.title, forKey: "title")
+            let transaction = Transaction(context: context)
+            transaction.date = userTransaction.date
+            transaction.amount = userTransaction.amount
+            transaction.category = userTransaction.category
+            transaction.title = userTransaction.title
         }
 
-        // perform the save
         do {
             try context.save()
-
-            // success
             UserDefaults.standard.set(false, forKey: "firstRun")
         } catch let saveErr {
             print("Failed to save user transactions:", saveErr)

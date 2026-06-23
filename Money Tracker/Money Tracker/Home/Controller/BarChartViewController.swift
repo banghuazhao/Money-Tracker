@@ -12,7 +12,7 @@ import SnapKit
 import Then
 import UIKit
 
-protocol BarChartViewControllerDelegate: class {
+protocol BarChartViewControllerDelegate: AnyObject {
     func didEditOrDeleteUserTransactionFromPieChart()
 }
 

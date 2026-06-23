@@ -8,8 +8,9 @@
 
 import CoreData
 
-struct CoreDataManager {
-    static let shared = CoreDataManager() // will live forever as long as your application is still alive, it's properties will too
+@MainActor
+final class CoreDataManager {
+    static let shared = CoreDataManager()
 
     let persistentContainer: NSPersistentContainer = {
         let container = NSPersistentContainer(name: "Model")
@@ -21,16 +22,26 @@ struct CoreDataManager {
         return container
     }()
 
-    func fetchLocalTransactions() -> [Transaction] {
-        let context = persistentContainer.viewContext
+    var viewContext: NSManagedObjectContext {
+        persistentContainer.viewContext
+    }
 
+    func fetchLocalTransactions() -> [Transaction] {
         let fetchRequest = NSFetchRequest<Transaction>(entityName: "Transaction")
         do {
-            let userWeights = try context.fetch(fetchRequest)
-            return userWeights
+            return try viewContext.fetch(fetchRequest)
         } catch let fetchErr {
             print("Failed to fetch User transaction:", fetchErr)
             return []
+        }
+    }
+
+    func saveContext() {
+        guard viewContext.hasChanges else { return }
+        do {
+            try viewContext.save()
+        } catch {
+            print("Failed to save context:", error)
         }
     }
 }

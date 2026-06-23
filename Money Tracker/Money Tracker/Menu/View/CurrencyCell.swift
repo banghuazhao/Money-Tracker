@@ -12,7 +12,7 @@ class CurrencyCell: UITableViewCell {
         didSet {
             guard let currencyCode = currencyCode else { return }
             currencyCodeLabel.text = currencyCode
-            if let identifier = Locale.availableIdentifiers.first(where: { Locale(identifier: $0).currencyCode == currencyCode }) {
+            if let identifier = Locale.availableIdentifiers.first(where: { Locale(identifier: $0).currency?.identifier == currencyCode }) {
                 currencySymbol.text = Locale(identifier: identifier).currencySymbol
             }
 

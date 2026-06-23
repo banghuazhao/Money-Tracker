@@ -14,7 +14,7 @@ import Sheeeeeeeeet
 import SwiftDate
 import UIKit
 
-protocol AddOrEditTransactionViewControllerDelegate: class {
+protocol AddOrEditTransactionViewControllerDelegate: AnyObject {
     func didAddUserTransaction()
     func didEditUserTransaction()
     func didDeleteUserTransaction()

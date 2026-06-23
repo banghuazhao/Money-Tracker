@@ -19,19 +19,31 @@ class MyNavigationController: UINavigationController {
     }
 
     func setNavigationBar() {
-        let compactAppearance = UINavigationBarAppearance()
-        compactAppearance.configureWithTransparentBackground()
-        compactAppearance.titleTextAttributes = [.foregroundColor: UIColor.label]
-        compactAppearance.largeTitleTextAttributes = [.foregroundColor: UIColor.label]
-        compactAppearance.backgroundColor = .clear
-
-        navigationBar.isTranslucent = true
-        navigationBar.standardAppearance = compactAppearance
-        navigationBar.compactAppearance = compactAppearance
-        navigationBar.scrollEdgeAppearance = compactAppearance
+        if #available(iOS 26.0, *) {
+            // Liquid Glass: use default background so the system applies the glass material
+            let appearance = UINavigationBarAppearance()
+            appearance.configureWithDefaultBackground()
+            appearance.titleTextAttributes = [.foregroundColor: UIColor.label]
+            appearance.largeTitleTextAttributes = [.foregroundColor: UIColor.label]
+            navigationBar.standardAppearance = appearance
+            navigationBar.compactAppearance = appearance
+            navigationBar.scrollEdgeAppearance = appearance
+        } else {
+            let appearance = UINavigationBarAppearance()
+            appearance.configureWithTransparentBackground()
+            appearance.titleTextAttributes = [.foregroundColor: UIColor.label]
+            appearance.largeTitleTextAttributes = [.foregroundColor: UIColor.label]
+            appearance.backgroundColor = .clear
+            navigationBar.isTranslucent = true
+            navigationBar.standardAppearance = appearance
+            navigationBar.compactAppearance = appearance
+            navigationBar.scrollEdgeAppearance = appearance
+        }
     }
 
     func setBackground(color: UIColor) {
+        // No-op on iOS 26+: overriding background would remove the Liquid Glass material
+        if #available(iOS 26.0, *) { return }
         navigationBar.standardAppearance.backgroundColor = color
         navigationBar.compactAppearance?.backgroundColor = color
         navigationBar.scrollEdgeAppearance?.backgroundColor = color

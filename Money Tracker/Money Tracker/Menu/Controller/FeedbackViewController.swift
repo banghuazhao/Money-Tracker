@@ -48,7 +48,7 @@ class FeedbackViewController: UIViewController {
         // Do any additional setup after loading the view.
         title = "Feedback".localized()
 
-        if let regionCode = Locale.current.regionCode, regionCode == "CN" {
+        if let regionCode = Locale.current.region?.identifier, regionCode == "CN" {
             feedbackItems = [
                 FeedbackItem(
                     title: "微信公众号",
@@ -115,7 +115,7 @@ extension FeedbackViewController: UITableViewDelegate, UITableViewDataSource {
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-        if let regionCode = Locale.current.regionCode, regionCode == "CN" {
+        if let regionCode = Locale.current.region?.identifier, regionCode == "CN" {
             if indexPath.row == 0 {
                 let alterController = UIAlertController(title: "微信公众号留言".localized(), message: "请在微信中搜索\"Apps Bay\"公众号，关注后即可留言反馈，谢谢！", preferredStyle: .alert)
                 let action = UIAlertAction(title: "好的".localized(), style: .cancel, handler: nil)

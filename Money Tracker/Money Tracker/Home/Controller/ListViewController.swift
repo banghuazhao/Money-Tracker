@@ -11,7 +11,7 @@ import SnapKit
 import SwiftDate
 import UIKit
 
-protocol ListViewControllerDelegate: class {
+protocol ListViewControllerDelegate: AnyObject {
     func didEditOrDeleteUserTransactionFromList()
 }
 

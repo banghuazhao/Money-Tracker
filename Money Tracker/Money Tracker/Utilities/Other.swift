@@ -10,7 +10,7 @@ import Foundation
 func convertDoubleToCurrency(amount: Double) -> String {
     let numberFormatter = NumberFormatter()
     if let currencyCode = UserDefaults.standard.value(forKey: UserDefaultsKeys.CURRENCY) as? String {
-        if let identifier = Locale.availableIdentifiers.first(where: { Locale(identifier: $0).currencyCode == currencyCode }) {
+        if let identifier = Locale.availableIdentifiers.first(where: { Locale(identifier: $0).currency?.identifier == currencyCode }) {
             numberFormatter.locale = Locale(identifier: identifier)
         }
     } else {

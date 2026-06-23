@@ -6,11 +6,11 @@
 //  Copyright © 2019 Banghua Zhao. All rights reserved.
 //
 
-import Foundation
 import StoreKit
+import UIKit
 
 struct StoreReviewHelper {
-    static func incrementFetchCount() { // called from appdelegate didfinishLaunchingWithOptions:
+    static func incrementFetchCount() {
         guard var fetchCount = UserDefaults.standard.value(forKey: UserDefaultsKeys.FETCH_COUNT) as? Int else {
             UserDefaults.standard.set(1, forKey: UserDefaultsKeys.FETCH_COUNT)
             return
@@ -19,8 +19,7 @@ struct StoreReviewHelper {
         UserDefaults.standard.set(fetchCount, forKey: UserDefaultsKeys.FETCH_COUNT)
     }
 
-    static func checkAndAskForReview() { // call this whenever appropriate
-        // this will not be shown everytime. Apple has some internal logic on how to show this.
+    static func checkAndAskForReview() {
         guard let fetchCount = UserDefaults.standard.value(forKey: UserDefaultsKeys.FETCH_COUNT) as? Int else {
             UserDefaults.standard.set(1, forKey: UserDefaultsKeys.FETCH_COUNT)
             return
@@ -37,7 +36,11 @@ struct StoreReviewHelper {
         }
     }
 
+    @MainActor
     func requestReview() {
-        SKStoreReviewController.requestReview()
+        guard let windowScene = UIApplication.shared.connectedScenes
+            .first(where: { $0.activationState == .foregroundActive }) as? UIWindowScene
+        else { return }
+        SKStoreReviewController.requestReview(in: windowScene)
     }
 }

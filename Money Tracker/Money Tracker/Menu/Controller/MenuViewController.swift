@@ -148,13 +148,19 @@ extension MenuViewController: UITableViewDelegate, UITableViewDataSource {
                 let action1 = UIAlertAction(title: "Yes".localized(), style: .default) { [weak self] _ in
                     guard let self = self else { return }
                     SVProgressHUD.show(withStatus: "Loading the advertisement".localized())
-                    self.rewardedAd = GADRewardedAd(adUnitID: Constants.rewardAdUnitID)
-                    self.rewardedAd?.load(GADRequest()) { error in
+                    GADRewardedAd.load(withAdUnitID: Constants.rewardAdUnitID, request: GADRequest()) { [weak self] ad, error in
+                        guard let self = self else { return }
                         SVProgressHUD.dismiss()
-                        if let _ = error {
-                        } else {
-                            self.rewardedAd?.present(fromRootViewController: self, delegate: self)
+                        if let error = error {
+                            print("Failed to load rewarded ad: \(error)")
+                            return
                         }
+                        guard let ad = ad else { return }
+                        ad.fullScreenContentDelegate = self
+                        ad.present(fromRootViewController: self, userDidEarnRewardHandler: {
+                            self.userDidEarn = true
+                        })
+                        self.rewardedAd = ad
                     }
                 }
                 let action2 = UIAlertAction(title: "Cancel".localized(), style: .cancel, handler: nil)
@@ -175,13 +181,8 @@ extension MenuViewController: UITableViewDelegate, UITableViewDataSource {
 }
 
 #if !targetEnvironment(macCatalyst)
-    extension MenuViewController: GADRewardedAdDelegate {
-        func rewardedAd(_ rewardedAd: GADRewardedAd, userDidEarn reward: GADAdReward) {
-            userDidEarn = true
-        }
-
-        func rewardedAdDidDismiss(_ rewardedAd: GADRewardedAd) {
-            SVProgressHUD.dismiss()
+    extension MenuViewController: GADFullScreenContentDelegate {
+        func adDidDismissFullScreenContent(_ ad: GADFullScreenPresentingAd) {
             if userDidEarn {
                 let ac = UIAlertController(title: "\("Thanks for Your Support".localized())!", message: "\("We will constantly optimize and maintain our App and make sure users have the best experience".localized()).", preferredStyle: .alert)
                 let action1 = UIAlertAction(title: "Cancel".localized(), style: .cancel, handler: nil)
@@ -189,6 +190,12 @@ extension MenuViewController: UITableViewDelegate, UITableViewDataSource {
                 present(ac, animated: true)
             }
             userDidEarn = false
+            rewardedAd = nil
+        }
+
+        func ad(_ ad: GADFullScreenPresentingAd, didFailToPresentFullScreenContentWithError error: Error) {
+            print("Rewarded ad failed to present: \(error)")
+            rewardedAd = nil
         }
     }
 #endif

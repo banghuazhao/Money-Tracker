@@ -19,7 +19,7 @@ import UIKit
 
 class HomeViewController: UIViewController {
     #if !targetEnvironment(macCatalyst)
-        var interstitial = GADInterstitial(adUnitID: Constants.interstitialAdID)
+        var interstitialAd: GADInterstitialAd?
     #endif
     var transactions: [Transaction] = [] {
         didSet {
@@ -49,8 +49,7 @@ class HomeViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         #if !targetEnvironment(macCatalyst)
-            interstitial = GADInterstitial(adUnitID: Constants.interstitialAdID)
-            interstitial.load(GADRequest())
+            loadInterstitialAd()
         #endif
         setupNavigationBar()
         setupViews()
@@ -90,6 +89,22 @@ class HomeViewController: UIViewController {
             }
         }
     }
+
+    #if !targetEnvironment(macCatalyst)
+        private func loadInterstitialAd() {
+            GADInterstitialAd.load(
+                withAdUnitID: Constants.interstitialAdID,
+                request: GADRequest()
+            ) { [weak self] ad, error in
+                if let error = error {
+                    print("Failed to load interstitial ad: \(error)")
+                    return
+                }
+                self?.interstitialAd = ad
+                self?.interstitialAd?.fullScreenContentDelegate = self
+            }
+        }
+    #endif
 }
 
 // MARK: - tableView
@@ -271,16 +286,15 @@ extension HomeViewController: AddOrEditTransactionViewControllerDelegate {
 
         #if !targetEnvironment(macCatalyst)
             if InterstitialAdsRequestHelper.increaseRequestAndCheckLoadInterstitialAd() {
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                    if self.interstitial.isReady {
-                        self.interstitial.present(fromRootViewController: self)
-                        print("interstitial Ad is ready")
-                        InterstitialAdsRequestHelper.resetRequestCount()
-                    } else {
+                Task { @MainActor in
+                    try? await Task.sleep(for: .seconds(0.5))
+                    guard let ad = interstitialAd else {
                         print("interstitial Ad wasn't ready")
+                        return
                     }
-                    self.interstitial = GADInterstitial(adUnitID: Constants.interstitialAdID)
-                    self.interstitial.load(GADRequest())
+                    ad.present(fromRootViewController: self)
+                    print("interstitial Ad is ready")
+                    InterstitialAdsRequestHelper.resetRequestCount()
                 }
             }
         #endif
@@ -314,3 +328,20 @@ extension HomeViewController: PieChartViewControllerDelegate {
         tableView.reloadData()
     }
 }
+
+// MARK: - GADFullScreenContentDelegate
+
+#if !targetEnvironment(macCatalyst)
+    extension HomeViewController: GADFullScreenContentDelegate {
+        func adDidDismissFullScreenContent(_ ad: GADFullScreenPresentingAd) {
+            interstitialAd = nil
+            loadInterstitialAd()
+        }
+
+        func ad(_ ad: GADFullScreenPresentingAd, didFailToPresentFullScreenContentWithError error: Error) {
+            print("Interstitial ad failed to present: \(error)")
+            interstitialAd = nil
+            loadInterstitialAd()
+        }
+    }
+#endif
