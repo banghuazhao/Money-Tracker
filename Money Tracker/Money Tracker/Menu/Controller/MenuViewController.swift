@@ -34,6 +34,7 @@ class MenuViewController: UIViewController, MFMailComposeViewControllerDelegate 
     #if !targetEnvironment(macCatalyst)
         let menuItems = [
             MyMenuItem(title: "Change currency symbol".localized(), icon: UIImage(systemName: "dollarsign.circle")),
+            MyMenuItem(title: "Financial Calculators".localized(), icon: UIImage(systemName: "function")),
             MyMenuItem(title: "Feedback".localized(), icon: UIImage(systemName: "bubble.left")),
             MyMenuItem(title: "Rate this App".localized(), icon: UIImage(systemName: "star")),
             MyMenuItem(title: "Share this App".localized(), icon: UIImage(systemName: "square.and.arrow.up")),
@@ -43,6 +44,7 @@ class MenuViewController: UIViewController, MFMailComposeViewControllerDelegate 
     #else
         let menuItems = [
             MyMenuItem(title: "Change currency symbol".localized(), icon: UIImage(systemName: "dollarsign.circle")),
+            MyMenuItem(title: "Financial Calculators".localized(), icon: UIImage(systemName: "function")),
             MyMenuItem(title: "Feedback".localized(), icon: UIImage(systemName: "bubble.left")),
             MyMenuItem(title: "Rate this App".localized(), icon: UIImage(systemName: "star")),
             MyMenuItem(title: "Share this App".localized(), icon: UIImage(systemName: "square.and.arrow.up")),
@@ -112,23 +114,26 @@ extension MenuViewController: UITableViewDelegate, UITableViewDataSource {
         }
 
         if indexPath.row == 1 {
-            navigationController?.pushViewController(FeedbackViewController(), animated: true)
+            navigationController?.pushViewController(CalculatorsViewController(), animated: true)
         }
 
         if indexPath.row == 2 {
+            navigationController?.pushViewController(FeedbackViewController(), animated: true)
+        }
+
+        if indexPath.row == 3 {
             tableView.cellForRow(at: indexPath)?.setSelected(false, animated: true)
             if let reviewURL = URL(string: "https://itunes.apple.com/app/id\(Constants.AppID.moneyTrackerAppID)?action=write-review"), UIApplication.shared.canOpenURL(reviewURL) {
                 UIApplication.shared.open(reviewURL, options: [:], completionHandler: nil)
             }
         }
 
-        if indexPath.row == 3 {
+        if indexPath.row == 4 {
             let textToShare = "Money Tracker".localized()
 
             let image = UIImage(named: "appIcon_money_tracker")!
 
             if let myWebsite = URL(string: "http://itunes.apple.com/app/id\(Constants.appID)") {
-                // Enter link to your app here
                 let objectsToShare = [textToShare, myWebsite, image] as [Any]
                 let activityVC = UIActivityViewController(activityItems: objectsToShare, applicationActivities: nil)
 
@@ -142,7 +147,7 @@ extension MenuViewController: UITableViewDelegate, UITableViewDataSource {
         }
 
         #if !targetEnvironment(macCatalyst)
-            if indexPath.row == 4 {
+            if indexPath.row == 5 {
                 tableView.cellForRow(at: indexPath)?.setSelected(false, animated: true)
                 let alterController = UIAlertController(title: "Support this App".localized(), message: "\("Do you want to watch an advertisement to support this App".localized())?", preferredStyle: .alert)
                 let action1 = UIAlertAction(title: "Yes".localized(), style: .default) { [weak self] _ in
@@ -169,11 +174,11 @@ extension MenuViewController: UITableViewDelegate, UITableViewDataSource {
                 present(alterController, animated: true)
             }
 
-            if indexPath.row == 5 {
+            if indexPath.row == 6 {
                 navigationController?.pushViewController(MoreAppsViewController(), animated: true)
             }
         #else
-            if indexPath.row == 4 {
+            if indexPath.row == 5 {
                 navigationController?.pushViewController(MoreAppsViewController(), animated: true)
             }
         #endif

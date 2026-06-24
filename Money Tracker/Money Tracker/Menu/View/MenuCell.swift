@@ -12,12 +12,13 @@ import UIKit
 class MenuCell: UITableViewCell {
     // SF Symbol name → background color mapping (Settings-app style)
     private static let iconColors: [String: UIColor] = [
-        "dollarsign.circle":  .systemGreen,
-        "bubble.left":        .systemBlue,
-        "star":               .systemYellow,
+        "dollarsign.circle":   .systemGreen,
+        "function":            .systemIndigo,
+        "bubble.left":         .systemBlue,
+        "star":                .systemYellow,
         "square.and.arrow.up": .systemOrange,
-        "hand.thumbsup":      .systemPurple,
-        "ellipsis":           .systemGray,
+        "hand.thumbsup":       .systemPurple,
+        "ellipsis":            .systemGray,
     ]
 
     var menuItem: MyMenuItem? {
