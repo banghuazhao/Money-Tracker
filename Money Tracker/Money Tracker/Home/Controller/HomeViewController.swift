@@ -57,23 +57,31 @@ class HomeViewController: UIViewController {
     }
 
     private func setupNavigationBar() {
-        title = "Net Worth".localized()
+        title = "Money Tracker".localized()
+        navigationItem.largeTitleDisplayMode = .always
 
+        let symbolConfig = UIImage.SymbolConfiguration(pointSize: 17, weight: .semibold)
         navigationItem.leftBarButtonItem = UIBarButtonItem(
-            image: UIImage(systemName: "gear", withConfiguration: UIImage.SymbolConfiguration(weight: .bold)),
+            image: UIImage(systemName: "gearshape.fill", withConfiguration: symbolConfig),
             style: .plain,
             target: self,
             action: #selector(tapMenuButton(_:)))
 
         navigationItem.rightBarButtonItem = UIBarButtonItem(
-            image: UIImage(systemName: "plus.square.fill", withConfiguration: UIImage.SymbolConfiguration(weight: .bold)),
+            image: UIImage(systemName: "plus.circle.fill", withConfiguration: symbolConfig),
             style: .plain,
             target: self,
             action: #selector(tapAddButton(_:)))
     }
 
     private func setupViews() {
-        view.backgroundColor = .systemBackground
+        view.backgroundColor = .systemGroupedBackground
+        tableView.backgroundColor = .systemGroupedBackground
+
+        let refreshControl = UIRefreshControl()
+        refreshControl.addTarget(self, action: #selector(handleRefresh(_:)), for: .valueChanged)
+        tableView.refreshControl = refreshControl
+
         view.addSubview(tableView)
         tableView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
@@ -125,15 +133,20 @@ extension HomeViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         if indexPath.section == 0 {
             if indexPath.row == 0 {
-                return 70
+                return UITableView.automaticDimension
             } else if indexPath.row == 1 {
                 return 280
             } else {
-                return 50
+                return 52
             }
         } else {
-            return 70
+            return UITableView.automaticDimension
         }
+    }
+
+    func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
+        if indexPath.section == 0 && indexPath.row == 0 { return 110 }
+        return 74
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -174,11 +187,53 @@ extension HomeViewController: UITableViewDelegate, UITableViewDataSource {
             navigationController?.pushViewController(addOrEditTransactionViewController, animated: true)
         }
     }
+
+    func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        guard indexPath.section == 1 else { return nil }
+        let transaction = selectedTransactions[indexPath.row]
+
+        let delete = UIContextualAction(style: .destructive, title: nil) { [weak self] _, _, completion in
+            guard let self = self else { return completion(false) }
+            let context = CoreDataManager.shared.persistentContainer.viewContext
+            context.delete(transaction)
+            do {
+                try context.save()
+                self.fetchTransactions()
+                tableView.deleteRows(at: [indexPath], with: .automatic)
+                tableView.reloadSections(IndexSet(integer: 0), with: .none)
+            } catch {
+                print("Failed to delete transaction:", error)
+            }
+            completion(true)
+        }
+        delete.image = UIImage(systemName: "trash.fill")
+        delete.backgroundColor = .expenseRed
+
+        let edit = UIContextualAction(style: .normal, title: nil) { [weak self] _, _, completion in
+            guard let self = self else { return completion(false) }
+            let vc = AddOrEditTransactionViewController()
+            vc.isAdd = false
+            vc.transaction = transaction
+            vc.delegate = self
+            self.navigationController?.pushViewController(vc, animated: true)
+            completion(true)
+        }
+        edit.image = UIImage(systemName: "pencil")
+        edit.backgroundColor = .themeColor
+
+        return UISwipeActionsConfiguration(actions: [delete, edit])
+    }
 }
 
 // MARK: - actions
 
 extension HomeViewController {
+    @objc func handleRefresh(_ sender: UIRefreshControl) {
+        fetchTransactions()
+        tableView.reloadData()
+        sender.endRefreshing()
+    }
+
     @objc func tapMenuButton(_ sender: UIBarButtonItem) {
         let generator = UIImpactFeedbackGenerator(style: .light)
         generator.impactOccurred()

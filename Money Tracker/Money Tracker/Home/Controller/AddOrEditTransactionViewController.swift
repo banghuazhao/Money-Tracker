@@ -37,17 +37,9 @@ class AddOrEditTransactionViewController: UIViewController {
                 typeSegmentedControl.selectedSegmentIndex = 1
             }
             selectedCategory = category
-            categoryButton.setAttributedTitle(NSAttributedString(
-                string: category.localized(),
-                attributes: [
-                    NSAttributedString.Key.foregroundColor: UIColor(hex: "#4A90E2"),
-                ]), for: .normal)
+            categoryButton.setTitle(category.localized(), for: .normal)
             selectedDate = date
-            dateButton.setAttributedTitle(NSAttributedString(
-                string: date.toFormat("yyyy-MM-dd"),
-                attributes: [
-                    NSAttributedString.Key.foregroundColor: UIColor(hex: "#4A90E2"),
-                ]), for: .normal)
+            dateButton.setTitle(date.toFormat("yyyy-MM-dd"), for: .normal)
             enteredAmount = transaction.amount
             amountTextView.text = fabs(enteredAmount).cleanZero
             descriptionTextField.text = transaction.title
@@ -68,61 +60,83 @@ class AddOrEditTransactionViewController: UIViewController {
 
     lazy var categoryLabel = UILabel().then { label in
         label.text = "Category".localized()
+        label.font = UIFont.systemFont(ofSize: 15, weight: .medium)
+        label.textColor = .label
     }
 
     lazy var categoryButton = UIButton().then { button in
         button.addTarget(self, action: #selector(tapCategoryButton(_:)), for: .touchUpInside)
-        button.setAttributedTitle(NSAttributedString(
-            string: "Grocery".localized(),
-            attributes: [
-                NSAttributedString.Key.foregroundColor: UIColor(hex: "#4A90E2"),
-            ]), for: .normal)
+        button.setTitle("Grocery".localized(), for: .normal)
+        button.setTitleColor(.themeColor, for: .normal)
+        button.titleLabel?.font = UIFont.systemFont(ofSize: 15, weight: .medium)
+        button.contentHorizontalAlignment = .right
     }
 
     lazy var dateLabel = UILabel().then { label in
         label.text = "Date".localized()
+        label.font = UIFont.systemFont(ofSize: 15, weight: .medium)
+        label.textColor = .label
     }
 
     lazy var dateButton = UIButton().then { button in
-        let date = Date()
-        button.setAttributedTitle(NSAttributedString(
-            string: date.toFormat("yyyy-MM-dd"),
-            attributes: [
-                NSAttributedString.Key.foregroundColor: UIColor(hex: "#4A90E2"),
-            ]), for: .normal)
+        button.setTitle(Date().toFormat("yyyy-MM-dd"), for: .normal)
+        button.setTitleColor(.themeColor, for: .normal)
+        button.titleLabel?.font = UIFont.systemFont(ofSize: 15, weight: .medium)
+        button.contentHorizontalAlignment = .right
         button.addTarget(self, action: #selector(tapDateButton(_:)), for: .touchUpInside)
     }
 
     lazy var amountLabel = UILabel().then { label in
         label.text = "Amount".localized() + " (-)"
+        label.font = UIFont.systemFont(ofSize: 15, weight: .medium)
+        label.textColor = .label
     }
 
     lazy var amountTextView = UITextView().then { textView in
-        textView.layer.cornerRadius = 24
-        textView.font = UIFont.boldSystemFont(ofSize: 18)
+        textView.layer.cornerRadius = 14
+        textView.layer.cornerCurve = .continuous
+        textView.font = UIFont.monospacedSystemFont(ofSize: 20, fixedDesign: false)
         textView.textAlignment = .center
         textView.keyboardType = .decimalPad
-        textView.contentInset = UIEdgeInsets(top: 5, left: 0, bottom: 0, right: 0)
+        textView.contentInset = UIEdgeInsets(top: 6, left: 0, bottom: 0, right: 0)
         textView.text = "0"
-        textView.backgroundColor = UIColor(hex: "#C2EEF5").alpha(0.4)
+        textView.backgroundColor = UIColor.systemBlue.withAlphaComponent(0.08)
         textView.delegate = self
     }
 
     lazy var descriptionTextField = UITextFieldPadding().then { textField in
-        textField.layer.cornerRadius = 24
+        textField.layer.cornerRadius = 14
+        textField.layer.cornerCurve = .continuous
         textField.placeholder = "Transaction Description".localized()
-        textField.backgroundColor = UIColor(hex: "#C2EEF5").alpha(0.4)
+        textField.backgroundColor = UIColor.secondarySystemBackground
+        textField.font = UIFont.systemFont(ofSize: 15)
+        textField.clearButtonMode = .whileEditing
     }
 
-    lazy var saveButton = UIButton(type: .custom).then { button in
-        button.setImage(UIImage(named: "save_button"), for: .normal)
+    lazy var saveButton: UIButton = {
+        var config = UIButton.Configuration.filled()
+        config.cornerStyle = .large
+        config.image = UIImage(systemName: "checkmark")
+        config.imagePlacement = .leading
+        config.imagePadding = 8
+        config.baseBackgroundColor = .themeColor
+        let button = UIButton(configuration: config)
         button.addTarget(self, action: #selector(tapSaveButton(_:)), for: .touchUpInside)
-    }
+        return button
+    }()
 
-    lazy var deleteButton = UIButton(type: .custom).then { button in
-        button.setImage(UIImage(named: "delete_button"), for: .normal)
+    lazy var deleteButton: UIButton = {
+        var config = UIButton.Configuration.filled()
+        config.title = "Delete Transaction".localized()
+        config.cornerStyle = .large
+        config.image = UIImage(systemName: "trash")
+        config.imagePlacement = .leading
+        config.imagePadding = 8
+        config.baseBackgroundColor = .expenseRed
+        let button = UIButton(configuration: config)
         button.addTarget(self, action: #selector(tapDeleteButton(_:)), for: .touchUpInside)
-    }
+        return button
+    }()
 
     #if !targetEnvironment(macCatalyst)
         lazy var bannerView: GADBannerView = {
@@ -138,11 +152,19 @@ class AddOrEditTransactionViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .systemBackground
+        view.backgroundColor = .systemGroupedBackground
+        navigationItem.largeTitleDisplayMode = .never
+
         if isAdd {
             title = "Add Transaction".localized()
+            var config = saveButton.configuration
+            config?.title = "Save Transaction".localized()
+            saveButton.configuration = config
         } else {
             title = "Edit Transaction".localized()
+            var config = saveButton.configuration
+            config?.title = "Update Transaction".localized()
+            saveButton.configuration = config
         }
         hideKeyboardWhenTappedAround()
         setupView()
@@ -154,75 +176,124 @@ class AddOrEditTransactionViewController: UIViewController {
 extension AddOrEditTransactionViewController {
     private func setupView() {
         view.addSubview(scrollView)
-
         scrollView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
 
-        scrollView.addSubview(typeSegmentedControl)
-        scrollView.addSubview(typeLabel)
-        scrollView.addSubview(categoryButton)
-        scrollView.addSubview(categoryLabel)
-        scrollView.addSubview(dateLabel)
-        scrollView.addSubview(dateButton)
-        scrollView.addSubview(amountTextView)
-        scrollView.addSubview(amountLabel)
+        // Card container for form rows
+        let formCard = UIView().then { v in
+            v.backgroundColor = .secondarySystemBackground
+            v.layer.cornerRadius = 16
+            v.layer.cornerCurve = .continuous
+        }
+
+        // Dividers between rows
+        let divider1 = makeDivider()
+        let divider2 = makeDivider()
+        let divider3 = makeDivider()
+
+        formCard.addSubview(typeLabel)
+        formCard.addSubview(typeSegmentedControl)
+        formCard.addSubview(divider1)
+        formCard.addSubview(categoryLabel)
+        formCard.addSubview(categoryButton)
+        formCard.addSubview(divider2)
+        formCard.addSubview(dateLabel)
+        formCard.addSubview(dateButton)
+        formCard.addSubview(divider3)
+        formCard.addSubview(amountLabel)
+        formCard.addSubview(amountTextView)
+
+        scrollView.addSubview(formCard)
         scrollView.addSubview(descriptionTextField)
         scrollView.addSubview(saveButton)
 
-        typeSegmentedControl.snp.makeConstraints { make in
-            make.centerX.equalToSuperview().offset(80)
+        // -- formCard layout --
+        formCard.snp.makeConstraints { make in
             make.top.equalToSuperview().offset(20)
-            make.width.equalTo(160)
-            make.height.equalTo(48)
+            make.left.equalTo(view).offset(16)
+            make.right.equalTo(view).offset(-16)
         }
+
+        let rowH: CGFloat = 54
+        let inset: CGFloat = 16
 
         typeLabel.snp.makeConstraints { make in
-            make.centerX.equalToSuperview().offset(-88)
+            make.left.equalToSuperview().offset(inset)
             make.centerY.equalTo(typeSegmentedControl)
         }
+        typeSegmentedControl.snp.makeConstraints { make in
+            make.top.equalToSuperview().offset(8)
+            make.right.equalToSuperview().inset(inset)
+            make.height.equalTo(36)
+            make.width.equalTo(180)
+            make.left.greaterThanOrEqualTo(typeLabel.snp.right).offset(8)
+        }
 
-        categoryButton.snp.makeConstraints { make in
-            make.centerX.equalToSuperview().offset(80)
-            make.top.equalTo(typeSegmentedControl.snp.bottom).offset(24)
-            make.width.equalTo(160)
-            make.height.equalTo(48)
+        divider1.snp.makeConstraints { make in
+            make.top.equalTo(typeSegmentedControl.snp.bottom).offset(8)
+            make.left.equalToSuperview().offset(inset)
+            make.right.equalToSuperview()
+            make.height.equalTo(0.5)
         }
 
         categoryLabel.snp.makeConstraints { make in
-            make.centerX.equalToSuperview().offset(-88)
+            make.left.equalToSuperview().offset(inset)
             make.centerY.equalTo(categoryButton)
         }
+        categoryButton.snp.makeConstraints { make in
+            make.top.equalTo(divider1.snp.bottom)
+            make.right.equalToSuperview().inset(inset)
+            make.height.equalTo(rowH)
+            make.width.lessThanOrEqualTo(200)
+            make.left.greaterThanOrEqualTo(categoryLabel.snp.right).offset(8)
+        }
 
-        dateButton.snp.makeConstraints { make in
-            make.centerX.equalToSuperview().offset(80)
-            make.top.equalTo(categoryButton.snp.bottom).offset(24)
-            make.width.equalTo(160)
-            make.height.equalTo(48)
+        divider2.snp.makeConstraints { make in
+            make.top.equalTo(categoryButton.snp.bottom)
+            make.left.equalToSuperview().offset(inset)
+            make.right.equalToSuperview()
+            make.height.equalTo(0.5)
         }
 
         dateLabel.snp.makeConstraints { make in
-            make.centerX.equalToSuperview().offset(-88)
+            make.left.equalToSuperview().offset(inset)
             make.centerY.equalTo(dateButton)
         }
+        dateButton.snp.makeConstraints { make in
+            make.top.equalTo(divider2.snp.bottom)
+            make.right.equalToSuperview().inset(inset)
+            make.height.equalTo(rowH)
+            make.width.lessThanOrEqualTo(200)
+            make.left.greaterThanOrEqualTo(dateLabel.snp.right).offset(8)
+        }
 
-        amountTextView.snp.makeConstraints { make in
-            make.centerX.equalToSuperview().offset(80)
-            make.top.equalTo(dateButton.snp.bottom).offset(24)
-            make.width.equalTo(160)
-            make.height.equalTo(48)
+        divider3.snp.makeConstraints { make in
+            make.top.equalTo(dateButton.snp.bottom)
+            make.left.equalToSuperview().offset(inset)
+            make.right.equalToSuperview()
+            make.height.equalTo(0.5)
         }
 
         amountLabel.snp.makeConstraints { make in
-            make.centerX.equalToSuperview().offset(-88)
+            make.left.equalToSuperview().offset(inset)
             make.centerY.equalTo(amountTextView)
         }
+        amountTextView.snp.makeConstraints { make in
+            make.top.equalTo(divider3.snp.bottom).offset(10)
+            make.right.equalToSuperview().inset(inset)
+            make.bottom.equalToSuperview().offset(-10)
+            make.height.equalTo(44)
+            make.width.equalTo(140)
+            make.left.greaterThanOrEqualTo(amountLabel.snp.right).offset(8)
+        }
 
+        // -- items below the card --
         descriptionTextField.snp.makeConstraints { make in
-            make.centerX.equalToSuperview()
-            make.top.equalTo(amountTextView.snp.bottom).offset(24)
-            make.width.equalTo(312)
-            make.height.equalTo(48)
+            make.top.equalTo(formCard.snp.bottom).offset(16)
+            make.left.equalTo(view).offset(16)
+            make.right.equalTo(view).offset(-16)
+            make.height.equalTo(50)
         }
 
         #if !targetEnvironment(macCatalyst)
@@ -231,43 +302,51 @@ extension AddOrEditTransactionViewController {
 
         if isAdd {
             saveButton.snp.makeConstraints { make in
-                make.centerX.equalToSuperview()
                 make.top.equalTo(descriptionTextField.snp.bottom).offset(24)
-                make.width.equalTo(312)
+                make.left.equalTo(view).offset(16)
+                make.right.equalTo(view).offset(-16)
                 make.height.equalTo(54)
-                make.bottom.equalToSuperview().offset(-80 - 300)
+                make.bottom.equalToSuperview().offset(-40)
             }
             #if !targetEnvironment(macCatalyst)
                 bannerView.snp.makeConstraints { make in
-                    make.top.equalTo(saveButton.snp.bottom).offset(24)
-                    make.width.equalToSuperview().offset(-32)
-                    make.centerX.equalToSuperview()
-                    make.height.equalTo(280)
+                    make.top.equalTo(saveButton.snp.bottom).offset(20)
+                    make.left.equalTo(view).offset(16)
+                    make.right.equalTo(view).offset(-16)
+                    make.height.equalTo(60)
+                    make.bottom.equalToSuperview().offset(-20)
                 }
             #endif
         } else {
+            scrollView.addSubview(deleteButton)
             saveButton.snp.makeConstraints { make in
-                make.centerX.equalToSuperview()
                 make.top.equalTo(descriptionTextField.snp.bottom).offset(24)
-                make.width.equalTo(312)
+                make.left.equalTo(view).offset(16)
+                make.right.equalTo(view).offset(-16)
                 make.height.equalTo(54)
             }
-            scrollView.addSubview(deleteButton)
             deleteButton.snp.makeConstraints { make in
-                make.centerX.equalToSuperview()
-                make.top.equalTo(saveButton.snp.bottom).offset(24)
-                make.width.equalTo(312)
+                make.top.equalTo(saveButton.snp.bottom).offset(12)
+                make.left.equalTo(view).offset(16)
+                make.right.equalTo(view).offset(-16)
                 make.height.equalTo(54)
-                make.bottom.equalToSuperview().offset(-80 - 300)
+                make.bottom.equalToSuperview().offset(-40)
             }
             #if !targetEnvironment(macCatalyst)
                 bannerView.snp.makeConstraints { make in
-                    make.top.equalTo(deleteButton.snp.bottom).offset(24)
-                    make.width.equalToSuperview().offset(-32)
-                    make.centerX.equalToSuperview()
-                    make.height.equalTo(280)
+                    make.top.equalTo(deleteButton.snp.bottom).offset(20)
+                    make.left.equalTo(view).offset(16)
+                    make.right.equalTo(view).offset(-16)
+                    make.height.equalTo(60)
+                    make.bottom.equalToSuperview().offset(-20)
                 }
             #endif
+        }
+    }
+
+    private func makeDivider() -> UIView {
+        UIView().then { v in
+            v.backgroundColor = UIColor.separator
         }
     }
 }
@@ -278,20 +357,12 @@ extension AddOrEditTransactionViewController {
     @objc private func tapTypeSegmentedControl(_ sender: UISegmentedControl) {
         if sender.selectedSegmentIndex == 0 {
             selectedCategory = "Grocery"
-            categoryButton.setAttributedTitle(NSAttributedString(
-                string: "Grocery".localized(),
-                attributes: [
-                    NSAttributedString.Key.foregroundColor: UIColor(hex: "#4A90E2"),
-                ]), for: .normal)
+            categoryButton.setTitle("Grocery".localized(), for: .normal)
             amountLabel.text = "Amount".localized() + " (-)"
             enteredAmount = -fabs(enteredAmount)
         } else {
             selectedCategory = "Salary"
-            categoryButton.setAttributedTitle(NSAttributedString(
-                string: "Salary".localized(),
-                attributes: [
-                    NSAttributedString.Key.foregroundColor: UIColor(hex: "#4A90E2"),
-                ]), for: .normal)
+            categoryButton.setTitle("Salary".localized(), for: .normal)
             amountLabel.text = "Amount".localized() + " (+)"
             enteredAmount = fabs(enteredAmount)
         }
@@ -334,11 +405,7 @@ extension AddOrEditTransactionViewController {
                     self.selectedCategory = categoryIncomes[index]
                 }
             }
-            self.categoryButton.setAttributedTitle(NSAttributedString(
-                string: title,
-                attributes: [
-                    NSAttributedString.Key.foregroundColor: UIColor(hex: "#4A90E2"),
-                ]), for: .normal)
+            self.categoryButton.setTitle(title, for: .normal)
         }
         sheet.present(in: self, from: sender)
     }
@@ -346,10 +413,7 @@ extension AddOrEditTransactionViewController {
     @objc private func tapDateButton(_ sender: UIButton) {
         let generator = UIImpactFeedbackGenerator(style: .light)
         generator.impactOccurred()
-        if #available(iOS 13.4, *) {
-            datePickerDialog.datePicker.preferredDatePickerStyle = .wheels
-        }
-        print(selectedDate)
+        datePickerDialog.datePicker.preferredDatePickerStyle = .wheels
         datePickerDialog.show("Pick Date".localized(),
                               doneButtonTitle: "Done".localized(),
                               cancelButtonTitle: "Cancel".localized(),
@@ -359,85 +423,58 @@ extension AddOrEditTransactionViewController {
                               datePickerMode: .date) { [weak self]
             (date) -> Void in
             if let date = date, let self = self {
-                sender.setAttributedTitle(NSAttributedString(
-                    string: date.toFormat("yyyy-MM-dd"),
-                    attributes: [
-                        NSAttributedString.Key.foregroundColor: UIColor(hex: "#4A90E2"),
-                    ]), for: .normal)
+                sender.setTitle(date.toFormat("yyyy-MM-dd"), for: .normal)
                 self.selectedDate = date
             }
         }
     }
 
     @objc private func tapSaveButton(_ sender: UIButton) {
-        let generator = UIImpactFeedbackGenerator(style: .light)
-        generator.impactOccurred()
+        UIImpactFeedbackGenerator(style: .medium).impactOccurred()
 
+        let context = CoreDataManager.shared.persistentContainer.viewContext
         if isAdd {
-            let context = CoreDataManager.shared.persistentContainer.viewContext
-            let newTransaction = NSEntityDescription.insertNewObject(forEntityName: "Transaction", into: context) as! Transaction
-
+            let newTransaction = Transaction(context: context)
             newTransaction.category = selectedCategory
-
             newTransaction.date = selectedDate
-
             newTransaction.amount = enteredAmount
-
             newTransaction.title = descriptionTextField.text
-
-            do {
-                try context.save()
-
-                delegate?.didAddUserTransaction()
-            } catch let saveErr {
-                print("Failed to save Event:", saveErr)
-            }
         } else {
             transaction?.category = selectedCategory
-
             transaction?.date = selectedDate
-
             transaction?.amount = enteredAmount
-
             transaction?.title = descriptionTextField.text
-
-            let context = CoreDataManager.shared.persistentContainer.viewContext
-            do {
-                try context.save()
-
-                delegate?.didEditUserTransaction()
-            } catch let saveErr {
-                print("Failed to save user Event:", saveErr)
-            }
         }
 
+        do {
+            try context.save()
+            if isAdd { delegate?.didAddUserTransaction() } else { delegate?.didEditUserTransaction() }
+        } catch {
+            print("Failed to save transaction:", error)
+        }
         navigationController?.popViewController(animated: true)
     }
 
     @objc private func tapDeleteButton(_ sender: UIButton) {
-        let generator = UIImpactFeedbackGenerator(style: .light)
-        generator.impactOccurred()
-        let alterController = UIAlertController(title: "Do you want to delete this transaction?".localized(), message: nil, preferredStyle: .alert)
-        let action1 = UIAlertAction(title: "Yes".localized(), style: .default) { [weak self] _ in
-            guard let self = self else { return }
+        UIImpactFeedbackGenerator(style: .medium).impactOccurred()
+        let alert = UIAlertController(
+            title: "Delete Transaction".localized(),
+            message: "Do you want to delete this transaction?".localized(),
+            preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "Delete".localized(), style: .destructive) { [weak self] _ in
+            guard let self = self, let transaction = self.transaction else { return }
             let context = CoreDataManager.shared.persistentContainer.viewContext
-
-            context.delete(self.transaction!)
-
+            context.delete(transaction)
             do {
                 try context.save()
-
                 self.delegate?.didDeleteUserTransaction()
                 self.navigationController?.popViewController(animated: true)
-            } catch let saveErr {
-                print("Failed to save Event:", saveErr)
+            } catch {
+                print("Failed to delete transaction:", error)
             }
-        }
-
-        let cancel = UIAlertAction(title: "Cancel".localized(), style: .cancel, handler: nil)
-        alterController.addAction(action1)
-        alterController.addAction(cancel)
-        present(alterController, animated: true, completion: nil)
+        })
+        alert.addAction(UIAlertAction(title: "Cancel".localized(), style: .cancel))
+        present(alert, animated: true)
     }
 }
 

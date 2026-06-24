@@ -50,11 +50,11 @@ class MenuViewController: UIViewController, MFMailComposeViewControllerDelegate 
         ]
     #endif
 
-    lazy var tableView = UITableView().then { tv in
+    lazy var tableView = UITableView(frame: .zero, style: .insetGrouped).then { tv in
         tv.delegate = self
         tv.dataSource = self
         tv.register(MenuCell.self, forCellReuseIdentifier: "MenuCell")
-        tv.tableFooterView = UIView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: 80))
+        tv.rowHeight = 54
     }
 
     override func viewDidLoad() {

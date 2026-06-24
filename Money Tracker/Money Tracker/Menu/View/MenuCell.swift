@@ -1,65 +1,92 @@
 //
 //  MenuCell.swift
-//  Countdown Days
+//  Money Tracker
 //
 //  Created by Banghua Zhao on 6/25/20.
-//  Copyright © 2020 Banghua Zhao. All rights reserved.
 //
 
+import SnapKit
+import Then
 import UIKit
 
 class MenuCell: UITableViewCell {
+    // SF Symbol name → background color mapping (Settings-app style)
+    private static let iconColors: [String: UIColor] = [
+        "dollarsign.circle":  .systemGreen,
+        "bubble.left":        .systemBlue,
+        "star":               .systemYellow,
+        "square.and.arrow.up": .systemOrange,
+        "hand.thumbsup":      .systemPurple,
+        "ellipsis":           .systemGray,
+    ]
+
     var menuItem: MyMenuItem? {
         didSet {
             guard let menuItem = menuItem else { return }
-            iconView.image = menuItem.icon
+            let symbolName = menuItem.icon?.description ?? ""
+            let bgColor = Self.iconColors.first(where: { symbolName.contains($0.key) })?.value ?? .themeColor
+
+            iconContainer.backgroundColor = bgColor
+            iconImageView.image = menuItem.icon?.withRenderingMode(.alwaysTemplate)
+            iconImageView.tintColor = .white
             titleLabel.text = menuItem.title
         }
     }
 
-    lazy var iconView = UIImageView().then { imageView in
-        imageView.contentMode = .scaleAspectFit
-        imageView.backgroundColor = .clear
-        imageView.tintColor = .label
+    lazy var iconContainer = UIView().then { v in
+        v.layer.cornerRadius = 8
+        v.layer.cornerCurve = .continuous
+        v.layer.masksToBounds = true
+        v.backgroundColor = .themeColor
+    }
+
+    lazy var iconImageView = UIImageView().then { iv in
+        iv.contentMode = .scaleAspectFit
+        iv.tintColor = .white
     }
 
     lazy var titleLabel = UILabel().then { label in
-        label.adjustsFontSizeToFitWidth = true
+        label.font = UIFont.systemFont(ofSize: 16, weight: .regular)
         label.numberOfLines = 1
         label.lineBreakMode = .byTruncatingTail
     }
 
-    lazy var rightArrowImageView = UIImageView().then { imageView in
-        imageView.contentMode = .scaleAspectFit
-        imageView.tintColor = .label
-        imageView.image = UIImage(systemName: "chevron.right")
+    lazy var chevron = UIImageView().then { iv in
+        let config = UIImage.SymbolConfiguration(pointSize: 12, weight: .semibold)
+        iv.image = UIImage(systemName: "chevron.right", withConfiguration: config)
+        iv.tintColor = .tertiaryLabel
+        iv.contentMode = .scaleAspectFit
     }
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        separatorInset = UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 20)
-        selectionStyle = .none
 
-        contentView.addSubview(iconView)
+        iconContainer.addSubview(iconImageView)
+        contentView.addSubview(iconContainer)
         contentView.addSubview(titleLabel)
-        contentView.addSubview(rightArrowImageView)
+        contentView.addSubview(chevron)
 
-        iconView.snp.makeConstraints { make in
-            make.left.equalToSuperview().offset(20)
-            make.size.equalTo(30)
+        iconContainer.snp.makeConstraints { make in
+            make.left.equalToSuperview().offset(16)
             make.centerY.equalToSuperview()
+            make.size.equalTo(32)
+        }
+
+        iconImageView.snp.makeConstraints { make in
+            make.center.equalToSuperview()
+            make.size.equalTo(18)
         }
 
         titleLabel.snp.makeConstraints { make in
-            make.left.equalTo(iconView.snp.right).offset(12)
-            make.right.equalTo(rightArrowImageView.snp.left).offset(-12)
+            make.left.equalTo(iconContainer.snp.right).offset(14)
+            make.right.equalTo(chevron.snp.left).offset(-8)
             make.centerY.equalToSuperview()
         }
 
-        rightArrowImageView.snp.makeConstraints { make in
-            make.width.equalTo(12)
-            make.right.equalToSuperview().inset(20)
+        chevron.snp.makeConstraints { make in
+            make.right.equalToSuperview().offset(-16)
             make.centerY.equalToSuperview()
+            make.width.equalTo(10)
         }
     }
 

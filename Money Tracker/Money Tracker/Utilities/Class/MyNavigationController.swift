@@ -10,7 +10,7 @@ import UIKit
 class MyNavigationController: UINavigationController {
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        navigationBar.prefersLargeTitles = true
         setNavigationBar()
     }
 

@@ -1,18 +1,34 @@
 //
-//  Other.swift
-//  BMI Diary
+//  Color.swift
+//  Money Tracker
 //
 //  Created by Banghua Zhao on 7/2/20.
-//  Copyright © 2020 Banghua Zhao. All rights reserved.
 //
 
 import UIKit
-import Hue
 
 extension UIColor {
-    static let incomeGreen = UIColor(hex: "#0AC673")
-    static let themeColor = UIColor(hex: "#4A90E2")
-//    static let unselected = UIColor(hex: "#83BFBD").alpha(0.2)
-//    static let selected = UIColor(hex: "#83BFBD")
-//    static let unselectedText = UIColor(hex: "#83BFBD")
+    static let incomeGreen = UIColor.systemGreen
+    static let expenseRed  = UIColor.systemRed
+    static let themeColor  = UIColor.systemBlue
+
+    static func categoryColor(for category: String) -> UIColor {
+        switch category {
+        case "Grocery":              return .systemGreen
+        case "Transportation":       return .systemBlue
+        case "Entertainment":        return .systemPurple
+        case "Restaurant":           return .systemOrange
+        case "House Rent":           return .systemBrown
+        case "Insurance":            return .systemIndigo
+        case "Travel":               return .systemTeal
+        case "Education":            return .systemCyan
+        case "Consumer Electronics": return .systemGray
+        case "Gift":                 return .systemPink
+        case "Medicine":             return .systemRed
+        case "Salary":               return .systemGreen
+        case "Investment Income":    return .systemMint
+        case "Other Income":         return .systemGreen
+        default:                     return .systemGray
+        }
+    }
 }
