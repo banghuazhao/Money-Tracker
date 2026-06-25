@@ -205,6 +205,8 @@ extension PieChartViewController: UITableViewDelegate, UITableViewDataSource {
                 return cell
             } else {
                 let cell = tableView.dequeueReusableCell(withIdentifier: "SingleTitleCell") as! SingleTitleCell
+                let total = transactionCategories.reduce(0) { $0 + $1.amount }
+                cell.configure(total: total, isExpense: isExpense)
                 return cell
             }
         } else {

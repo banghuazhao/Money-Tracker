@@ -26,16 +26,21 @@ class BarChartViewController: UIViewController {
     var isExpense: Bool = true
 
     var selectedTime = "All".localized()
-    
+
     private var barChartView = AAChartView()
 
+    // 0 = group by category, 1 = group by day (daily spending statistics)
+    private lazy var modeSegment = UISegmentedControl(items: ["By Category".localized(), "By Day".localized()]).then { sc in
+        sc.selectedSegmentIndex = 0
+        sc.addTarget(self, action: #selector(tapModeSegment), for: .valueChanged)
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
         setupNavigationBar()
         setupViews()
         fetchTransactionCategories()
-        drawBarChart()
+        drawChart()
     }
 
     private func setupNavigationBar() {
@@ -48,10 +53,22 @@ class BarChartViewController: UIViewController {
 
     private func setupViews() {
         view.backgroundColor = .systemBackground
+        view.addSubview(modeSegment)
         view.addSubview(barChartView)
-        barChartView.snp.makeConstraints { (make) in
-            make.edges.equalToSuperview()
+        modeSegment.snp.makeConstraints { make in
+            make.top.equalTo(view.safeAreaLayoutGuide).offset(12)
+            make.left.equalToSuperview().offset(16)
+            make.right.equalToSuperview().offset(-16)
         }
+        barChartView.snp.makeConstraints { make in
+            make.top.equalTo(modeSegment.snp.bottom).offset(8)
+            make.left.right.bottom.equalToSuperview()
+        }
+    }
+
+    @objc private func tapModeSegment() {
+        UISelectionFeedbackGenerator().selectionChanged()
+        drawChart()
     }
 
     private func fetchTransactionCategories() {
@@ -93,24 +110,30 @@ class BarChartViewController: UIViewController {
         transactionCategories.sort { fabs($0.amount) > fabs($1.amount) }
     }
     
-    private func drawBarChart() {
-        
+    private func drawChart() {
+        if modeSegment.selectedSegmentIndex == 1 {
+            drawDailyChart()
+        } else {
+            drawCategoryChart()
+        }
+    }
+
+    private func drawCategoryChart() {
         var datas: [[Any]] = []
         for transactionCategory in transactionCategories {
             let name = transactionCategory.category.localized()
             datas.append([name, fabs(transactionCategory.amount)])
         }
-        
+
+        let total = transactionCategories.reduce(0) { $0 + fabs($1.amount) }
+
         let aaOptions = AAOptions()
             .chart(AAChart()
-                .type(AAChartType.bar)
-//                .scrollablePlotArea(
-//                    AAScrollablePlotArea()
-//                        .minHeight(1300)
-//            )
-            )
+                .type(AAChartType.bar))
             .title(AATitle()
                 .text("\("Date".localized()): \(selectedTime)"))
+            .subtitle(AASubtitle()
+                .text("\("Total".localized()): \(convertDoubleToCurrency(amount: total))"))
             .xAxis(AAXAxis()
                 .type("category"))
             .series([
@@ -118,7 +141,41 @@ class BarChartViewController: UIViewController {
                     .name(isExpense ? "Expense".localized() : "Income".localized())
                     .data(datas)])
         barChartView.aa_drawChartWithChartOptions(aaOptions)
-        
+    }
+
+    /// Daily spending statistics: sums each day's amount across the selected period.
+    private func drawDailyChart() {
+        var totalsByDay: [String: Double] = [:]
+        for transaction in currentTransactions {
+            guard let category = transaction.category, let date = transaction.date else { continue }
+            let isExpenseCategory = categoryExpenses.contains(category)
+            guard isExpenseCategory == isExpense else { continue }
+            let day = date.toFormat("yyyy-MM-dd")
+            totalsByDay[day, default: 0] += fabs(transaction.amount)
+        }
+
+        let sortedDays = totalsByDay.keys.sorted { ($0.toDate()?.date ?? Date()) < ($1.toDate()?.date ?? Date()) }
+        let datas: [[Any]] = sortedDays.map { [$0, totalsByDay[$0] ?? 0] }
+        let total = totalsByDay.values.reduce(0, +)
+
+        let aaOptions = AAOptions()
+            .chart(AAChart()
+                .type(AAChartType.column)
+                .scrollablePlotArea(
+                    AAScrollablePlotArea()
+                        .minWidth(max(sortedDays.count * 44, Int(view.bounds.width)))
+                        .scrollPositionX(1)))
+            .title(AATitle()
+                .text("\("Daily".localized()) · \(selectedTime)"))
+            .subtitle(AASubtitle()
+                .text("\("Total".localized()): \(convertDoubleToCurrency(amount: total))"))
+            .xAxis(AAXAxis()
+                .type("category"))
+            .series([
+                AASeriesElement()
+                    .name(isExpense ? "Expense".localized() : "Income".localized())
+                    .data(datas)])
+        barChartView.aa_drawChartWithChartOptions(aaOptions)
     }
 }
 
@@ -179,7 +236,7 @@ extension BarChartViewController {
             let title = item.title
             self.selectedTime = title
             self.fetchTransactionCategories()
-            self.drawBarChart()
+            self.drawChart()
         }
         sheet.present(in: self, from: sender)
     }

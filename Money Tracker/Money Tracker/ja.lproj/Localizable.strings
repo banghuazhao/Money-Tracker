@@ -108,3 +108,18 @@
 "Select a Date" = "日付を選択";
 "Bar Chart (Expense)" = "バーチャート（費用）";
 "Bar Chart (Income)" = "バーチャート（収入）";
+
+// v-next: new categories & chart totals/daily
+"Clothing" = "衣類";
+"Beauty" = "美容";
+"Membership" = "会員";
+"Fitness" = "フィットネス";
+"Pets" = "ペット";
+"Utilities" = "光熱費";
+"Childcare" = "育児";
+"Savings" = "貯金";
+"Side Hustle Income" = "副業収入";
+"Total" = "合計";
+"By Category" = "カテゴリ別";
+"By Day" = "日別";
+"Daily" = "日別";

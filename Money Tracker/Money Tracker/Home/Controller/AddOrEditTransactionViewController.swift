@@ -375,12 +375,12 @@ extension AddOrEditTransactionViewController {
         var items: [MenuItem] = []
         if typeSegmentedControl.selectedSegmentIndex == 0 {
             for tempCategory in categoryExpenses {
-                let item = SingleSelectItem(title: tempCategory.localized(), isSelected: tempCategory == selectedCategory, image: UIImage(named: tempCategory))
+                let item = SingleSelectItem(title: tempCategory.localized(), isSelected: tempCategory == selectedCategory, image: UIImage.categoryIcon(for: tempCategory))
                 items.append(item)
             }
         } else {
             for tempCategory in categoryIncomes {
-                let item = SingleSelectItem(title: tempCategory.localized(), isSelected: tempCategory == selectedCategory, image: UIImage(named: tempCategory))
+                let item = SingleSelectItem(title: tempCategory.localized(), isSelected: tempCategory == selectedCategory, image: UIImage.categoryIcon(for: tempCategory))
                 items.append(item)
             }
         }

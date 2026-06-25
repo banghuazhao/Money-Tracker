@@ -17,7 +17,7 @@ class TransactionCell: UITableViewCell {
 
             let color = UIColor.categoryColor(for: category)
             iconBackground.backgroundColor = color.withAlphaComponent(0.15)
-            categoryImageView.image = UIImage(named: category)
+            categoryImageView.image = UIImage.categoryIcon(for: category)
 
             categoryLabel.attributedText = nil
             titleLabel.attributedText = nil

@@ -54,11 +54,20 @@ let categoryExpenses: [String] = [
     "Consumer Electronics",
     "Gift",
     "Medicine",
+    "Clothing",
+    "Beauty",
+    "Membership",
+    "Fitness",
+    "Pets",
+    "Utilities",
+    "Childcare",
     "Other Expense",
 ]
 let categoryIncomes: [String] = [
     "Salary",
     "Investment Income",
+    "Savings",
+    "Side Hustle Income",
     "Other Income",
 ]
 

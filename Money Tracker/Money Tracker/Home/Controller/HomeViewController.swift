@@ -103,13 +103,6 @@ class HomeViewController: UIViewController {
         setupViews()
         fetchTransactions()
         updateSampleBanner()
-
-        // Refresh when CloudKit merges changes from another device (iPhone ↔ Mac).
-        NotificationCenter.default.addObserver(
-            self,
-            selector: #selector(handleRemoteStoreChange),
-            name: .NSPersistentStoreRemoteChange,
-            object: CoreDataManager.shared.persistentContainer.persistentStoreCoordinator)
     }
 
     override func viewDidLayoutSubviews() {
@@ -130,15 +123,6 @@ class HomeViewController: UIViewController {
             }
         } else if tableView.tableHeaderView != nil {
             tableView.tableHeaderView = nil
-        }
-    }
-
-    @objc private func handleRemoteStoreChange() {
-        DispatchQueue.main.async { [weak self] in
-            guard let self = self else { return }
-            self.fetchTransactions()
-            self.updateSampleBanner()
-            self.tableView.reloadData()
         }
     }
 

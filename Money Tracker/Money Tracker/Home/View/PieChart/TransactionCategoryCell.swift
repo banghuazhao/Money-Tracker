@@ -16,7 +16,7 @@ class TransactionCategoryCell: UITableViewCell {
             guard let transactionCategory = transactionCategory else { return }
             categoryLabel.text = transactionCategory.category.localized()
             amountLabel.text = convertDoubleToCurrency(amount: transactionCategory.amount)
-            categoryImageView.image = UIImage(named: transactionCategory.category)
+            categoryImageView.image = UIImage.categoryIcon(for: transactionCategory.category)
             if categoryExpenses.contains(transactionCategory.category) {
                 amountLabel.textColor = UIColor.label
             } else {

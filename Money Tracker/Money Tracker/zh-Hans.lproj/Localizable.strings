@@ -108,3 +108,18 @@
 "Select a Date" = "选择日期";
 "Bar Chart (Expense)" = "条形图 (支出)";
 "Bar Chart (Income)" = "条形图 (收入)";
+
+// v-next: new categories & chart totals/daily
+"Clothing" = "服饰";
+"Beauty" = "美妆护肤";
+"Membership" = "会员卡";
+"Fitness" = "健身";
+"Pets" = "宠物";
+"Utilities" = "水电煤";
+"Childcare" = "育儿";
+"Savings" = "储蓄";
+"Side Hustle Income" = "副业收入";
+"Total" = "合计";
+"By Category" = "按类别";
+"By Day" = "按天";
+"Daily" = "每日";

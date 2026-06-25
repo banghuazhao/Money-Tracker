@@ -12,52 +12,13 @@ import CoreData
 final class CoreDataManager {
     static let shared = CoreDataManager()
 
-    /// CloudKit container identifier. Must match the iCloud capability configured
-    /// in Signing & Capabilities (and the App ID in the developer portal).
-    static let cloudKitContainerID = "iCloud.com.Banghua-Zhao.Money-Tracker"
-
-    let persistentContainer: NSPersistentCloudKitContainer = {
-        let container = NSPersistentCloudKitContainer(name: "Model")
-
-        if let description = container.persistentStoreDescriptions.first {
-            // Required for CloudKit mirroring: track history and post a
-            // notification when another device pushes a change.
-            description.setOption(true as NSNumber, forKey: NSPersistentHistoryTrackingKey)
-            description.setOption(true as NSNumber, forKey: NSPersistentStoreRemoteChangeNotificationPostOptionKey)
-
-            // Mirror the local store to the user's private CloudKit database so
-            // data syncs across their devices (iPhone ↔ Mac).
-            description.cloudKitContainerOptions = NSPersistentCloudKitContainerOptions(
-                containerIdentifier: CoreDataManager.cloudKitContainerID
-            )
-        }
-
-        var loadError: Error?
+    let persistentContainer: NSPersistentContainer = {
+        let container = NSPersistentContainer(name: "Model")
         container.loadPersistentStores { _, err in
             if let err = err {
-                loadError = err
-                print("CloudKit store load failed: \(err)")
+                fatalError("Loading of store failed: \(err)")
             }
         }
-
-        // If CloudKit isn't available (iCloud capability not configured, no
-        // entitlement, etc.), fall back to a plain local store so the app
-        // always works — just without cross-device sync.
-        if loadError != nil {
-            if let description = container.persistentStoreDescriptions.first {
-                description.cloudKitContainerOptions = nil
-            }
-            container.loadPersistentStores { _, err in
-                if let err = err {
-                    print("Local store load failed: \(err)")
-                }
-            }
-        }
-
-        // Keep the UI context up to date as remote changes are merged in.
-        container.viewContext.automaticallyMergesChangesFromParent = true
-        container.viewContext.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
-        try? container.viewContext.setQueryGenerationFrom(.current)
         return container
     }()
 

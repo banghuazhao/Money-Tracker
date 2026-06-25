@@ -109,3 +109,18 @@
 "Bar Chart (Expense)" = "條形圖 (支出)";
 "Bar Chart (Income)" = "條形圖 (收入)";
 
+
+// v-next: new categories & chart totals/daily
+"Clothing" = "服飾";
+"Beauty" = "美妝護膚";
+"Membership" = "會員卡";
+"Fitness" = "健身";
+"Pets" = "寵物";
+"Utilities" = "水電煤";
+"Childcare" = "育兒";
+"Savings" = "儲蓄";
+"Side Hustle Income" = "副業收入";
+"Total" = "合計";
+"By Category" = "按類別";
+"By Day" = "按日";
+"Daily" = "每日";

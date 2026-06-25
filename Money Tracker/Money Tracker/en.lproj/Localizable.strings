@@ -108,3 +108,18 @@
 "Select a Date" = "Select a Date";
 "Bar Chart (Expense)" = "Bar Chart (Expense)";
 "Bar Chart (Income)" = "Bar Chart (Income)";
+
+// v-next: new categories & chart totals/daily
+"Clothing" = "Clothing";
+"Beauty" = "Beauty";
+"Membership" = "Membership";
+"Fitness" = "Fitness";
+"Pets" = "Pets";
+"Utilities" = "Utilities";
+"Childcare" = "Childcare";
+"Savings" = "Savings";
+"Side Hustle Income" = "Side Hustle Income";
+"Total" = "Total";
+"By Category" = "By Category";
+"By Day" = "By Day";
+"Daily" = "Daily";
