@@ -32,11 +32,25 @@ final class CoreDataManager {
             )
         }
 
+        var loadError: Error?
         container.loadPersistentStores { _, err in
             if let err = err {
-                // Don't crash: if CloudKit is unreachable or the account is
-                // signed out, the app still works against the local store.
-                print("Loading of store failed: \(err)")
+                loadError = err
+                print("CloudKit store load failed: \(err)")
+            }
+        }
+
+        // If CloudKit isn't available (iCloud capability not configured, no
+        // entitlement, etc.), fall back to a plain local store so the app
+        // always works — just without cross-device sync.
+        if loadError != nil {
+            if let description = container.persistentStoreDescriptions.first {
+                description.cloudKitContainerOptions = nil
+            }
+            container.loadPersistentStores { _, err in
+                if let err = err {
+                    print("Local store load failed: \(err)")
+                }
             }
         }
 
