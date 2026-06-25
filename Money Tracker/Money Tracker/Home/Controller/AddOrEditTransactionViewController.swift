@@ -440,6 +440,12 @@ extension AddOrEditTransactionViewController {
 
         let context = CoreDataManager.shared.persistentContainer.viewContext
         if isAdd {
+            // The user's first real entry replaces the first-run sample data so
+            // their records never get mixed up with the examples.
+            if UserDefaults.standard.bool(forKey: UserDefaultsKeys.hasSampleData) {
+                CoreDataManager.shared.deleteAllTransactions()
+                UserDefaults.standard.set(false, forKey: UserDefaultsKeys.hasSampleData)
+            }
             let newTransaction = Transaction(context: context)
             newTransaction.category = selectedCategory
             newTransaction.date = selectedDate

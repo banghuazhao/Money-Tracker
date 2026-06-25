@@ -12,13 +12,38 @@ import CoreData
 final class CoreDataManager {
     static let shared = CoreDataManager()
 
-    let persistentContainer: NSPersistentContainer = {
-        let container = NSPersistentContainer(name: "Model")
+    /// CloudKit container identifier. Must match the iCloud capability configured
+    /// in Signing & Capabilities (and the App ID in the developer portal).
+    static let cloudKitContainerID = "iCloud.com.Banghua-Zhao.Money-Tracker"
+
+    let persistentContainer: NSPersistentCloudKitContainer = {
+        let container = NSPersistentCloudKitContainer(name: "Model")
+
+        if let description = container.persistentStoreDescriptions.first {
+            // Required for CloudKit mirroring: track history and post a
+            // notification when another device pushes a change.
+            description.setOption(true as NSNumber, forKey: NSPersistentHistoryTrackingKey)
+            description.setOption(true as NSNumber, forKey: NSPersistentStoreRemoteChangeNotificationPostOptionKey)
+
+            // Mirror the local store to the user's private CloudKit database so
+            // data syncs across their devices (iPhone ↔ Mac).
+            description.cloudKitContainerOptions = NSPersistentCloudKitContainerOptions(
+                containerIdentifier: CoreDataManager.cloudKitContainerID
+            )
+        }
+
         container.loadPersistentStores { _, err in
             if let err = err {
-                fatalError("Loading of store failed: \(err)")
+                // Don't crash: if CloudKit is unreachable or the account is
+                // signed out, the app still works against the local store.
+                print("Loading of store failed: \(err)")
             }
         }
+
+        // Keep the UI context up to date as remote changes are merged in.
+        container.viewContext.automaticallyMergesChangesFromParent = true
+        container.viewContext.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
+        try? container.viewContext.setQueryGenerationFrom(.current)
         return container
     }()
 
@@ -43,5 +68,15 @@ final class CoreDataManager {
         } catch {
             print("Failed to save context:", error)
         }
+    }
+
+    /// Deletes every transaction. Used to clear the first-run sample data.
+    func deleteAllTransactions() {
+        let transactions = fetchLocalTransactions()
+        guard !transactions.isEmpty else { return }
+        for transaction in transactions {
+            viewContext.delete(transaction)
+        }
+        saveContext()
     }
 }

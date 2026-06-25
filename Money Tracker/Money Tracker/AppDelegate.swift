@@ -18,6 +18,11 @@ import UIKit
 class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+        // Format and parse dates in the device's local time zone. Without this,
+        // SwiftDate defaults to UTC, which shifts a picked date back a day for
+        // users east of UTC (e.g. "3/14" shown as "3/13" in UTC+8).
+        SwiftDate.defaultRegion = Region.local
+
         #if !targetEnvironment(macCatalyst)
             GADMobileAds.sharedInstance().start(completionHandler: nil)
             IQKeyboardManager.shared.enable = true
@@ -123,6 +128,9 @@ extension AppDelegate {
         do {
             try context.save()
             UserDefaults.standard.set(false, forKey: "firstRun")
+            // Mark these as sample data so the Home screen can offer a one-tap
+            // clear and so they're auto-removed when the user adds a real entry.
+            UserDefaults.standard.set(true, forKey: UserDefaultsKeys.hasSampleData)
         } catch let saveErr {
             print("Failed to save user transactions:", saveErr)
         }

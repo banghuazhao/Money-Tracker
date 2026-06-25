@@ -38,6 +38,8 @@ struct UserDefaultsKeys {
     static let FETCH_COUNT = "FETCH_COUNT"
     static let CURRENCY = "CURRENCY"
     static let timesToOpenInterstitialAds = "timesToOpenInterstitialAds"
+    /// True while the only transactions are the first-run sample data.
+    static let hasSampleData = "hasSampleData"
 }
 
 let categoryExpenses: [String] = [

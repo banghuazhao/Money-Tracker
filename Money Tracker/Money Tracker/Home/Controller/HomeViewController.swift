@@ -54,6 +54,46 @@ class HomeViewController: UIViewController {
         return tv
     }()
 
+    private lazy var sampleBanner: UIView = {
+        let container = UIView()
+        container.backgroundColor = .secondarySystemGroupedBackground
+
+        let iconLabel = UILabel()
+        iconLabel.text = "👋"
+        iconLabel.font = .systemFont(ofSize: 22)
+
+        let textLabel = UILabel()
+        textLabel.text = "These are sample transactions to show you around. Clear them when you're ready.".localized()
+        textLabel.font = .systemFont(ofSize: 13)
+        textLabel.textColor = .secondaryLabel
+        textLabel.numberOfLines = 2
+
+        let clearButton = UIButton(type: .system)
+        clearButton.setTitle("Clear".localized(), for: .normal)
+        clearButton.titleLabel?.font = .systemFont(ofSize: 14, weight: .semibold)
+        clearButton.addTarget(self, action: #selector(tapClearSampleData), for: .touchUpInside)
+        clearButton.setContentHuggingPriority(.required, for: .horizontal)
+
+        container.addSubview(iconLabel)
+        container.addSubview(textLabel)
+        container.addSubview(clearButton)
+
+        iconLabel.snp.makeConstraints { make in
+            make.left.equalToSuperview().offset(16)
+            make.centerY.equalToSuperview()
+        }
+        clearButton.snp.makeConstraints { make in
+            make.right.equalToSuperview().offset(-16)
+            make.centerY.equalToSuperview()
+        }
+        textLabel.snp.makeConstraints { make in
+            make.left.equalTo(iconLabel.snp.right).offset(12)
+            make.right.equalTo(clearButton.snp.left).offset(-12)
+            make.centerY.equalToSuperview()
+        }
+        return container
+    }()
+
     override func viewDidLoad() {
         super.viewDidLoad()
         #if !targetEnvironment(macCatalyst)
@@ -62,6 +102,61 @@ class HomeViewController: UIViewController {
         setupNavigationBar()
         setupViews()
         fetchTransactions()
+        updateSampleBanner()
+
+        // Refresh when CloudKit merges changes from another device (iPhone ↔ Mac).
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(handleRemoteStoreChange),
+            name: .NSPersistentStoreRemoteChange,
+            object: CoreDataManager.shared.persistentContainer.persistentStoreCoordinator)
+    }
+
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        // Keep the table header (sample banner) width in sync with the table.
+        if let header = tableView.tableHeaderView, header.frame.width != tableView.bounds.width {
+            header.frame.size.width = tableView.bounds.width
+            tableView.tableHeaderView = header
+        }
+    }
+
+    private func updateSampleBanner() {
+        let showBanner = UserDefaults.standard.bool(forKey: UserDefaultsKeys.hasSampleData)
+        if showBanner {
+            if tableView.tableHeaderView !== sampleBanner {
+                sampleBanner.frame = CGRect(x: 0, y: 0, width: tableView.bounds.width, height: 64)
+                tableView.tableHeaderView = sampleBanner
+            }
+        } else if tableView.tableHeaderView != nil {
+            tableView.tableHeaderView = nil
+        }
+    }
+
+    @objc private func handleRemoteStoreChange() {
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
+            self.fetchTransactions()
+            self.updateSampleBanner()
+            self.tableView.reloadData()
+        }
+    }
+
+    @objc private func tapClearSampleData() {
+        let alert = UIAlertController(
+            title: "Clear sample data?".localized(),
+            message: "This removes the example transactions so you can start fresh.".localized(),
+            preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "Clear".localized(), style: .destructive) { [weak self] _ in
+            guard let self = self else { return }
+            CoreDataManager.shared.deleteAllTransactions()
+            UserDefaults.standard.set(false, forKey: UserDefaultsKeys.hasSampleData)
+            self.fetchTransactions()
+            self.updateSampleBanner()
+            self.tableView.reloadData()
+        })
+        alert.addAction(UIAlertAction(title: "Cancel".localized(), style: .cancel))
+        present(alert, animated: true)
     }
 
     private func setupNavigationBar() {
@@ -348,6 +443,7 @@ extension HomeViewController: AAChartViewDelegate {
 extension HomeViewController: AddOrEditTransactionViewControllerDelegate {
     func didAddUserTransaction() {
         fetchTransactions()
+        updateSampleBanner()
         tableView.reloadData()
 
         #if !targetEnvironment(macCatalyst)
