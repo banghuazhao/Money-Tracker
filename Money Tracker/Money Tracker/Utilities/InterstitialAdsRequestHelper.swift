@@ -9,7 +9,13 @@
 import Foundation
 
 struct InterstitialAdsRequestHelper {
-    static let requestThreshold = 2
+    /// Show an interstitial only every Nth transaction add (adding is the core
+    /// action — interrupting it too often is what users complained about).
+    static let requestThreshold = 5
+    /// Never show two interstitials closer together than this, regardless of count.
+    static let minInterval: TimeInterval = 3 * 60
+
+    private static let lastShownKey = "lastInterstitialShownDate"
 
     static func incrementRequestCount() {
         if var requestCount = UserDefaults.standard.value(forKey: UserDefaultsKeys.timesToOpenInterstitialAds) as? Int {
@@ -24,14 +30,19 @@ struct InterstitialAdsRequestHelper {
         incrementRequestCount()
         let requestCount = UserDefaults.standard.integer(forKey: UserDefaultsKeys.timesToOpenInterstitialAds)
         print("requestCount: \(requestCount)")
-        if requestCount >= requestThreshold {
-            return true
+        guard requestCount >= requestThreshold else { return false }
+
+        // Enforce a time cooldown so a burst of quick adds can't chain ads.
+        if let last = UserDefaults.standard.object(forKey: lastShownKey) as? Date,
+           Date().timeIntervalSince(last) < minInterval {
+            return false
         }
-        return false
+        return true
     }
 
     static func resetRequestCount() {
         UserDefaults.standard.setValue(0, forKey: UserDefaultsKeys.timesToOpenInterstitialAds)
+        UserDefaults.standard.setValue(Date(), forKey: lastShownKey)
         print("resetRequestCount")
     }
 }

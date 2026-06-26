@@ -25,11 +25,24 @@ final class AppOpenAdManager: NSObject {
     /// When we last *showed* an app-open ad, used for the frequency cap.
     private var lastShowTime: Date?
     /// Minimum gap between two app-open ads so returning users aren't bombarded.
-    private let minIntervalBetweenAds: TimeInterval = 4 * 60
+    private let minIntervalBetweenAds: TimeInterval = 8 * 60
+
+    /// When the app last went to the background.
+    private var didEnterBackgroundTime: Date?
+    /// Only show on resume if the app was actually away this long. This avoids
+    /// interrupting quick app-switches (e.g. copying a number) and means the ad
+    /// never shows on first launch (no prior background time recorded).
+    private let minBackgroundDuration: TimeInterval = 30
 
     private var adUnitID: String { Constants.appOpenAdID }
 
     private override init() { super.init() }
+
+    /// Call when the app enters the background so resume can be gated on how
+    /// long the user was actually away.
+    func appDidEnterBackground() {
+        didEnterBackgroundTime = Date()
+    }
 
     // MARK: - Loading
 
@@ -53,6 +66,14 @@ final class AppOpenAdManager: NSObject {
 
     func showAdIfAvailable() {
         guard !isShowingAd else { return }
+
+        // Only after the user was genuinely away for a bit (also skips the
+        // first cold launch, when there's no recorded background time).
+        guard let bgTime = didEnterBackgroundTime,
+              Date().timeIntervalSince(bgTime) >= minBackgroundDuration else {
+            loadAd()
+            return
+        }
 
         // Respect the frequency cap.
         if let lastShowTime, Date().timeIntervalSince(lastShowTime) < minIntervalBetweenAds {

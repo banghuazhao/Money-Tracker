@@ -73,10 +73,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     func applicationDidBecomeActive(_ application: UIApplication) {
-        // Show an app-open ad when the user returns to the foreground. On the very
-        // first launch the ad isn't loaded yet, so nothing interrupts the cold start.
+        // Show an app-open ad only when the user returns after being away a while
+        // (handled in the manager). Never interrupts the first cold start.
         #if !targetEnvironment(macCatalyst)
             AppOpenAdManager.shared.showAdIfAvailable()
+        #endif
+    }
+
+    func applicationDidEnterBackground(_ application: UIApplication) {
+        #if !targetEnvironment(macCatalyst)
+            AppOpenAdManager.shared.appDidEnterBackground()
         #endif
     }
 }
