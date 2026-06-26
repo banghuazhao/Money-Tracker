@@ -10,7 +10,7 @@
         <attribute name="iconName" optional="YES" attributeType="String"/>
         <attribute name="isIncome" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
         <attribute name="name" optional="YES" attributeType="String"/>
-        <attribute name="uuid" optional="YES" attributeType="String"/>
+        <attribute name="uuid" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
     </entity>
     <elements>
         <element name="Transaction" positionX="-63" positionY="-18" width="128" height="103"/>

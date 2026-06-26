@@ -14,7 +14,7 @@ extension UserCategory {
     @NSManaged public var iconName: String?
     @NSManaged public var isIncome: Bool
     @NSManaged public var name: String?
-    @NSManaged public var uuid: String?
+    @NSManaged public var uuid: UUID?
 }
 
 extension UserCategory: Identifiable {}

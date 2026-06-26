@@ -38,7 +38,7 @@ final class UserCategoryManager {
     func create(name: String, iconName: String, isIncome: Bool) -> UserCategory {
         let context = CoreDataManager.shared.viewContext
         let cat = UserCategory(context: context)
-        cat.uuid = UUID().uuidString
+        cat.uuid = UUID()
         cat.name = name
         cat.iconName = iconName
         cat.isIncome = isIncome
