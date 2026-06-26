@@ -20,14 +20,6 @@ import UIKit
 class HomeViewController: UIViewController {
     #if !targetEnvironment(macCatalyst)
         var interstitialAd: GADInterstitialAd?
-
-        lazy var bannerView: GADBannerView = {
-            let bannerView = GADBannerView()
-            bannerView.adUnitID = Constants.bannerViewAdUnitID
-            bannerView.rootViewController = self
-            bannerView.load(GADRequest())
-            return bannerView
-        }()
     #endif
     var transactions: [Transaction] = [] {
         didSet {
@@ -165,23 +157,9 @@ class HomeViewController: UIViewController {
         tableView.refreshControl = refreshControl
 
         view.addSubview(tableView)
-
-        #if !targetEnvironment(macCatalyst)
-            view.addSubview(bannerView)
-            bannerView.snp.makeConstraints { make in
-                make.bottom.equalTo(view.safeAreaLayoutGuide)
-                make.left.right.equalToSuperview()
-                make.height.equalTo(50)
-            }
-            tableView.snp.makeConstraints { make in
-                make.top.left.right.equalToSuperview()
-                make.bottom.equalTo(bannerView.snp.top)
-            }
-        #else
-            tableView.snp.makeConstraints { make in
-                make.edges.equalToSuperview()
-            }
-        #endif
+        tableView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
     }
 
     private func fetchTransactions() {
