@@ -34,10 +34,11 @@ class AddOrEditTransactionViewController: UIViewController {
             guard let transaction = transaction,
                   let category = transaction.category,
                   let date = transaction.date else { return }
-            typeSegmentedControl.selectedSegmentIndex = categoryExpenses.contains(category) ? 0 : 1
+            typeSegmentedControl.selectedSegmentIndex = transaction.amount < 0 ? 0 : 1
             updateAmountSign()
             selectedCategory = category
-            categoryButton.setTitle(category.localized(), for: .normal)
+            let isUser = UserCategoryManager.shared.category(forName: category) != nil
+            categoryButton.setTitle(isUser ? category : category.localized(), for: .normal)
             selectedDate = date
             dateButton.setTitle(date.toFormat("yyyy-MM-dd"), for: .normal)
             enteredAmount = transaction.amount
@@ -460,23 +461,10 @@ extension AddOrEditTransactionViewController {
 
     @objc private func tapCategoryButton(_ sender: UIButton) {
         UIImpactFeedbackGenerator(style: .light).impactOccurred()
-
-        let categories = typeSegmentedControl.selectedSegmentIndex == 0 ? categoryExpenses : categoryIncomes
-        var items: [MenuItem] = categories.map {
-            SingleSelectItem(title: $0.localized(), isSelected: $0 == selectedCategory, image: UIImage.categoryIcon(for: $0))
-        }
-        items.append(CancelButton(title: "Cancel".localized()))
-
-        let menu = Menu(title: "Select a Category".localized(), items: items)
-        let sheet = menu.toActionSheet { [weak self] _, item in
-            guard let self = self else { return }
-            guard item.title != "Cancel".localized(), item.title != "Select a Category".localized() else { return }
-            if let index = items.firstIndex(where: { $0.title == item.title }), index < categories.count {
-                self.selectedCategory = categories[index]
-                self.categoryButton.setTitle(item.title, for: .normal)
-            }
-        }
-        sheet.present(in: self, from: sender)
+        let isIncome = typeSegmentedControl.selectedSegmentIndex == 1
+        let vc = CategoryListViewController(isSelectMode: true, filterIncome: isIncome)
+        vc.delegate = self
+        navigationController?.pushViewController(vc, animated: true)
     }
 
     @objc private func tapDateButton(_ sender: UIButton) {
@@ -598,6 +586,17 @@ extension AddOrEditTransactionViewController: UITextViewDelegate {
             textView.text = ""
         }
         updateAmountPlaceholder()
+    }
+}
+
+// MARK: - CategoryListViewControllerDelegate
+
+extension AddOrEditTransactionViewController: CategoryListViewControllerDelegate {
+    func categoryList(_ vc: CategoryListViewController, didSelect name: String) {
+        selectedCategory = name
+        // Determine display name: localized for common, raw for user categories
+        let isUser = UserCategoryManager.shared.category(forName: name) != nil
+        categoryButton.setTitle(isUser ? name : name.localized(), for: .normal)
     }
 }
 

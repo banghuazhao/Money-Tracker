@@ -6,7 +6,14 @@
         <attribute name="date" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="title" optional="YES" attributeType="String"/>
     </entity>
+    <entity name="UserCategory" representedClassName="UserCategory" syncable="YES" codeGenerationType="none">
+        <attribute name="iconName" optional="YES" attributeType="String"/>
+        <attribute name="isIncome" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="name" optional="YES" attributeType="String"/>
+        <attribute name="uuid" optional="YES" attributeType="String"/>
+    </entity>
     <elements>
         <element name="Transaction" positionX="-63" positionY="-18" width="128" height="103"/>
+        <element name="UserCategory" positionX="100" positionY="-18" width="128" height="103"/>
     </elements>
 </model>

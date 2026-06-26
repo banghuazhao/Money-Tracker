@@ -47,6 +47,24 @@ extension UIColor {
 }
 
 extension UIImage {
+    /// Renders an emoji string as a UIImage at the given point size.
+    static func emoji(_ emoji: String, size: CGFloat = 40) -> UIImage? {
+        let sz = CGSize(width: size, height: size)
+        return UIGraphicsImageRenderer(size: sz).image { _ in
+            let font = UIFont.systemFont(ofSize: size * 0.78)
+            let attrs: [NSAttributedString.Key: Any] = [.font: font]
+            let str = emoji as NSString
+            let textSize = str.size(withAttributes: attrs)
+            let rect = CGRect(
+                x: (sz.width - textSize.width) / 2,
+                y: (sz.height - textSize.height) / 2,
+                width: textSize.width,
+                height: textSize.height
+            )
+            str.draw(in: rect, withAttributes: attrs)
+        }
+    }
+
     /// SF Symbol used for categories that don't ship a bundled image asset.
     private static func categorySymbolName(for category: String) -> String {
         switch category {
@@ -67,8 +85,7 @@ extension UIImage {
         }
     }
 
-    /// Icon for a category: the bundled image asset if present, otherwise a
-    /// tinted SF Symbol. Lets new categories be added without new artwork.
+    /// Icon for a common (built-in) category: bundled asset or tinted SF Symbol.
     static func categoryIcon(for category: String) -> UIImage? {
         if let asset = UIImage(named: category) {
             return asset
