@@ -20,6 +20,10 @@ class DebtPayoffCalculatorViewController: UIViewController {
     private lazy var totalInterestLabel = makeResultValue(color: .expenseRed)
     private lazy var totalPaidLabel = makeResultValue(color: .label)
 
+    private lazy var shareButton = UIBarButtonItem(
+        image: UIImage(systemName: "square.and.arrow.up", withConfiguration: UIImage.SymbolConfiguration(weight: .bold)),
+        style: .plain, target: self, action: #selector(tapShare))
+
     private lazy var resultCard: UIView = {
         let v = UIView()
         v.backgroundColor = .secondarySystemBackground
@@ -52,6 +56,8 @@ class DebtPayoffCalculatorViewController: UIViewController {
         navigationItem.largeTitleDisplayMode = .never
         view.backgroundColor = .systemGroupedBackground
         hideKeyboardWhenTappedAround()
+        shareButton.isEnabled = false
+        navigationItem.rightBarButtonItem = shareButton
         setupViews()
     }
 
@@ -174,6 +180,7 @@ class DebtPayoffCalculatorViewController: UIViewController {
         totalInterestLabel.text = convertDoubleToCurrency(amount: totalInterest)
         totalPaidLabel.text = convertDoubleToCurrency(amount: totalPaid)
 
+        shareButton.isEnabled = true
         if resultCard.isHidden {
             resultCard.isHidden = false
             scrollView.layoutIfNeeded()
@@ -183,6 +190,20 @@ class DebtPayoffCalculatorViewController: UIViewController {
                 scrollView.setContentOffset(CGPoint(x: 0, y: offset), animated: true)
             }
         }
+    }
+
+    @objc private func tapShare() {
+        let text = """
+        \("Debt Payoff".localized())
+        \("Time to Pay Off".localized()): \(payoffTimeLabel.text ?? "")
+        \("Total Interest".localized()): \(totalInterestLabel.text ?? "")
+        \("Total Paid".localized()): \(totalPaidLabel.text ?? "")
+
+        via Money Tracker
+        """
+        let avc = UIActivityViewController(activityItems: [text], applicationActivities: nil)
+        if let popover = avc.popoverPresentationController { popover.barButtonItem = shareButton }
+        present(avc, animated: true)
     }
 
     private func formatMonths(_ months: Double) -> String {

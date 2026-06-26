@@ -28,6 +28,10 @@ class CompoundInterestCalculatorViewController: UIViewController {
     private lazy var totalContributionsLabel = makeResultValue(color: .label)
     private lazy var totalInterestLabel = makeResultValue(color: .themeColor)
 
+    private lazy var shareButton = UIBarButtonItem(
+        image: UIImage(systemName: "square.and.arrow.up", withConfiguration: UIImage.SymbolConfiguration(weight: .bold)),
+        style: .plain, target: self, action: #selector(tapShare))
+
     private lazy var resultCard: UIView = {
         let v = UIView()
         v.backgroundColor = .secondarySystemBackground
@@ -60,6 +64,8 @@ class CompoundInterestCalculatorViewController: UIViewController {
         navigationItem.largeTitleDisplayMode = .never
         view.backgroundColor = .systemGroupedBackground
         hideKeyboardWhenTappedAround()
+        shareButton.isEnabled = false
+        navigationItem.rightBarButtonItem = shareButton
         setupViews()
     }
 
@@ -217,6 +223,7 @@ class CompoundInterestCalculatorViewController: UIViewController {
         totalContributionsLabel.text = convertDoubleToCurrency(amount: totalContributions)
         totalInterestLabel.text = convertDoubleToCurrency(amount: interestEarned)
 
+        shareButton.isEnabled = true
         if resultCard.isHidden {
             resultCard.isHidden = false
             scrollView.layoutIfNeeded()
@@ -226,6 +233,20 @@ class CompoundInterestCalculatorViewController: UIViewController {
                 scrollView.setContentOffset(CGPoint(x: 0, y: offset), animated: true)
             }
         }
+    }
+
+    @objc private func tapShare() {
+        let text = """
+        \("Compound Interest".localized())
+        \("Future Value".localized()): \(futureValueLabel.text ?? "")
+        \("Total Contributions".localized()): \(totalContributionsLabel.text ?? "")
+        \("Interest Earned".localized()): \(totalInterestLabel.text ?? "")
+
+        via Money Tracker
+        """
+        let avc = UIActivityViewController(activityItems: [text], applicationActivities: nil)
+        if let popover = avc.popoverPresentationController { popover.barButtonItem = shareButton }
+        present(avc, animated: true)
     }
 
     private func showInputError() {

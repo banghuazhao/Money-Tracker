@@ -153,3 +153,22 @@
 // amount validation
 "Amount Required" = "請輸入金額";
 "Please enter an amount for this transaction." = "請為此記帳輸入金額。";
+
+// IAP status cell & Pro section
+"Ad-Free Pro" = "無廣告專業版";
+"All ads removed • Thank you!" = "已移除所有廣告 · 感謝支持！";
+"One-time purchase" = "一次性購買";
+"Pro Member" = "專業會員";
+"Upgrade" = "升級";
+
+// Export
+"No Transactions" = "暫無記錄";
+"There are no transactions to export." = "目前沒有可匯出的記錄。";
+"No Data" = "暫無資料";
+"There is no data to export for the selected period." = "所選時間段內沒有可匯出的資料。";
+"Summary" = "彙總";
+
+// Budget Planner share text
+"Needs (50%)" = "必要支出（50%）";
+"Wants (30%)" = "想要支出（30%）";
+"Savings & Debt (20%)" = "儲蓄與還債（20%）";

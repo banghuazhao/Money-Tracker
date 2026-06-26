@@ -152,3 +152,22 @@
 // amount validation
 "Amount Required" = "请输入金额";
 "Please enter an amount for this transaction." = "请为此记账输入金额。";
+
+// IAP status cell & Pro section
+"Ad-Free Pro" = "无广告专业版";
+"All ads removed • Thank you!" = "已移除所有广告 · 感谢支持！";
+"One-time purchase" = "一次性购买";
+"Pro Member" = "专业会员";
+"Upgrade" = "升级";
+
+// Export
+"No Transactions" = "暂无记录";
+"There are no transactions to export." = "当前没有可导出的记录。";
+"No Data" = "暂无数据";
+"There is no data to export for the selected period." = "所选时间段内没有可导出的数据。";
+"Summary" = "汇总";
+
+// Budget Planner share text
+"Needs (50%)" = "必要支出（50%）";
+"Wants (30%)" = "想要支出（30%）";
+"Savings & Debt (20%)" = "储蓄与还债（20%）";

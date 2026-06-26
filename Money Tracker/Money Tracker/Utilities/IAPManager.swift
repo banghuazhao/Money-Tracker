@@ -23,6 +23,8 @@ final class IAPManager: NSObject {
     var onRestoreComplete: (() -> Void)?
     var onRestoreEmpty: (() -> Void)?
     var onFailed: ((String) -> Void)?
+    /// Called on main thread when the product price has been fetched (e.g. to refresh UI).
+    var onProductFetched: (() -> Void)?
 
     private override init() { super.init() }
 
@@ -98,6 +100,9 @@ extension IAPManager: SKProductsRequestDelegate {
             return
         }
         removeAdsProduct = product
+        DispatchQueue.main.async { [weak self] in
+            self?.onProductFetched?()
+        }
         // Only queue a payment when triggered by purchaseRemoveAds (not prefetch).
         // We distinguish by checking if onPurchaseComplete or onFailed is set.
         if onPurchaseComplete != nil || onFailed != nil {

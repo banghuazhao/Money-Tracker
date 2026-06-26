@@ -52,11 +52,17 @@ class ListViewController: UIViewController {
     private func setupNavigationBar() {
         title = "List".localized()
         navigationItem.searchController = searchController
-        navigationItem.rightBarButtonItem = UIBarButtonItem(
+        let sortButton = UIBarButtonItem(
             image: UIImage(systemName: "arrow.up.arrow.down.circle", withConfiguration: UIImage.SymbolConfiguration(weight: .bold)),
             style: .plain,
             target: self,
             action: #selector(tapSortButton(_:)))
+        let exportButton = UIBarButtonItem(
+            image: UIImage(systemName: "square.and.arrow.up", withConfiguration: UIImage.SymbolConfiguration(weight: .bold)),
+            style: .plain,
+            target: self,
+            action: #selector(tapExportButton(_:)))
+        navigationItem.rightBarButtonItems = [sortButton, exportButton]
     }
 
     private func setupViews() {
@@ -236,6 +242,52 @@ extension ListViewController: UISearchBarDelegate {
         searchText = ""
         searchBar.text = ""
         tableView.reloadData()
+    }
+}
+
+// MARK: - Export
+
+extension ListViewController {
+    @objc func tapExportButton(_ sender: UIBarButtonItem) {
+        let list = isSearching ? searchedTransactions : selectedTransctions
+        guard !list.isEmpty else {
+            let ac = UIAlertController(
+                title: "No Transactions".localized(),
+                message: "There are no transactions to export.".localized(),
+                preferredStyle: .alert)
+            ac.addAction(UIAlertAction(title: "OK".localized(), style: .cancel))
+            present(ac, animated: true)
+            return
+        }
+
+        var csv = "Date,Category,Note,Amount\n"
+        let fmt = DateFormatter()
+        fmt.dateStyle = .short
+        fmt.timeStyle = .none
+        for t in list {
+            let date = t.date.map { fmt.string(from: $0) } ?? ""
+            let category = (t.category?.localized() ?? "").csvEscaped
+            let note = (t.title ?? "").csvEscaped
+            csv += "\"\(date)\",\(category),\(note),\(t.amount)\n"
+        }
+
+        let url = FileManager.default.temporaryDirectory.appendingPathComponent("transactions.csv")
+        try? csv.write(to: url, atomically: true, encoding: .utf8)
+
+        let avc = UIActivityViewController(activityItems: [url], applicationActivities: nil)
+        if let popover = avc.popoverPresentationController {
+            popover.barButtonItem = sender
+        }
+        present(avc, animated: true)
+    }
+}
+
+private extension String {
+    var csvEscaped: String {
+        if contains(",") || contains("\"") || contains("\n") {
+            return "\"\(replacingOccurrences(of: "\"", with: "\"\""))\""
+        }
+        return "\"\(self)\""
     }
 }
 

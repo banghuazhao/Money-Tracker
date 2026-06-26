@@ -68,6 +68,7 @@
 		99FD2BDA25B42BFD00D0AC0C /* FeedbackViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99FD2BD825B42BFC00D0AC0C /* FeedbackViewController.swift */; };
 		99FD2BDB25B42BFD00D0AC0C /* MoreAppsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99FD2BD925B42BFD00D0AC0C /* MoreAppsViewController.swift */; };
 		99FD2BDF25B42C7300D0AC0C /* UIFont+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99FD2BDE25B42C7300D0AC0C /* UIFont+Extension.swift */; };
+		9BBD4D1A09E2AF7CEFF7CA0F /* IAPStatusCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E18D59E215CCCF0E05EB751A /* IAPStatusCell.swift */; };
 		FA2040C8CFBE965D5FF61C5F /* TipCalculatorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B23F6C8A417C94D6D5336FA /* TipCalculatorViewController.swift */; };
 		FF21168013F287BE6F670752 /* SavingsGoalCalculatorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDD3DF3677C29788DFAC13C2 /* SavingsGoalCalculatorViewController.swift */; };
 /* End PBXBuildFile section */
@@ -135,11 +136,22 @@
 		A388A8D7987339238F333CBA /* DebtPayoffCalculatorViewController.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = DebtPayoffCalculatorViewController.swift; sourceTree = "<group>"; };
 		BD9FD0B66D5A646BD44C0481 /* AppOpenAdManager.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = AppOpenAdManager.swift; sourceTree = "<group>"; };
 		CBEA9AF95B5BF95038211983 /* IAPManager.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = IAPManager.swift; sourceTree = "<group>"; };
+		E18D59E215CCCF0E05EB751A /* IAPStatusCell.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = IAPStatusCell.swift; sourceTree = "<group>"; };
 		FDD3DF3677C29788DFAC13C2 /* SavingsGoalCalculatorViewController.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = SavingsGoalCalculatorViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		999A68F12FEDD35F00960450 /* Config */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Config; sourceTree = "<group>"; };
+		999A68F12FEDD35F00960450 /* Config */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+			);
+			explicitFileTypes = {
+			};
+			explicitFolders = (
+			);
+			path = Config;
+			sourceTree = "<group>";
+		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -325,6 +337,7 @@
 				9930BFCA252D5F4C0035365F /* CurrencyCell.swift */,
 				99FD2BD325B42BF400D0AC0C /* AppItemCell.swift */,
 				99FD2BD425B42BF600D0AC0C /* FeedbackItemCell.swift */,
+				E18D59E215CCCF0E05EB751A /* IAPStatusCell.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -511,6 +524,7 @@
 				FA2040C8CFBE965D5FF61C5F /* TipCalculatorViewController.swift in Sources */,
 				70F5857D54D80E0C14A9853E /* AppOpenAdManager.swift in Sources */,
 				1C15B5BBB08C278B696FA52E /* IAPManager.swift in Sources */,
+				9BBD4D1A09E2AF7CEFF7CA0F /* IAPStatusCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -28,6 +28,10 @@ class TipCalculatorViewController: UIViewController {
     private lazy var totalLabel = makeResultValue(color: .label)
     private lazy var perPersonLabel = makeResultValue(color: .incomeGreen)
 
+    private lazy var shareButton = UIBarButtonItem(
+        image: UIImage(systemName: "square.and.arrow.up", withConfiguration: UIImage.SymbolConfiguration(weight: .bold)),
+        style: .plain, target: self, action: #selector(tapShare))
+
     private lazy var resultCard: UIView = {
         let v = UIView()
         v.backgroundColor = .secondarySystemBackground
@@ -60,6 +64,8 @@ class TipCalculatorViewController: UIViewController {
         navigationItem.largeTitleDisplayMode = .never
         view.backgroundColor = .systemGroupedBackground
         hideKeyboardWhenTappedAround()
+        shareButton.isEnabled = false
+        navigationItem.rightBarButtonItem = shareButton
         setupViews()
     }
 
@@ -187,6 +193,7 @@ class TipCalculatorViewController: UIViewController {
         totalLabel.text = convertDoubleToCurrency(amount: total)
         perPersonLabel.text = convertDoubleToCurrency(amount: perPerson)
 
+        shareButton.isEnabled = true
         if resultCard.isHidden {
             resultCard.isHidden = false
             scrollView.layoutIfNeeded()
@@ -197,6 +204,21 @@ class TipCalculatorViewController: UIViewController {
             }
         }
     }
+
+    @objc private func tapShare() {
+        let text = """
+        \("Tip Calculator".localized())
+        \("Tip Amount".localized()): \(tipAmountLabel.text ?? "")
+        \("Total".localized()): \(totalLabel.text ?? "")
+        \("Per Person".localized()): \(perPersonLabel.text ?? "")
+
+        via Money Tracker
+        """
+        let avc = UIActivityViewController(activityItems: [text], applicationActivities: nil)
+        if let popover = avc.popoverPresentationController { popover.barButtonItem = shareButton }
+        present(avc, animated: true)
+    }
+
 
     private func showInputError() {
         let ac = UIAlertController(

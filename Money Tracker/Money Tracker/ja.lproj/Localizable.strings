@@ -152,3 +152,22 @@
 // amount validation
 "Amount Required" = "金額を入力してください";
 "Please enter an amount for this transaction." = "この取引の金額を入力してください。";
+
+// IAP status cell & Pro section
+"Ad-Free Pro" = "広告なしPro";
+"All ads removed • Thank you!" = "全ての広告を削除済み · ありがとうございます！";
+"One-time purchase" = "一度限りの購入";
+"Pro Member" = "Proメンバー";
+"Upgrade" = "アップグレード";
+
+// Export
+"No Transactions" = "記録なし";
+"There are no transactions to export." = "エクスポートできる取引がありません。";
+"No Data" = "データなし";
+"There is no data to export for the selected period." = "選択した期間にエクスポートできるデータがありません。";
+"Summary" = "集計";
+
+// Budget Planner share text
+"Needs (50%)" = "必需品（50%）";
+"Wants (30%)" = "欲しいもの（30%）";
+"Savings & Debt (20%)" = "貯蓄・返済（20%）";

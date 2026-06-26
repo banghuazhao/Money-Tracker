@@ -47,11 +47,17 @@ class PieChartViewController: UIViewController {
     }
 
     private func setupNavigationBar() {
-        navigationItem.rightBarButtonItem = UIBarButtonItem(
+        let filterButton = UIBarButtonItem(
             image: UIImage(systemName: "ellipsis.circle", withConfiguration: UIImage.SymbolConfiguration(weight: .bold)),
             style: .plain,
             target: self,
             action: #selector(tapDetailButton(_:)))
+        let shareButton = UIBarButtonItem(
+            image: UIImage(systemName: "square.and.arrow.up", withConfiguration: UIImage.SymbolConfiguration(weight: .bold)),
+            style: .plain,
+            target: self,
+            action: #selector(tapShareButton(_:)))
+        navigationItem.rightBarButtonItems = [filterButton, shareButton]
     }
 
     private func setupViews() {
@@ -99,6 +105,40 @@ class PieChartViewController: UIViewController {
 
         transactionCategories = transactionCategories.filter { fabs($0.amount) > 0 }
         transactionCategories.sort { fabs($0.amount) > fabs($1.amount) }
+    }
+}
+
+// MARK: - Share / Export
+
+extension PieChartViewController {
+    @objc func tapShareButton(_ sender: UIBarButtonItem) {
+        guard !transactionCategories.isEmpty else {
+            let ac = UIAlertController(
+                title: "No Data".localized(),
+                message: "There is no data to export for the selected period.".localized(),
+                preferredStyle: .alert)
+            ac.addAction(UIAlertAction(title: "OK".localized(), style: .cancel))
+            present(ac, animated: true)
+            return
+        }
+
+        let typeLabel = isExpense ? "Expense".localized() : "Income".localized()
+        let periodLabel = selectedTime
+        let total = transactionCategories.reduce(0.0) { $0 + $1.amount }
+
+        var lines = ["\(typeLabel) \("Summary".localized()) – \(periodLabel)", ""]
+        for cat in transactionCategories {
+            let pct = total != 0 ? abs(cat.amount / total) * 100 : 0
+            let amtStr = convertDoubleToCurrency(amount: abs(cat.amount))
+            lines.append("\(cat.category.localized()): \(amtStr) (\(String(format: "%.1f", pct))%)")
+        }
+        lines += ["", "\("Total".localized()): \(convertDoubleToCurrency(amount: abs(total)))", "", "via Money Tracker"]
+
+        let avc = UIActivityViewController(activityItems: [lines.joined(separator: "\n")], applicationActivities: nil)
+        if let popover = avc.popoverPresentationController {
+            popover.barButtonItem = sender
+        }
+        present(avc, animated: true)
     }
 }
 
