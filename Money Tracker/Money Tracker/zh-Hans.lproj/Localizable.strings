@@ -148,3 +148,7 @@
 "Clear" = "清除";
 "Clear sample data?" = "清除示例数据？";
 "This removes the example transactions so you can start fresh." = "这将删除所有示例记账，让您从头开始。";
+
+// amount validation
+"Amount Required" = "请输入金额";
+"Please enter an amount for this transaction." = "请为此记账输入金额。";

@@ -28,104 +28,127 @@ class AddOrEditTransactionViewController: UIViewController {
     var selectedCategory: String = "Grocery"
     var selectedDate = Date()
     var enteredAmount: Double = 0.0
+
     var transaction: Transaction? {
         didSet {
-            guard let transaction = transaction, let category = transaction.category, let date = transaction.date else { return }
-            if categoryExpenses.contains(category) {
-                typeSegmentedControl.selectedSegmentIndex = 0
-            } else {
-                typeSegmentedControl.selectedSegmentIndex = 1
-            }
+            guard let transaction = transaction,
+                  let category = transaction.category,
+                  let date = transaction.date else { return }
+            typeSegmentedControl.selectedSegmentIndex = categoryExpenses.contains(category) ? 0 : 1
+            updateAmountSign()
             selectedCategory = category
             categoryButton.setTitle(category.localized(), for: .normal)
             selectedDate = date
             dateButton.setTitle(date.toFormat("yyyy-MM-dd"), for: .normal)
             enteredAmount = transaction.amount
-            amountTextView.text = fabs(enteredAmount).cleanZero
+            let absValue = fabs(enteredAmount)
+            amountTextView.text = absValue > 0 ? absValue.cleanZero : ""
+            updateAmountPlaceholder()
             descriptionTextField.text = transaction.title
         }
     }
 
-    // MARK: - UI related
+    // MARK: - UI
 
-    lazy var scrollView = UIScrollView()
-    lazy var typeLabel = UILabel().then { label in
-        label.text = "Type".localized()
+    private lazy var scrollView = UIScrollView().then { sv in
+        sv.keyboardDismissMode = .onDrag
+        sv.alwaysBounceVertical = true
     }
 
-    lazy var typeSegmentedControl = UISegmentedControl(items: ["Expense".localized(), "Income".localized()]).then { sc in
+    private lazy var typeLabel = UILabel().then { l in
+        l.text = "Type".localized()
+        l.font = .systemFont(ofSize: 15, weight: .medium)
+        l.textColor = .label
+    }
+
+    private lazy var typeSegmentedControl = UISegmentedControl(items: ["Expense".localized(), "Income".localized()]).then { sc in
         sc.selectedSegmentIndex = 0
         sc.addTarget(self, action: #selector(tapTypeSegmentedControl(_:)), for: .valueChanged)
     }
 
-    lazy var categoryLabel = UILabel().then { label in
-        label.text = "Category".localized()
-        label.font = UIFont.systemFont(ofSize: 15, weight: .medium)
-        label.textColor = .label
+    private lazy var categoryLabel = UILabel().then { l in
+        l.text = "Category".localized()
+        l.font = .systemFont(ofSize: 15, weight: .medium)
+        l.textColor = .label
     }
 
-    lazy var categoryButton = UIButton().then { button in
-        button.addTarget(self, action: #selector(tapCategoryButton(_:)), for: .touchUpInside)
-        button.setTitle("Grocery".localized(), for: .normal)
-        button.setTitleColor(.themeColor, for: .normal)
-        button.titleLabel?.font = UIFont.systemFont(ofSize: 15, weight: .medium)
-        button.contentHorizontalAlignment = .right
+    private lazy var categoryButton = UIButton().then { b in
+        b.addTarget(self, action: #selector(tapCategoryButton(_:)), for: .touchUpInside)
+        b.setTitle("Grocery".localized(), for: .normal)
+        b.setTitleColor(.themeColor, for: .normal)
+        b.titleLabel?.font = .systemFont(ofSize: 15, weight: .medium)
+        b.contentHorizontalAlignment = .right
     }
 
-    lazy var dateLabel = UILabel().then { label in
-        label.text = "Date".localized()
-        label.font = UIFont.systemFont(ofSize: 15, weight: .medium)
-        label.textColor = .label
+    private lazy var categoryChevron = makeChevron()
+
+    private lazy var dateLabel = UILabel().then { l in
+        l.text = "Date".localized()
+        l.font = .systemFont(ofSize: 15, weight: .medium)
+        l.textColor = .label
     }
 
-    lazy var dateButton = UIButton().then { button in
-        button.setTitle(Date().toFormat("yyyy-MM-dd"), for: .normal)
-        button.setTitleColor(.themeColor, for: .normal)
-        button.titleLabel?.font = UIFont.systemFont(ofSize: 15, weight: .medium)
-        button.contentHorizontalAlignment = .right
-        button.addTarget(self, action: #selector(tapDateButton(_:)), for: .touchUpInside)
+    private lazy var dateButton = UIButton().then { b in
+        b.setTitle(Date().toFormat("yyyy-MM-dd"), for: .normal)
+        b.setTitleColor(.themeColor, for: .normal)
+        b.titleLabel?.font = .systemFont(ofSize: 15, weight: .medium)
+        b.contentHorizontalAlignment = .right
+        b.addTarget(self, action: #selector(tapDateButton(_:)), for: .touchUpInside)
     }
 
-    lazy var amountLabel = UILabel().then { label in
-        label.text = "Amount".localized() + " (-)"
-        label.font = UIFont.systemFont(ofSize: 15, weight: .medium)
-        label.textColor = .label
+    private lazy var dateChevron = makeChevron()
+
+    private lazy var amountLabel = UILabel().then { l in
+        l.text = "Amount".localized() + " (−)"
+        l.font = .systemFont(ofSize: 15, weight: .medium)
+        l.textColor = .label
     }
 
-    lazy var amountTextView = UITextView().then { textView in
-        textView.layer.cornerRadius = 14
-        textView.layer.cornerCurve = .continuous
-        textView.font = UIFont.monospacedDigitSystemFont(ofSize: 20, weight: .regular)
-        textView.textAlignment = .center
-        textView.keyboardType = .decimalPad
-        textView.contentInset = UIEdgeInsets(top: 6, left: 0, bottom: 0, right: 0)
-        textView.text = "0"
-        textView.backgroundColor = UIColor.systemBlue.withAlphaComponent(0.08)
-        textView.delegate = self
+    private lazy var amountTextView = UITextView().then { tv in
+        tv.layer.cornerRadius = 12
+        tv.layer.cornerCurve = .continuous
+        tv.font = UIFont.monospacedDigitSystemFont(ofSize: 24, weight: .regular)
+        tv.textAlignment = .center
+        tv.keyboardType = .decimalPad
+        tv.contentInset = UIEdgeInsets(top: 4, left: 0, bottom: 0, right: 0)
+        tv.text = ""
+        tv.backgroundColor = UIColor.systemBlue.withAlphaComponent(0.08)
+        tv.inputAccessoryView = makeKeyboardToolbar()
+        tv.delegate = self
     }
 
-    lazy var descriptionTextField = UITextFieldPadding().then { textField in
-        textField.layer.cornerRadius = 14
-        textField.layer.cornerCurve = .continuous
-        textField.placeholder = "Transaction Description".localized()
-        textField.backgroundColor = UIColor.secondarySystemBackground
-        textField.font = UIFont.systemFont(ofSize: 15)
-        textField.clearButtonMode = .whileEditing
+    private lazy var amountPlaceholderLabel = UILabel().then { l in
+        l.text = "0.00"
+        l.font = UIFont.monospacedDigitSystemFont(ofSize: 24, weight: .regular)
+        l.textColor = .tertiaryLabel
+        l.textAlignment = .center
+        l.isUserInteractionEnabled = false
     }
 
-    lazy var saveButton: UIButton = {
+    private lazy var descriptionTextField = UITextFieldPadding().then { tf in
+        tf.layer.cornerRadius = 14
+        tf.layer.cornerCurve = .continuous
+        tf.placeholder = "Transaction Description".localized()
+        tf.backgroundColor = .secondarySystemBackground
+        tf.font = .systemFont(ofSize: 15)
+        tf.clearButtonMode = .whileEditing
+        tf.returnKeyType = .done
+        tf.delegate = self
+    }
+
+    private lazy var saveButton: UIButton = {
         var config = UIButton.Configuration.filled()
         config.cornerStyle = .large
         config.image = UIImage(systemName: "checkmark")
         config.imagePlacement = .leading
         config.imagePadding = 8
         config.baseBackgroundColor = .themeColor
-        let button = UIButton(configuration: config)
-        button.addTarget(self, action: #selector(tapSaveButton(_:)), for: .touchUpInside)
-        return button
+        let b = UIButton(configuration: config)
+        b.addTarget(self, action: #selector(tapSaveButton(_:)), for: .touchUpInside)
+        return b
     }()
 
-    lazy var deleteButton: UIButton = {
+    private lazy var deleteButton: UIButton = {
         var config = UIButton.Configuration.filled()
         config.title = "Delete Transaction".localized()
         config.cornerStyle = .large
@@ -133,62 +156,64 @@ class AddOrEditTransactionViewController: UIViewController {
         config.imagePlacement = .leading
         config.imagePadding = 8
         config.baseBackgroundColor = .expenseRed
-        let button = UIButton(configuration: config)
-        button.addTarget(self, action: #selector(tapDeleteButton(_:)), for: .touchUpInside)
-        return button
+        let b = UIButton(configuration: config)
+        b.addTarget(self, action: #selector(tapDeleteButton(_:)), for: .touchUpInside)
+        return b
     }()
 
     #if !targetEnvironment(macCatalyst)
-        lazy var bannerView: GADBannerView = {
-            let bannerView = GADBannerView()
-            bannerView.adUnitID = Constants.bannerViewAdUnitID
-            bannerView.rootViewController = self
-            bannerView.load(GADRequest())
-            return bannerView
+        private lazy var bannerView: GADBannerView = {
+            let bv = GADBannerView()
+            bv.adUnitID = Constants.bannerViewAdUnitID
+            bv.rootViewController = self
+            bv.load(GADRequest())
+            return bv
         }()
-        var showsBanner: Bool { !IAPManager.shared.adsRemoved }
+        private var showsBanner: Bool { !IAPManager.shared.adsRemoved }
     #endif
 
-    // MARK: - life cycle
+    // MARK: - Lifecycle
 
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemGroupedBackground
         navigationItem.largeTitleDisplayMode = .never
 
-        if isAdd {
-            title = "Add Transaction".localized()
-            var config = saveButton.configuration
-            config?.title = "Save Transaction".localized()
-            saveButton.configuration = config
-        } else {
-            title = "Edit Transaction".localized()
-            var config = saveButton.configuration
-            config?.title = "Update Transaction".localized()
-            saveButton.configuration = config
-        }
-        hideKeyboardWhenTappedAround()
+        var saveCfg = saveButton.configuration
+        saveCfg?.title = isAdd ? "Save Transaction".localized() : "Update Transaction".localized()
+        saveButton.configuration = saveCfg
+        title = isAdd ? "Add Transaction".localized() : "Edit Transaction".localized()
+
         setupView()
+        setupKeyboardObservers()
+        hideKeyboardWhenTappedAround()
+    }
+
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        if isAdd {
+            amountTextView.becomeFirstResponder()
+        }
+    }
+
+    deinit {
+        NotificationCenter.default.removeObserver(self)
     }
 }
 
-// MARK: - private funcitons
+// MARK: - Layout
 
 extension AddOrEditTransactionViewController {
     private func setupView() {
         view.addSubview(scrollView)
-        scrollView.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
-        }
+        scrollView.snp.makeConstraints { $0.edges.equalToSuperview() }
 
-        // Card container for form rows
         let formCard = UIView().then { v in
             v.backgroundColor = .secondarySystemBackground
             v.layer.cornerRadius = 16
             v.layer.cornerCurve = .continuous
         }
 
-        // Dividers between rows
         let divider1 = makeDivider()
         let divider2 = makeDivider()
         let divider3 = makeDivider()
@@ -198,33 +223,36 @@ extension AddOrEditTransactionViewController {
         formCard.addSubview(divider1)
         formCard.addSubview(categoryLabel)
         formCard.addSubview(categoryButton)
+        formCard.addSubview(categoryChevron)
         formCard.addSubview(divider2)
         formCard.addSubview(dateLabel)
         formCard.addSubview(dateButton)
+        formCard.addSubview(dateChevron)
         formCard.addSubview(divider3)
         formCard.addSubview(amountLabel)
         formCard.addSubview(amountTextView)
+        amountTextView.addSubview(amountPlaceholderLabel)
 
         scrollView.addSubview(formCard)
         scrollView.addSubview(descriptionTextField)
         scrollView.addSubview(saveButton)
 
-        // -- formCard layout --
+        let rowH: CGFloat = 54
+        let inset: CGFloat = 16
+
         formCard.snp.makeConstraints { make in
             make.top.equalToSuperview().offset(20)
             make.left.equalTo(view).offset(16)
             make.right.equalTo(view).offset(-16)
         }
 
-        let rowH: CGFloat = 54
-        let inset: CGFloat = 16
-
+        // Type row
         typeLabel.snp.makeConstraints { make in
             make.left.equalToSuperview().offset(inset)
             make.centerY.equalTo(typeSegmentedControl)
         }
         typeSegmentedControl.snp.makeConstraints { make in
-            make.top.equalToSuperview().offset(8)
+            make.top.equalToSuperview().offset(10)
             make.right.equalToSuperview().inset(inset)
             make.height.equalTo(36)
             make.width.equalTo(180)
@@ -232,21 +260,25 @@ extension AddOrEditTransactionViewController {
         }
 
         divider1.snp.makeConstraints { make in
-            make.top.equalTo(typeSegmentedControl.snp.bottom).offset(8)
+            make.top.equalTo(typeSegmentedControl.snp.bottom).offset(10)
             make.left.equalToSuperview().offset(inset)
             make.right.equalToSuperview()
             make.height.equalTo(0.5)
         }
 
+        // Category row
         categoryLabel.snp.makeConstraints { make in
             make.left.equalToSuperview().offset(inset)
             make.centerY.equalTo(categoryButton)
         }
+        categoryChevron.snp.makeConstraints { make in
+            make.right.equalToSuperview().inset(inset)
+            make.centerY.equalTo(categoryButton)
+        }
         categoryButton.snp.makeConstraints { make in
             make.top.equalTo(divider1.snp.bottom)
-            make.right.equalToSuperview().inset(inset)
+            make.right.equalTo(categoryChevron.snp.left).offset(-4)
             make.height.equalTo(rowH)
-            make.width.lessThanOrEqualTo(200)
             make.left.greaterThanOrEqualTo(categoryLabel.snp.right).offset(8)
         }
 
@@ -257,15 +289,19 @@ extension AddOrEditTransactionViewController {
             make.height.equalTo(0.5)
         }
 
+        // Date row
         dateLabel.snp.makeConstraints { make in
             make.left.equalToSuperview().offset(inset)
             make.centerY.equalTo(dateButton)
         }
+        dateChevron.snp.makeConstraints { make in
+            make.right.equalToSuperview().inset(inset)
+            make.centerY.equalTo(dateButton)
+        }
         dateButton.snp.makeConstraints { make in
             make.top.equalTo(divider2.snp.bottom)
-            make.right.equalToSuperview().inset(inset)
+            make.right.equalTo(dateChevron.snp.left).offset(-4)
             make.height.equalTo(rowH)
-            make.width.lessThanOrEqualTo(200)
             make.left.greaterThanOrEqualTo(dateLabel.snp.right).offset(8)
         }
 
@@ -276,55 +312,38 @@ extension AddOrEditTransactionViewController {
             make.height.equalTo(0.5)
         }
 
+        // Amount row
         amountLabel.snp.makeConstraints { make in
             make.left.equalToSuperview().offset(inset)
             make.centerY.equalTo(amountTextView)
         }
         amountTextView.snp.makeConstraints { make in
-            make.top.equalTo(divider3.snp.bottom).offset(10)
+            make.top.equalTo(divider3.snp.bottom).offset(12)
             make.right.equalToSuperview().inset(inset)
-            make.bottom.equalToSuperview().offset(-10)
-            make.height.equalTo(44)
-            make.width.equalTo(140)
+            make.bottom.equalToSuperview().offset(-12)
+            make.height.equalTo(50)
+            make.width.equalTo(150)
             make.left.greaterThanOrEqualTo(amountLabel.snp.right).offset(8)
         }
+        amountPlaceholderLabel.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
+        updateAmountPlaceholder()
 
-        // -- items below the card --
+        // Below card
         descriptionTextField.snp.makeConstraints { make in
             make.top.equalTo(formCard.snp.bottom).offset(16)
             make.left.equalTo(view).offset(16)
             make.right.equalTo(view).offset(-16)
-            make.height.equalTo(50)
+            make.height.equalTo(52)
         }
 
         #if !targetEnvironment(macCatalyst)
             if showsBanner { scrollView.addSubview(bannerView) }
         #endif
 
-        if isAdd {
-            saveButton.snp.makeConstraints { make in
-                make.top.equalTo(descriptionTextField.snp.bottom).offset(24)
-                make.left.equalTo(view).offset(16)
-                make.right.equalTo(view).offset(-16)
-                make.height.equalTo(54)
-                #if !targetEnvironment(macCatalyst)
-                    if !showsBanner { make.bottom.equalToSuperview().offset(-40) }
-                #else
-                    make.bottom.equalToSuperview().offset(-40)
-                #endif
-            }
-            #if !targetEnvironment(macCatalyst)
-                if showsBanner {
-                    bannerView.snp.makeConstraints { make in
-                        make.top.equalTo(saveButton.snp.bottom).offset(20)
-                        make.left.equalTo(view).offset(16)
-                        make.right.equalTo(view).offset(-16)
-                        make.height.equalTo(60)
-                        make.bottom.equalToSuperview().offset(-20)
-                    }
-                }
-            #endif
-        } else {
+        let lastAnchor: ConstraintItem
+        if !isAdd {
             scrollView.addSubview(deleteButton)
             saveButton.snp.makeConstraints { make in
                 make.top.equalTo(descriptionTextField.snp.bottom).offset(24)
@@ -337,95 +356,129 @@ extension AddOrEditTransactionViewController {
                 make.left.equalTo(view).offset(16)
                 make.right.equalTo(view).offset(-16)
                 make.height.equalTo(54)
-                #if !targetEnvironment(macCatalyst)
-                    if !showsBanner { make.bottom.equalToSuperview().offset(-40) }
-                #else
-                    make.bottom.equalToSuperview().offset(-40)
-                #endif
             }
-            #if !targetEnvironment(macCatalyst)
-                if showsBanner {
-                    bannerView.snp.makeConstraints { make in
-                        make.top.equalTo(deleteButton.snp.bottom).offset(20)
-                        make.left.equalTo(view).offset(16)
-                        make.right.equalTo(view).offset(-16)
-                        make.height.equalTo(60)
-                        make.bottom.equalToSuperview().offset(-20)
-                    }
-                }
-            #endif
+            lastAnchor = deleteButton.snp.bottom
+        } else {
+            saveButton.snp.makeConstraints { make in
+                make.top.equalTo(descriptionTextField.snp.bottom).offset(24)
+                make.left.equalTo(view).offset(16)
+                make.right.equalTo(view).offset(-16)
+                make.height.equalTo(54)
+            }
+            lastAnchor = saveButton.snp.bottom
         }
+
+        #if !targetEnvironment(macCatalyst)
+            if showsBanner {
+                bannerView.snp.makeConstraints { make in
+                    make.top.equalTo(lastAnchor).offset(20)
+                    make.left.equalTo(view).offset(16)
+                    make.right.equalTo(view).offset(-16)
+                    make.height.equalTo(60)
+                    make.bottom.equalToSuperview().offset(-20)
+                }
+            } else {
+                scrollView.snp.makeConstraints { $0.bottom.equalTo(lastAnchor).offset(40) }
+            }
+        #else
+            scrollView.snp.makeConstraints { $0.bottom.equalTo(lastAnchor).offset(40) }
+        #endif
     }
 
     private func makeDivider() -> UIView {
-        UIView().then { v in
-            v.backgroundColor = UIColor.separator
+        UIView().then { $0.backgroundColor = .separator }
+    }
+
+    private func makeChevron() -> UILabel {
+        UILabel().then { l in
+            l.text = "›"
+            l.font = .systemFont(ofSize: 18, weight: .medium)
+            l.textColor = .tertiaryLabel
+            l.isUserInteractionEnabled = false
         }
+    }
+
+    private func makeKeyboardToolbar() -> UIToolbar {
+        let toolbar = UIToolbar()
+        toolbar.sizeToFit()
+        let flex = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
+        let done = UIBarButtonItem(title: "Done".localized(), style: .done, target: self, action: #selector(dismissKeyboard))
+        toolbar.items = [flex, done]
+        return toolbar
+    }
+
+    func updateAmountPlaceholder() {
+        amountPlaceholderLabel.isHidden = !(amountTextView.text?.isEmpty ?? true)
     }
 }
 
-// MARK: - actions
+// MARK: - Keyboard
+
+extension AddOrEditTransactionViewController {
+    private func setupKeyboardObservers() {
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(_:)), name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide(_:)), name: UIResponder.keyboardWillHideNotification, object: nil)
+    }
+
+    @objc private func keyboardWillShow(_ note: Notification) {
+        guard let frame = note.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect else { return }
+        let inset = UIEdgeInsets(top: 0, left: 0, bottom: frame.height, right: 0)
+        scrollView.contentInset = inset
+        scrollView.scrollIndicatorInsets = inset
+    }
+
+    @objc private func keyboardWillHide(_ note: Notification) {
+        scrollView.contentInset = .zero
+        scrollView.scrollIndicatorInsets = .zero
+    }
+}
+
+// MARK: - Actions
 
 extension AddOrEditTransactionViewController {
     @objc private func tapTypeSegmentedControl(_ sender: UISegmentedControl) {
         if sender.selectedSegmentIndex == 0 {
             selectedCategory = "Grocery"
             categoryButton.setTitle("Grocery".localized(), for: .normal)
-            amountLabel.text = "Amount".localized() + " (-)"
-            enteredAmount = -fabs(enteredAmount)
         } else {
             selectedCategory = "Salary"
             categoryButton.setTitle("Salary".localized(), for: .normal)
-            amountLabel.text = "Amount".localized() + " (+)"
-            enteredAmount = fabs(enteredAmount)
+        }
+        updateAmountSign()
+        // Flip sign of any already-entered amount
+        if enteredAmount != 0 {
+            enteredAmount = sender.selectedSegmentIndex == 0 ? -fabs(enteredAmount) : fabs(enteredAmount)
         }
     }
 
+    private func updateAmountSign() {
+        let sign = typeSegmentedControl.selectedSegmentIndex == 0 ? "(−)" : "(+)"
+        amountLabel.text = "Amount".localized() + " \(sign)"
+    }
+
     @objc private func tapCategoryButton(_ sender: UIButton) {
-        let generator = UIImpactFeedbackGenerator(style: .light)
-        generator.impactOccurred()
+        UIImpactFeedbackGenerator(style: .light).impactOccurred()
 
-        var items: [MenuItem] = []
-        if typeSegmentedControl.selectedSegmentIndex == 0 {
-            for tempCategory in categoryExpenses {
-                let item = SingleSelectItem(title: tempCategory.localized(), isSelected: tempCategory == selectedCategory, image: UIImage.categoryIcon(for: tempCategory))
-                items.append(item)
-            }
-        } else {
-            for tempCategory in categoryIncomes {
-                let item = SingleSelectItem(title: tempCategory.localized(), isSelected: tempCategory == selectedCategory, image: UIImage.categoryIcon(for: tempCategory))
-                items.append(item)
-            }
+        let categories = typeSegmentedControl.selectedSegmentIndex == 0 ? categoryExpenses : categoryIncomes
+        var items: [MenuItem] = categories.map {
+            SingleSelectItem(title: $0.localized(), isSelected: $0 == selectedCategory, image: UIImage.categoryIcon(for: $0))
         }
+        items.append(CancelButton(title: "Cancel".localized()))
 
-        let cancelButton = CancelButton(title: "Cancel".localized())
-        items.append(cancelButton)
         let menu = Menu(title: "Select a Category".localized(), items: items)
-
         let sheet = menu.toActionSheet { [weak self] _, item in
             guard let self = self else { return }
-            guard item.title != "Cancel".localized() && item.title != "Select a Category".localized() else { return }
-            let title = item.title
-            let index = items.firstIndex { (item) -> Bool in
-                item.title == title
+            guard item.title != "Cancel".localized(), item.title != "Select a Category".localized() else { return }
+            if let index = items.firstIndex(where: { $0.title == item.title }), index < categories.count {
+                self.selectedCategory = categories[index]
+                self.categoryButton.setTitle(item.title, for: .normal)
             }
-            if self.typeSegmentedControl.selectedSegmentIndex == 0 {
-                if let index = index {
-                    self.selectedCategory = categoryExpenses[index]
-                }
-            } else {
-                if let index = index {
-                    self.selectedCategory = categoryIncomes[index]
-                }
-            }
-            self.categoryButton.setTitle(title, for: .normal)
         }
         sheet.present(in: self, from: sender)
     }
 
     @objc private func tapDateButton(_ sender: UIButton) {
-        let generator = UIImpactFeedbackGenerator(style: .light)
-        generator.impactOccurred()
+        UIImpactFeedbackGenerator(style: .light).impactOccurred()
         let alert = UIAlertController(title: "Pick Date".localized(), message: "\n\n\n\n\n\n\n\n\n\n", preferredStyle: .alert)
         let datePicker = UIDatePicker()
         datePicker.preferredDatePickerStyle = .wheels
@@ -440,7 +493,7 @@ extension AddOrEditTransactionViewController {
             datePicker.topAnchor.constraint(equalTo: alert.view.topAnchor, constant: 50),
         ])
         alert.addAction(UIAlertAction(title: "Done".localized(), style: .default) { [weak self] _ in
-            guard let self = self else { return }
+            guard let self else { return }
             sender.setTitle(datePicker.date.toFormat("yyyy-MM-dd"), for: .normal)
             self.selectedDate = datePicker.date
         })
@@ -451,19 +504,31 @@ extension AddOrEditTransactionViewController {
     @objc private func tapSaveButton(_ sender: UIButton) {
         UIImpactFeedbackGenerator(style: .medium).impactOccurred()
 
+        guard enteredAmount != 0.0 else {
+            let alert = UIAlertController(
+                title: "Amount Required".localized(),
+                message: "Please enter an amount for this transaction.".localized(),
+                preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "OK".localized(), style: .cancel) { [weak self] _ in
+                self?.amountTextView.becomeFirstResponder()
+            })
+            present(alert, animated: true)
+            return
+        }
+
+        view.endEditing(true)
         let context = CoreDataManager.shared.persistentContainer.viewContext
+
         if isAdd {
-            // The user's first real entry replaces the first-run sample data so
-            // their records never get mixed up with the examples.
             if UserDefaults.standard.bool(forKey: UserDefaultsKeys.hasSampleData) {
                 CoreDataManager.shared.deleteAllTransactions()
                 UserDefaults.standard.set(false, forKey: UserDefaultsKeys.hasSampleData)
             }
-            let newTransaction = Transaction(context: context)
-            newTransaction.category = selectedCategory
-            newTransaction.date = selectedDate
-            newTransaction.amount = enteredAmount
-            newTransaction.title = descriptionTextField.text
+            let t = Transaction(context: context)
+            t.category = selectedCategory
+            t.date = selectedDate
+            t.amount = enteredAmount
+            t.title = descriptionTextField.text
         } else {
             transaction?.category = selectedCategory
             transaction?.date = selectedDate
@@ -487,7 +552,7 @@ extension AddOrEditTransactionViewController {
             message: "Do you want to delete this transaction?".localized(),
             preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "Delete".localized(), style: .destructive) { [weak self] _ in
-            guard let self = self, let transaction = self.transaction else { return }
+            guard let self, let transaction = self.transaction else { return }
             let context = CoreDataManager.shared.persistentContainer.viewContext
             context.delete(transaction)
             do {
@@ -506,29 +571,39 @@ extension AddOrEditTransactionViewController {
 // MARK: - UITextViewDelegate
 
 extension AddOrEditTransactionViewController: UITextViewDelegate {
-    func textViewDidEndEditing(_ textView: UITextView) {
-        if let value = Double(textView.text) {
-            if typeSegmentedControl.selectedSegmentIndex == 0 {
-                enteredAmount = -value
-            } else {
-                enteredAmount = value
-            }
-        } else if textView.text == "" {
-            enteredAmount = 0.0
-        }
-        textView.text = fabs(enteredAmount).cleanZero
+    func textViewDidBeginEditing(_ textView: UITextView) {
+        amountPlaceholderLabel.isHidden = true
     }
 
     func textViewDidChange(_ textView: UITextView) {
-        if let value = Double(textView.text) {
-            if typeSegmentedControl.selectedSegmentIndex == 0 {
-                enteredAmount = -value
-            } else {
-                enteredAmount = value
-            }
-        } else if textView.text == "" {
-        } else {
-            textView.text = fabs(enteredAmount).cleanZero
+        if let value = Double(textView.text), value > 0 {
+            enteredAmount = typeSegmentedControl.selectedSegmentIndex == 0 ? -value : value
+        } else if textView.text.isEmpty {
+            enteredAmount = 0.0
+        } else if textView.text != "." {
+            // reject non-numeric input by reverting
+            let abs = fabs(enteredAmount)
+            textView.text = abs > 0 ? abs.cleanZero : ""
         }
+    }
+
+    func textViewDidEndEditing(_ textView: UITextView) {
+        if let value = Double(textView.text), value > 0 {
+            enteredAmount = typeSegmentedControl.selectedSegmentIndex == 0 ? -value : value
+            textView.text = value.cleanZero
+        } else {
+            enteredAmount = 0.0
+            textView.text = ""
+        }
+        updateAmountPlaceholder()
+    }
+}
+
+// MARK: - UITextFieldDelegate
+
+extension AddOrEditTransactionViewController: UITextFieldDelegate {
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
     }
 }

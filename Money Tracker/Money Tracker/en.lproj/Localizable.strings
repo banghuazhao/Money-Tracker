@@ -148,3 +148,7 @@
 "Clear" = "Clear";
 "Clear sample data?" = "Clear sample data?";
 "This removes the example transactions so you can start fresh." = "This removes the example transactions so you can start fresh.";
+
+// amount validation
+"Amount Required" = "Amount Required";
+"Please enter an amount for this transaction." = "Please enter an amount for this transaction.";

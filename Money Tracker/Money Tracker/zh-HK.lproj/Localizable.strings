@@ -45,3 +45,7 @@
 "Clear" = "清除";
 "Clear sample data?" = "清除示例資料？";
 "This removes the example transactions so you can start fresh." = "這將刪除所有示例記帳，讓您重新開始。";
+
+// amount validation
+"Amount Required" = "請輸入金額";
+"Please enter an amount for this transaction." = "請為此記帳輸入金額。";

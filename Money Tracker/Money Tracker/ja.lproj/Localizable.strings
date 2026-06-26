@@ -148,3 +148,7 @@
 "Clear" = "クリア";
 "Clear sample data?" = "サンプルデータを削除しますか？";
 "This removes the example transactions so you can start fresh." = "サンプル取引を削除して、最初からやり直せます。";
+
+// amount validation
+"Amount Required" = "金額を入力してください";
+"Please enter an amount for this transaction." = "この取引の金額を入力してください。";
