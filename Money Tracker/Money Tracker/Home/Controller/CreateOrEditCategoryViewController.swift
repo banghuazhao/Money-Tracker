@@ -45,12 +45,6 @@ class CreateOrEditCategoryViewController: UIViewController {
         tf.clearButtonMode = .whileEditing
     }
 
-    private lazy var typeSegment = UISegmentedControl(items: [
-        "Expense".localized(), "Income".localized(),
-    ]).then { sc in
-        sc.addTarget(self, action: #selector(typeChanged), for: .valueChanged)
-    }
-
     private lazy var emojiPreview = UILabel().then { l in
         l.font = .systemFont(ofSize: 44)
         l.textAlignment = .center
@@ -101,7 +95,6 @@ class CreateOrEditCategoryViewController: UIViewController {
         setupViews()
 
         nameField.text = existing?.name
-        typeSegment.selectedSegmentIndex = selectedIncome ? 1 : 0
         emojiPreview.text = selectedEmoji
         preselectCurrentEmoji()
     }
@@ -122,16 +115,10 @@ class CreateOrEditCategoryViewController: UIViewController {
             v.layer.cornerCurve = .continuous
         }
         previewCard.addSubview(emojiPreview)
-        previewCard.addSubview(typeSegment)
 
         emojiPreview.snp.makeConstraints { make in
-            make.top.equalToSuperview().offset(14)
+            make.top.bottom.equalToSuperview().inset(14)
             make.centerX.equalToSuperview()
-        }
-        typeSegment.snp.makeConstraints { make in
-            make.top.equalTo(emojiPreview.snp.bottom).offset(12)
-            make.left.right.equalToSuperview().inset(16)
-            make.bottom.equalToSuperview().offset(-14)
         }
 
         view.addSubview(nameCard)
@@ -156,10 +143,6 @@ class CreateOrEditCategoryViewController: UIViewController {
     }
 
     // MARK: - Actions
-
-    @objc private func typeChanged() {
-        selectedIncome = typeSegment.selectedSegmentIndex == 1
-    }
 
     @objc private func tapSave() {
         guard let name = nameField.text, !name.trimmingCharacters(in: .whitespaces).isEmpty else {
