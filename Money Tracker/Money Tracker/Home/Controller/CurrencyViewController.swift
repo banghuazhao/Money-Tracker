@@ -40,11 +40,13 @@ class CurrencyViewController: UIViewController {
         view.addSubview(tableView)
 
         #if !targetEnvironment(macCatalyst)
-            view.addSubview(bannerView)
-            bannerView.snp.makeConstraints { make in
-                make.bottom.equalTo(view.safeAreaLayoutGuide)
-                make.left.right.equalToSuperview()
-                make.height.equalTo(50)
+            if !IAPManager.shared.adsRemoved {
+                view.addSubview(bannerView)
+                bannerView.snp.makeConstraints { make in
+                    make.bottom.equalTo(view.safeAreaLayoutGuide)
+                    make.left.right.equalToSuperview()
+                    make.height.equalTo(50)
+                }
             }
         #endif
 
@@ -86,6 +88,6 @@ extension CurrencyViewController: UITableViewDelegate, UITableViewDataSource {
         tableView.deselectRow(at: indexPath, animated: true)
         UserDefaults.standard.set(currencyCodes[indexPath.row], forKey: UserDefaultsKeys.CURRENCY)
         tableView.reloadData()
-        (navigationController?.viewControllers[0] as? HomeViewController)?.tableView.reloadData()
+        NotificationCenter.default.post(name: .currencyDidChange, object: nil)
     }
 }

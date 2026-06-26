@@ -34,6 +34,10 @@ struct Constants {
     }
 }
 
+extension Notification.Name {
+    static let currencyDidChange = Notification.Name("currencyDidChange")
+}
+
 struct UserDefaultsKeys {
     static let FETCH_COUNT = "FETCH_COUNT"
     static let CURRENCY = "CURRENCY"

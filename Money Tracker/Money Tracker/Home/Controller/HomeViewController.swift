@@ -95,6 +95,11 @@ class HomeViewController: UIViewController {
         setupViews()
         fetchTransactions()
         updateSampleBanner()
+        NotificationCenter.default.addObserver(self, selector: #selector(handleCurrencyChange), name: .currencyDidChange, object: nil)
+    }
+
+    @objc private func handleCurrencyChange() {
+        tableView.reloadData()
     }
 
     override func viewDidLayoutSubviews() {
