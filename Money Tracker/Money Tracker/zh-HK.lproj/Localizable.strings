@@ -6,7 +6,7 @@
   
 */
 
-// v-next: new categories & chart totals/daily
+// categories & chart totals/daily
 "Clothing" = "服飾";
 "Beauty" = "美妝護膚";
 "Membership" = "會員卡";
@@ -14,9 +14,34 @@
 "Pets" = "寵物";
 "Utilities" = "水電煤";
 "Childcare" = "育兒";
+"Rental Income" = "租金收入";
+"Freelance" = "自由職業";
+"Bonus" = "獎金";
+"Interest Income" = "利息收入";
 "Savings" = "儲蓄";
 "Side Hustle Income" = "副業收入";
 "Total" = "合計";
 "By Category" = "按類別";
 "By Day" = "按日";
 "Daily" = "每日";
+
+// IAP
+"Remove Ads Forever" = "永久去除廣告";
+"Restore Purchase" = "恢復購買";
+"Purchase" = "購買";
+"Ads Removed" = "廣告已去除";
+"Ads Removed!" = "廣告已去除！";
+"Enjoy the app completely ad-free with a one-time purchase." = "一次性購買，永久享受無廣告體驗。";
+"You've already removed ads. Thank you for your support!" = "您已去除廣告，感謝您的支持！";
+"Thank you! All ads have been removed." = "感謝！所有廣告已被去除。";
+"No previous purchase found for this Apple ID." = "未找到此 Apple ID 的購買記錄。";
+"Purchase Failed" = "購買失敗";
+"Processing..." = "處理中...";
+"Restoring..." = "恢復中...";
+"OK" = "好的";
+
+// sample data
+"These are sample transactions to show you around. Clear them when you're ready." = "這些是示例記帳，幫您快速上手。準備好後可清除。";
+"Clear" = "清除";
+"Clear sample data?" = "清除示例資料？";
+"This removes the example transactions so you can start fresh." = "這將刪除所有示例記帳，讓您重新開始。";

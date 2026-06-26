@@ -109,7 +109,7 @@
 "Bar Chart (Expense)" = "Bar Chart (Expense)";
 "Bar Chart (Income)" = "Bar Chart (Income)";
 
-// v-next: new categories & chart totals/daily
+// categories & chart totals/daily
 "Clothing" = "Clothing";
 "Beauty" = "Beauty";
 "Membership" = "Membership";
@@ -117,9 +117,34 @@
 "Pets" = "Pets";
 "Utilities" = "Utilities";
 "Childcare" = "Childcare";
+"Rental Income" = "Rental Income";
+"Freelance" = "Freelance";
+"Bonus" = "Bonus";
+"Interest Income" = "Interest Income";
 "Savings" = "Savings";
 "Side Hustle Income" = "Side Hustle Income";
 "Total" = "Total";
 "By Category" = "By Category";
 "By Day" = "By Day";
 "Daily" = "Daily";
+
+// IAP
+"Remove Ads Forever" = "Remove Ads Forever";
+"Restore Purchase" = "Restore Purchase";
+"Purchase" = "Purchase";
+"Ads Removed" = "Ads Removed";
+"Ads Removed!" = "Ads Removed!";
+"Enjoy the app completely ad-free with a one-time purchase." = "Enjoy the app completely ad-free with a one-time purchase.";
+"You've already removed ads. Thank you for your support!" = "You've already removed ads. Thank you for your support!";
+"Thank you! All ads have been removed." = "Thank you! All ads have been removed.";
+"No previous purchase found for this Apple ID." = "No previous purchase found for this Apple ID.";
+"Purchase Failed" = "Purchase Failed";
+"Processing..." = "Processing...";
+"Restoring..." = "Restoring...";
+"OK" = "OK";
+
+// sample data
+"These are sample transactions to show you around. Clear them when you're ready." = "These are sample transactions to show you around. Clear them when you're ready.";
+"Clear" = "Clear";
+"Clear sample data?" = "Clear sample data?";
+"This removes the example transactions so you can start fresh." = "This removes the example transactions so you can start fresh.";

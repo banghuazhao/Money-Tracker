@@ -146,6 +146,7 @@ class AddOrEditTransactionViewController: UIViewController {
             bannerView.load(GADRequest())
             return bannerView
         }()
+        var showsBanner: Bool { !IAPManager.shared.adsRemoved }
     #endif
 
     // MARK: - life cycle
@@ -297,7 +298,7 @@ extension AddOrEditTransactionViewController {
         }
 
         #if !targetEnvironment(macCatalyst)
-            scrollView.addSubview(bannerView)
+            if showsBanner { scrollView.addSubview(bannerView) }
         #endif
 
         if isAdd {
@@ -306,15 +307,21 @@ extension AddOrEditTransactionViewController {
                 make.left.equalTo(view).offset(16)
                 make.right.equalTo(view).offset(-16)
                 make.height.equalTo(54)
-                make.bottom.equalToSuperview().offset(-40)
+                #if !targetEnvironment(macCatalyst)
+                    if !showsBanner { make.bottom.equalToSuperview().offset(-40) }
+                #else
+                    make.bottom.equalToSuperview().offset(-40)
+                #endif
             }
             #if !targetEnvironment(macCatalyst)
-                bannerView.snp.makeConstraints { make in
-                    make.top.equalTo(saveButton.snp.bottom).offset(20)
-                    make.left.equalTo(view).offset(16)
-                    make.right.equalTo(view).offset(-16)
-                    make.height.equalTo(60)
-                    make.bottom.equalToSuperview().offset(-20)
+                if showsBanner {
+                    bannerView.snp.makeConstraints { make in
+                        make.top.equalTo(saveButton.snp.bottom).offset(20)
+                        make.left.equalTo(view).offset(16)
+                        make.right.equalTo(view).offset(-16)
+                        make.height.equalTo(60)
+                        make.bottom.equalToSuperview().offset(-20)
+                    }
                 }
             #endif
         } else {
@@ -330,15 +337,21 @@ extension AddOrEditTransactionViewController {
                 make.left.equalTo(view).offset(16)
                 make.right.equalTo(view).offset(-16)
                 make.height.equalTo(54)
-                make.bottom.equalToSuperview().offset(-40)
+                #if !targetEnvironment(macCatalyst)
+                    if !showsBanner { make.bottom.equalToSuperview().offset(-40) }
+                #else
+                    make.bottom.equalToSuperview().offset(-40)
+                #endif
             }
             #if !targetEnvironment(macCatalyst)
-                bannerView.snp.makeConstraints { make in
-                    make.top.equalTo(deleteButton.snp.bottom).offset(20)
-                    make.left.equalTo(view).offset(16)
-                    make.right.equalTo(view).offset(-16)
-                    make.height.equalTo(60)
-                    make.bottom.equalToSuperview().offset(-20)
+                if showsBanner {
+                    bannerView.snp.makeConstraints { make in
+                        make.top.equalTo(deleteButton.snp.bottom).offset(20)
+                        make.left.equalTo(view).offset(16)
+                        make.right.equalTo(view).offset(-16)
+                        make.height.equalTo(60)
+                        make.bottom.equalToSuperview().offset(-20)
+                    }
                 }
             #endif
         }

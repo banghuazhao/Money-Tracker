@@ -34,6 +34,10 @@ extension UIColor {
         case "Childcare":            return .systemTeal
         case "Salary":               return .systemGreen
         case "Investment Income":    return .systemMint
+        case "Rental Income":        return .systemOrange
+        case "Freelance":            return .systemPurple
+        case "Bonus":                return .systemYellow
+        case "Interest Income":      return .systemCyan
         case "Savings":              return .systemMint
         case "Side Hustle Income":   return .systemTeal
         case "Other Income":         return .systemGreen
@@ -53,6 +57,10 @@ extension UIImage {
         case "Pets":               return "pawprint.fill"
         case "Utilities":          return "bolt.fill"
         case "Childcare":          return "figure.and.child.holdinghands"
+        case "Rental Income":      return "house.fill"
+        case "Freelance":          return "laptopcomputer"
+        case "Bonus":              return "star.fill"
+        case "Interest Income":    return "percent"
         case "Savings":            return "banknote.fill"
         case "Side Hustle Income": return "briefcase.fill"
         default:                   return "tag.fill"

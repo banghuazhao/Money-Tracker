@@ -109,7 +109,7 @@
 "Bar Chart (Expense)" = "バーチャート（費用）";
 "Bar Chart (Income)" = "バーチャート（収入）";
 
-// v-next: new categories & chart totals/daily
+// categories & chart totals/daily
 "Clothing" = "衣類";
 "Beauty" = "美容";
 "Membership" = "会員";
@@ -117,9 +117,34 @@
 "Pets" = "ペット";
 "Utilities" = "光熱費";
 "Childcare" = "育児";
+"Rental Income" = "家賃収入";
+"Freelance" = "フリーランス";
+"Bonus" = "ボーナス";
+"Interest Income" = "利子収入";
 "Savings" = "貯金";
 "Side Hustle Income" = "副業収入";
 "Total" = "合計";
 "By Category" = "カテゴリ別";
 "By Day" = "日別";
 "Daily" = "日別";
+
+// IAP
+"Remove Ads Forever" = "広告を永久に削除";
+"Restore Purchase" = "購入を復元";
+"Purchase" = "購入";
+"Ads Removed" = "広告が削除されました";
+"Ads Removed!" = "広告が削除されました！";
+"Enjoy the app completely ad-free with a one-time purchase." = "一度の購入で、完全に広告なしでアプリをお楽しみください。";
+"You've already removed ads. Thank you for your support!" = "すでに広告を削除しています。ご支援ありがとうございます！";
+"Thank you! All ads have been removed." = "ありがとうございます！すべての広告が削除されました。";
+"No previous purchase found for this Apple ID." = "この Apple ID の購入履歴が見つかりませんでした。";
+"Purchase Failed" = "購入に失敗しました";
+"Processing..." = "処理中...";
+"Restoring..." = "復元中...";
+"OK" = "OK";
+
+// sample data
+"These are sample transactions to show you around. Clear them when you're ready." = "これらはサンプル取引です。準備ができたら削除してください。";
+"Clear" = "クリア";
+"Clear sample data?" = "サンプルデータを削除しますか？";
+"This removes the example transactions so you can start fresh." = "サンプル取引を削除して、最初からやり直せます。";

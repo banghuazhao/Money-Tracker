@@ -68,6 +68,10 @@ let categoryExpenses: [String] = [
 let categoryIncomes: [String] = [
     "Salary",
     "Investment Income",
+    "Rental Income",
+    "Freelance",
+    "Bonus",
+    "Interest Income",
     "Savings",
     "Side Hustle Income",
     "Other Income",
@@ -86,11 +90,24 @@ struct JustForLocalization {
         "Consumer Electronics".localized(),
         "Gift".localized(),
         "Medicine".localized(),
+        "Clothing".localized(),
+        "Beauty".localized(),
+        "Membership".localized(),
+        "Fitness".localized(),
+        "Pets".localized(),
+        "Utilities".localized(),
+        "Childcare".localized(),
         "Other Expense".localized(),
     ]
     let categoryIncomesLocalization: [String] = [
         "Salary".localized(),
         "Investment Income".localized(),
+        "Rental Income".localized(),
+        "Freelance".localized(),
+        "Bonus".localized(),
+        "Interest Income".localized(),
+        "Savings".localized(),
+        "Side Hustle Income".localized(),
         "Other Income".localized(),
     ]
 }

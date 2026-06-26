@@ -109,7 +109,7 @@
 "Bar Chart (Expense)" = "条形图 (支出)";
 "Bar Chart (Income)" = "条形图 (收入)";
 
-// v-next: new categories & chart totals/daily
+// categories & chart totals/daily
 "Clothing" = "服饰";
 "Beauty" = "美妆护肤";
 "Membership" = "会员卡";
@@ -117,9 +117,34 @@
 "Pets" = "宠物";
 "Utilities" = "水电煤";
 "Childcare" = "育儿";
+"Rental Income" = "租金收入";
+"Freelance" = "自由职业";
+"Bonus" = "奖金";
+"Interest Income" = "利息收入";
 "Savings" = "储蓄";
 "Side Hustle Income" = "副业收入";
 "Total" = "合计";
 "By Category" = "按类别";
 "By Day" = "按天";
 "Daily" = "每日";
+
+// IAP
+"Remove Ads Forever" = "永久去除广告";
+"Restore Purchase" = "恢复购买";
+"Purchase" = "购买";
+"Ads Removed" = "广告已去除";
+"Ads Removed!" = "广告已去除！";
+"Enjoy the app completely ad-free with a one-time purchase." = "一次性购买，永久享受无广告体验。";
+"You've already removed ads. Thank you for your support!" = "您已经去除了广告，感谢您的支持！";
+"Thank you! All ads have been removed." = "感谢！所有广告已被去除。";
+"No previous purchase found for this Apple ID." = "未找到此 Apple ID 的购买记录。";
+"Purchase Failed" = "购买失败";
+"Processing..." = "处理中...";
+"Restoring..." = "恢复中...";
+"OK" = "好的";
+
+// sample data
+"These are sample transactions to show you around. Clear them when you're ready." = "这些是示例记账，帮您快速上手。准备好后可以清除它们。";
+"Clear" = "清除";
+"Clear sample data?" = "清除示例数据？";
+"This removes the example transactions so you can start fresh." = "这将删除所有示例记账，让您从头开始。";

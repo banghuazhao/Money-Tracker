@@ -677,7 +677,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = "Money Tracker/Money Tracker.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1.0.70;
+				CURRENT_PROJECT_VERSION = 1.0.80;
 				DEVELOPMENT_TEAM = F694X76A5X;
 				INFOPLIST_FILE = "Money Tracker/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
@@ -685,7 +685,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0.7;
+				MARKETING_VERSION = 1.0.8;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.Banghua-Zhao.Money-Tracker";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTS_MACCATALYST = YES;
@@ -703,7 +703,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = "Money Tracker/Money Tracker.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1.0.70;
+				CURRENT_PROJECT_VERSION = 1.0.80;
 				DEVELOPMENT_TEAM = F694X76A5X;
 				INFOPLIST_FILE = "Money Tracker/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
@@ -711,7 +711,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0.7;
+				MARKETING_VERSION = 1.0.8;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.Banghua-Zhao.Money-Tracker";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTS_MACCATALYST = YES;
