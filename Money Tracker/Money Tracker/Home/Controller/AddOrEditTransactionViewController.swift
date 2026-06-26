@@ -231,7 +231,7 @@ extension AddOrEditTransactionViewController {
         formCard.addSubview(divider3)
         formCard.addSubview(amountLabel)
         formCard.addSubview(amountTextView)
-        amountTextView.addSubview(amountPlaceholderLabel)
+        formCard.addSubview(amountPlaceholderLabel)
 
         scrollView.addSubview(formCard)
         scrollView.addSubview(descriptionTextField)
@@ -325,8 +325,10 @@ extension AddOrEditTransactionViewController {
             make.width.equalTo(150)
             make.left.greaterThanOrEqualTo(amountLabel.snp.right).offset(8)
         }
+        // Overlay the placeholder directly on top of the text view (not inside it,
+        // since UITextView is a scroll view and subviews shift with content offset).
         amountPlaceholderLabel.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
+            make.edges.equalTo(amountTextView)
         }
         updateAmountPlaceholder()
 
