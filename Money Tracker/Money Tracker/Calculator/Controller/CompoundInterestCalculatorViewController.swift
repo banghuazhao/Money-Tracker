@@ -19,6 +19,7 @@ class CompoundInterestCalculatorViewController: UIViewController {
     private lazy var frequencySegment: UISegmentedControl = {
         let sc = UISegmentedControl(items: ["Monthly".localized(), "Quarterly".localized(), "Annually".localized()])
         sc.selectedSegmentIndex = 0
+        sc.addTarget(self, action: #selector(recalculate), for: .valueChanged)
         return sc
     }()
 
@@ -32,25 +33,16 @@ class CompoundInterestCalculatorViewController: UIViewController {
         image: UIImage(systemName: "square.and.arrow.up", withConfiguration: UIImage.SymbolConfiguration(weight: .bold)),
         style: .plain, target: self, action: #selector(tapShare))
 
+    private lazy var clearButton = UIBarButtonItem(
+        image: UIImage(systemName: "arrow.counterclockwise"),
+        style: .plain, target: self, action: #selector(clearAll))
+
     private lazy var resultCard: UIView = {
         let v = UIView()
         v.backgroundColor = .secondarySystemBackground
         v.layer.cornerRadius = 16
         v.layer.cornerCurve = .continuous
-        v.isHidden = true
         return v
-    }()
-
-    private lazy var calculateButton: UIButton = {
-        var cfg = UIButton.Configuration.filled()
-        cfg.title = "Calculate".localized()
-        cfg.image = UIImage(systemName: "arrow.up.right.circle.fill")
-        cfg.imagePadding = 8
-        cfg.baseBackgroundColor = .systemGreen
-        cfg.cornerStyle = .large
-        let btn = UIButton(configuration: cfg)
-        btn.addTarget(self, action: #selector(tapCalculate), for: .touchUpInside)
-        return btn
     }()
 
     private lazy var scrollView = UIScrollView()
@@ -64,19 +56,17 @@ class CompoundInterestCalculatorViewController: UIViewController {
         navigationItem.largeTitleDisplayMode = .never
         view.backgroundColor = .systemGroupedBackground
         hideKeyboardWhenTappedAround()
-        shareButton.isEnabled = false
-        navigationItem.rightBarButtonItem = shareButton
+        navigationItem.rightBarButtonItems = [shareButton, clearButton]
         setupViews()
-        calculateButton.isEnabled = false
-        [principalField, rateField, yearsField].forEach {
-            $0.addTarget(self, action: #selector(updateButtonState), for: .editingChanged)
-        }
-    }
 
-    @objc private func updateButtonState() {
-        calculateButton.isEnabled = [principalField, rateField, yearsField].allSatisfy {
-            !($0.text?.isEmpty ?? true)
+        principalField.text = "10000"
+        rateField.text = "7"
+        yearsField.text = "10"
+        contributionField.text = "500"
+        [principalField, rateField, yearsField, contributionField].forEach {
+            $0.addTarget(self, action: #selector(recalculate), for: .editingChanged)
         }
+        recalculate()
     }
 
     // MARK: - Setup
@@ -170,7 +160,6 @@ class CompoundInterestCalculatorViewController: UIViewController {
         // Assemble in contentView
         contentView.addSubview(freqCard)
         contentView.addSubview(inputCard)
-        contentView.addSubview(calculateButton)
         contentView.addSubview(resultCard)
 
         freqCard.snp.makeConstraints { make in
@@ -183,14 +172,8 @@ class CompoundInterestCalculatorViewController: UIViewController {
             make.left.equalTo(view).offset(16)
             make.right.equalTo(view).offset(-16)
         }
-        calculateButton.snp.makeConstraints { make in
-            make.top.equalTo(inputCard.snp.bottom).offset(20)
-            make.left.equalTo(view).offset(16)
-            make.right.equalTo(view).offset(-16)
-            make.height.equalTo(52)
-        }
         resultCard.snp.makeConstraints { make in
-            make.top.equalTo(calculateButton.snp.bottom).offset(24)
+            make.top.equalTo(inputCard.snp.bottom).offset(20)
             make.left.equalTo(view).offset(16)
             make.right.equalTo(view).offset(-16)
             make.bottom.equalToSuperview().offset(-32)
@@ -199,14 +182,14 @@ class CompoundInterestCalculatorViewController: UIViewController {
 
     // MARK: - Actions
 
-    @objc private func tapCalculate() {
-        view.endEditing(true)
+    @objc private func recalculate() {
         guard
             let pText = principalField.text, let principal = Double(pText), principal >= 0,
             let rText = rateField.text, let annualRate = Double(rText), annualRate >= 0,
             let yText = yearsField.text, let years = Double(yText), years > 0
         else {
-            showInputError()
+            [futureValueLabel, totalContributionsLabel, totalInterestLabel].forEach { $0.text = "—" }
+            shareButton.isEnabled = false
             return
         }
 
@@ -216,7 +199,6 @@ class CompoundInterestCalculatorViewController: UIViewController {
         let totalPeriods = n * years
         let r = annualRate / 100.0 / n
 
-        // Future value of lump sum + future value of annuity
         let fvPrincipal = principal * pow(1 + r, totalPeriods)
         let fvContributions: Double
         if r == 0 {
@@ -225,24 +207,22 @@ class CompoundInterestCalculatorViewController: UIViewController {
             fvContributions = pmt * (pow(1 + r, totalPeriods) - 1) / r
         }
         let futureValue = fvPrincipal + fvContributions
-
         let totalContributions = principal + pmt * totalPeriods
         let interestEarned = futureValue - totalContributions
 
         futureValueLabel.text = convertDoubleToCurrency(amount: futureValue)
         totalContributionsLabel.text = convertDoubleToCurrency(amount: totalContributions)
         totalInterestLabel.text = convertDoubleToCurrency(amount: interestEarned)
-
         shareButton.isEnabled = true
-        if resultCard.isHidden {
-            resultCard.isHidden = false
-            scrollView.layoutIfNeeded()
-            let bottom = resultCard.frame.maxY + 32
-            let offset = bottom - scrollView.bounds.height
-            if offset > 0 {
-                scrollView.setContentOffset(CGPoint(x: 0, y: offset), animated: true)
-            }
-        }
+    }
+
+    @objc private func clearAll() {
+        principalField.text = "10000"
+        rateField.text = "7"
+        yearsField.text = "10"
+        contributionField.text = "500"
+        frequencySegment.selectedSegmentIndex = 0
+        recalculate()
     }
 
     @objc private func tapShare() {
@@ -269,16 +249,6 @@ class CompoundInterestCalculatorViewController: UIViewController {
         let avc = UIActivityViewController(activityItems: [text], applicationActivities: nil)
         if let popover = avc.popoverPresentationController { popover.barButtonItem = shareButton }
         present(avc, animated: true)
-    }
-
-    private func showInputError() {
-        let ac = UIAlertController(
-            title: "Invalid Input".localized(),
-            message: "Please enter valid numbers. Initial amount and years must be greater than zero.".localized(),
-            preferredStyle: .alert
-        )
-        ac.addAction(UIAlertAction(title: "OK".localized(), style: .cancel))
-        present(ac, animated: true)
     }
 
     // MARK: - Helpers
@@ -308,9 +278,12 @@ class CompoundInterestCalculatorViewController: UIViewController {
         let row = UIView()
         let lbl = UILabel().then { l in l.text = title; l.font = .systemFont(ofSize: 16) }
         let unitLbl = UILabel().then { l in l.text = unit; l.font = .systemFont(ofSize: 16); l.textColor = .secondaryLabel }
+        let tapOverlay = UIButton()
+        tapOverlay.addTarget(field, action: #selector(UIResponder.becomeFirstResponder), for: .touchUpInside)
         row.addSubview(lbl)
         row.addSubview(unitLbl)
         row.addSubview(field)
+        row.addSubview(tapOverlay)
         lbl.snp.makeConstraints { $0.left.equalToSuperview().offset(16); $0.centerY.equalToSuperview() }
         unitLbl.snp.makeConstraints { $0.right.equalToSuperview().offset(-16); $0.centerY.equalToSuperview() }
         field.snp.makeConstraints { make in
@@ -319,6 +292,7 @@ class CompoundInterestCalculatorViewController: UIViewController {
             make.left.greaterThanOrEqualTo(lbl.snp.right).offset(8)
             make.width.greaterThanOrEqualTo(80)
         }
+        tapOverlay.snp.makeConstraints { $0.edges.equalToSuperview() }
         return row
     }
 

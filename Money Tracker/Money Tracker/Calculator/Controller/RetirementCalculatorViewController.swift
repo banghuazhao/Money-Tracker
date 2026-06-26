@@ -26,25 +26,16 @@ class RetirementCalculatorViewController: UIViewController {
         image: UIImage(systemName: "square.and.arrow.up", withConfiguration: UIImage.SymbolConfiguration(weight: .bold)),
         style: .plain, target: self, action: #selector(tapShare))
 
+    private lazy var clearButton = UIBarButtonItem(
+        image: UIImage(systemName: "arrow.counterclockwise"),
+        style: .plain, target: self, action: #selector(clearAll))
+
     private lazy var resultCard: UIView = {
         let v = UIView()
         v.backgroundColor = .secondarySystemBackground
         v.layer.cornerRadius = 16
         v.layer.cornerCurve = .continuous
-        v.isHidden = true
         return v
-    }()
-
-    private lazy var calculateButton: UIButton = {
-        var cfg = UIButton.Configuration.filled()
-        cfg.title = "Calculate".localized()
-        cfg.image = UIImage(systemName: "arrow.up.right.circle.fill")
-        cfg.imagePadding = 8
-        cfg.baseBackgroundColor = .systemTeal
-        cfg.cornerStyle = .large
-        let btn = UIButton(configuration: cfg)
-        btn.addTarget(self, action: #selector(tapCalculate), for: .touchUpInside)
-        return btn
     }()
 
     private lazy var scrollView = UIScrollView()
@@ -58,19 +49,18 @@ class RetirementCalculatorViewController: UIViewController {
         navigationItem.largeTitleDisplayMode = .never
         view.backgroundColor = .systemGroupedBackground
         hideKeyboardWhenTappedAround()
-        shareButton.isEnabled = false
-        navigationItem.rightBarButtonItem = shareButton
+        navigationItem.rightBarButtonItems = [shareButton, clearButton]
         setupViews()
-        calculateButton.isEnabled = false
-        [currentAgeField, retireAgeField, rateField].forEach {
-            $0.addTarget(self, action: #selector(updateButtonState), for: .editingChanged)
-        }
-    }
 
-    @objc private func updateButtonState() {
-        calculateButton.isEnabled = [currentAgeField, retireAgeField, rateField].allSatisfy {
-            !($0.text?.isEmpty ?? true)
+        currentAgeField.text = "30"
+        retireAgeField.text = "65"
+        savingsField.text = "20000"
+        contributionField.text = "500"
+        rateField.text = "7"
+        [currentAgeField, retireAgeField, savingsField, contributionField, rateField].forEach {
+            $0.addTarget(self, action: #selector(recalculate), for: .editingChanged)
         }
+        recalculate()
     }
 
     // MARK: - Setup
@@ -151,7 +141,6 @@ class RetirementCalculatorViewController: UIViewController {
 
         // Assemble
         contentView.addSubview(inputCard)
-        contentView.addSubview(calculateButton)
         contentView.addSubview(resultCard)
 
         inputCard.snp.makeConstraints { make in
@@ -159,14 +148,8 @@ class RetirementCalculatorViewController: UIViewController {
             make.left.equalTo(view).offset(16)
             make.right.equalTo(view).offset(-16)
         }
-        calculateButton.snp.makeConstraints { make in
-            make.top.equalTo(inputCard.snp.bottom).offset(20)
-            make.left.equalTo(view).offset(16)
-            make.right.equalTo(view).offset(-16)
-            make.height.equalTo(52)
-        }
         resultCard.snp.makeConstraints { make in
-            make.top.equalTo(calculateButton.snp.bottom).offset(24)
+            make.top.equalTo(inputCard.snp.bottom).offset(20)
             make.left.equalTo(view).offset(16)
             make.right.equalTo(view).offset(-16)
             make.bottom.equalToSuperview().offset(-32)
@@ -175,14 +158,14 @@ class RetirementCalculatorViewController: UIViewController {
 
     // MARK: - Actions
 
-    @objc private func tapCalculate() {
-        view.endEditing(true)
+    @objc private func recalculate() {
         guard
             let caText = currentAgeField.text, let currentAge = Double(caText), currentAge > 0,
             let raText = retireAgeField.text, let retireAge = Double(raText), retireAge > currentAge,
             let rText = rateField.text, let annualRate = Double(rText), annualRate >= 0
         else {
-            showInputError()
+            [nestEggLabel, contributionsLabel, interestLabel].forEach { $0.text = "—" }
+            shareButton.isEnabled = false
             return
         }
 
@@ -206,17 +189,16 @@ class RetirementCalculatorViewController: UIViewController {
         nestEggLabel.text = convertDoubleToCurrency(amount: nestEgg)
         contributionsLabel.text = convertDoubleToCurrency(amount: totalContributions)
         interestLabel.text = convertDoubleToCurrency(amount: interestEarned)
-
         shareButton.isEnabled = true
-        if resultCard.isHidden {
-            resultCard.isHidden = false
-            scrollView.layoutIfNeeded()
-            let bottom = resultCard.frame.maxY + 32
-            let offset = bottom - scrollView.bounds.height
-            if offset > 0 {
-                scrollView.setContentOffset(CGPoint(x: 0, y: offset), animated: true)
-            }
-        }
+    }
+
+    @objc private func clearAll() {
+        currentAgeField.text = "30"
+        retireAgeField.text = "65"
+        savingsField.text = "20000"
+        contributionField.text = "500"
+        rateField.text = "7"
+        recalculate()
     }
 
     @objc private func tapShare() {
@@ -241,16 +223,6 @@ class RetirementCalculatorViewController: UIViewController {
         let avc = UIActivityViewController(activityItems: [text], applicationActivities: nil)
         if let popover = avc.popoverPresentationController { popover.barButtonItem = shareButton }
         present(avc, animated: true)
-    }
-
-    private func showInputError() {
-        let ac = UIAlertController(
-            title: "Invalid Input".localized(),
-            message: "Please enter valid numbers. Retirement age must be greater than current age.".localized(),
-            preferredStyle: .alert
-        )
-        ac.addAction(UIAlertAction(title: "OK".localized(), style: .cancel))
-        present(ac, animated: true)
     }
 
     // MARK: - Helpers
@@ -280,9 +252,12 @@ class RetirementCalculatorViewController: UIViewController {
         let row = UIView()
         let lbl = UILabel().then { l in l.text = title; l.font = .systemFont(ofSize: 16) }
         let unitLbl = UILabel().then { l in l.text = unit; l.font = .systemFont(ofSize: 16); l.textColor = .secondaryLabel }
+        let tapOverlay = UIButton()
+        tapOverlay.addTarget(field, action: #selector(UIResponder.becomeFirstResponder), for: .touchUpInside)
         row.addSubview(lbl)
         row.addSubview(unitLbl)
         row.addSubview(field)
+        row.addSubview(tapOverlay)
         lbl.snp.makeConstraints { $0.left.equalToSuperview().offset(16); $0.centerY.equalToSuperview() }
         unitLbl.snp.makeConstraints { $0.right.equalToSuperview().offset(-16); $0.centerY.equalToSuperview() }
         field.snp.makeConstraints { make in
@@ -291,6 +266,7 @@ class RetirementCalculatorViewController: UIViewController {
             make.left.greaterThanOrEqualTo(lbl.snp.right).offset(8)
             make.width.greaterThanOrEqualTo(80)
         }
+        tapOverlay.snp.makeConstraints { $0.edges.equalToSuperview() }
         return row
     }
 

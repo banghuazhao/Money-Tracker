@@ -27,24 +27,15 @@ class BudgetCalculatorViewController: UIViewController {
         image: UIImage(systemName: "square.and.arrow.up", withConfiguration: UIImage.SymbolConfiguration(weight: .bold)),
         style: .plain, target: self, action: #selector(tapShare))
 
+    private lazy var clearButton = UIBarButtonItem(
+        image: UIImage(systemName: "arrow.counterclockwise"),
+        style: .plain, target: self, action: #selector(clearAll))
+
     private lazy var resultStack: UIStackView = {
         let sv = UIStackView()
         sv.axis = .vertical
         sv.spacing = 16
-        sv.isHidden = true
         return sv
-    }()
-
-    private lazy var calculateButton: UIButton = {
-        var cfg = UIButton.Configuration.filled()
-        cfg.title = "Calculate".localized()
-        cfg.image = UIImage(systemName: "chart.pie.fill")
-        cfg.imagePadding = 8
-        cfg.baseBackgroundColor = .systemOrange
-        cfg.cornerStyle = .large
-        let btn = UIButton(configuration: cfg)
-        btn.addTarget(self, action: #selector(tapCalculate), for: .touchUpInside)
-        return btn
     }()
 
     private lazy var scrollView = UIScrollView()
@@ -58,15 +49,12 @@ class BudgetCalculatorViewController: UIViewController {
         navigationItem.largeTitleDisplayMode = .never
         view.backgroundColor = .systemGroupedBackground
         hideKeyboardWhenTappedAround()
-        shareButton.isEnabled = false
-        navigationItem.rightBarButtonItem = shareButton
+        navigationItem.rightBarButtonItems = [shareButton, clearButton]
         setupViews()
-        calculateButton.isEnabled = false
-        incomeField.addTarget(self, action: #selector(updateButtonState), for: .editingChanged)
-    }
 
-    @objc private func updateButtonState() {
-        calculateButton.isEnabled = !(incomeField.text?.isEmpty ?? true)
+        incomeField.text = "5000"
+        incomeField.addTarget(self, action: #selector(recalculate), for: .editingChanged)
+        recalculate()
     }
 
     // MARK: - Setup
@@ -104,9 +92,12 @@ class BudgetCalculatorViewController: UIViewController {
             l.font = UIFont.systemFont(ofSize: 16)
             l.textColor = .secondaryLabel
         }
+        let tapOverlay = UIButton()
+        tapOverlay.addTarget(incomeField, action: #selector(UIResponder.becomeFirstResponder), for: .touchUpInside)
         inputCard.addSubview(monthlyLabel)
         inputCard.addSubview(unitLabel)
         inputCard.addSubview(incomeField)
+        inputCard.addSubview(tapOverlay)
         monthlyLabel.snp.makeConstraints { make in
             make.left.equalToSuperview().offset(16)
             make.centerY.equalToSuperview()
@@ -121,6 +112,7 @@ class BudgetCalculatorViewController: UIViewController {
             make.left.greaterThanOrEqualTo(monthlyLabel.snp.right).offset(8)
             make.width.greaterThanOrEqualTo(100)
         }
+        tapOverlay.snp.makeConstraints { $0.edges.equalToSuperview() }
         inputCard.snp.makeConstraints { $0.height.equalTo(54) }
 
         // Build result bucket cards
@@ -152,7 +144,6 @@ class BudgetCalculatorViewController: UIViewController {
         // Assemble in contentView
         contentView.addSubview(infoCard)
         contentView.addSubview(inputCard)
-        contentView.addSubview(calculateButton)
         contentView.addSubview(resultStack)
 
         infoCard.snp.makeConstraints { make in
@@ -165,14 +156,8 @@ class BudgetCalculatorViewController: UIViewController {
             make.left.equalTo(view).offset(16)
             make.right.equalTo(view).offset(-16)
         }
-        calculateButton.snp.makeConstraints { make in
-            make.top.equalTo(inputCard.snp.bottom).offset(20)
-            make.left.equalTo(view).offset(16)
-            make.right.equalTo(view).offset(-16)
-            make.height.equalTo(52)
-        }
         resultStack.snp.makeConstraints { make in
-            make.top.equalTo(calculateButton.snp.bottom).offset(24)
+            make.top.equalTo(inputCard.snp.bottom).offset(20)
             make.left.equalTo(view).offset(16)
             make.right.equalTo(view).offset(-16)
             make.bottom.equalToSuperview().offset(-32)
@@ -181,35 +166,22 @@ class BudgetCalculatorViewController: UIViewController {
 
     // MARK: - Actions
 
-    @objc private func tapCalculate() {
-        view.endEditing(true)
-        guard
-            let text = incomeField.text, let income = Double(text), income > 0
-        else {
-            let ac = UIAlertController(
-                title: "Invalid Input".localized(),
-                message: "Please enter a valid monthly income greater than zero.".localized(),
-                preferredStyle: .alert
-            )
-            ac.addAction(UIAlertAction(title: "OK".localized(), style: .cancel))
-            present(ac, animated: true)
+    @objc private func recalculate() {
+        guard let text = incomeField.text, let income = Double(text), income > 0 else {
+            [needsAmountLabel, wantsAmountLabel, savingsAmountLabel].forEach { $0.text = "—" }
+            shareButton.isEnabled = false
             return
         }
 
         needsAmountLabel.text = convertDoubleToCurrency(amount: income * 0.50)
         wantsAmountLabel.text = convertDoubleToCurrency(amount: income * 0.30)
         savingsAmountLabel.text = convertDoubleToCurrency(amount: income * 0.20)
-
         shareButton.isEnabled = true
-        if resultStack.isHidden {
-            resultStack.isHidden = false
-            scrollView.layoutIfNeeded()
-            let bottom = resultStack.frame.maxY + 32
-            let offset = bottom - scrollView.bounds.height
-            if offset > 0 {
-                scrollView.setContentOffset(CGPoint(x: 0, y: offset), animated: true)
-            }
-        }
+    }
+
+    @objc private func clearAll() {
+        incomeField.text = "5000"
+        recalculate()
     }
 
     @objc private func tapShare() {

@@ -24,25 +24,16 @@ class LoanCalculatorViewController: UIViewController {
         image: UIImage(systemName: "square.and.arrow.up", withConfiguration: UIImage.SymbolConfiguration(weight: .bold)),
         style: .plain, target: self, action: #selector(tapShare))
 
+    private lazy var clearButton = UIBarButtonItem(
+        image: UIImage(systemName: "arrow.counterclockwise"),
+        style: .plain, target: self, action: #selector(clearAll))
+
     private lazy var resultCard: UIView = {
         let v = UIView()
         v.backgroundColor = .secondarySystemBackground
         v.layer.cornerRadius = 16
         v.layer.cornerCurve = .continuous
-        v.isHidden = true
         return v
-    }()
-
-    private lazy var calculateButton: UIButton = {
-        var cfg = UIButton.Configuration.filled()
-        cfg.title = "Calculate".localized()
-        cfg.image = UIImage(systemName: "equal.circle.fill")
-        cfg.imagePadding = 8
-        cfg.baseBackgroundColor = .themeColor
-        cfg.cornerStyle = .large
-        let btn = UIButton(configuration: cfg)
-        btn.addTarget(self, action: #selector(tapCalculate), for: .touchUpInside)
-        return btn
     }()
 
     private lazy var scrollView = UIScrollView()
@@ -56,19 +47,16 @@ class LoanCalculatorViewController: UIViewController {
         navigationItem.largeTitleDisplayMode = .never
         view.backgroundColor = .systemGroupedBackground
         hideKeyboardWhenTappedAround()
-        shareButton.isEnabled = false
-        navigationItem.rightBarButtonItem = shareButton
+        navigationItem.rightBarButtonItems = [shareButton, clearButton]
         setupViews()
-        calculateButton.isEnabled = false
-        [principalField, rateField, termField].forEach {
-            $0.addTarget(self, action: #selector(updateButtonState), for: .editingChanged)
-        }
-    }
 
-    @objc private func updateButtonState() {
-        calculateButton.isEnabled = [principalField, rateField, termField].allSatisfy {
-            !($0.text?.isEmpty ?? true)
+        principalField.text = "200000"
+        rateField.text = "5.5"
+        termField.text = "30"
+        [principalField, rateField, termField].forEach {
+            $0.addTarget(self, action: #selector(recalculate), for: .editingChanged)
         }
+        recalculate()
     }
 
     // MARK: - Setup
@@ -167,7 +155,6 @@ class LoanCalculatorViewController: UIViewController {
 
         // Arrange in content view
         contentView.addSubview(inputCard)
-        contentView.addSubview(calculateButton)
         contentView.addSubview(resultCard)
 
         inputCard.snp.makeConstraints { make in
@@ -175,14 +162,8 @@ class LoanCalculatorViewController: UIViewController {
             make.left.equalTo(view).offset(16)
             make.right.equalTo(view).offset(-16)
         }
-        calculateButton.snp.makeConstraints { make in
-            make.top.equalTo(inputCard.snp.bottom).offset(20)
-            make.left.equalTo(view).offset(16)
-            make.right.equalTo(view).offset(-16)
-            make.height.equalTo(52)
-        }
         resultCard.snp.makeConstraints { make in
-            make.top.equalTo(calculateButton.snp.bottom).offset(24)
+            make.top.equalTo(inputCard.snp.bottom).offset(20)
             make.left.equalTo(view).offset(16)
             make.right.equalTo(view).offset(-16)
             make.bottom.equalToSuperview().offset(-32)
@@ -191,14 +172,14 @@ class LoanCalculatorViewController: UIViewController {
 
     // MARK: - Actions
 
-    @objc private func tapCalculate() {
-        view.endEditing(true)
+    @objc private func recalculate() {
         guard
             let principalText = principalField.text, let principal = Double(principalText), principal > 0,
             let rateText = rateField.text, let annualRate = Double(rateText), annualRate >= 0,
             let termText = termField.text, let termYears = Double(termText), termYears > 0
         else {
-            showInputError()
+            [monthlyPaymentValue, totalInterestValue, totalAmountValue].forEach { $0.text = "—" }
+            shareButton.isEnabled = false
             return
         }
 
@@ -217,19 +198,15 @@ class LoanCalculatorViewController: UIViewController {
         monthlyPaymentValue.text = convertDoubleToCurrency(amount: monthlyPayment)
         totalInterestValue.text = convertDoubleToCurrency(amount: totalInterest)
         totalAmountValue.text = convertDoubleToCurrency(amount: totalAmount)
-
         totalAmountValue.textColor = .expenseRed
-
         shareButton.isEnabled = true
-        if resultCard.isHidden {
-            resultCard.isHidden = false
-            scrollView.layoutIfNeeded()
-            let bottom = resultCard.frame.maxY + 32
-            let offset = bottom - scrollView.bounds.height
-            if offset > 0 {
-                scrollView.setContentOffset(CGPoint(x: 0, y: offset), animated: true)
-            }
-        }
+    }
+
+    @objc private func clearAll() {
+        principalField.text = "200000"
+        rateField.text = "5.5"
+        termField.text = "30"
+        recalculate()
     }
 
     @objc private func tapShare() {
@@ -252,16 +229,6 @@ class LoanCalculatorViewController: UIViewController {
         let avc = UIActivityViewController(activityItems: [text], applicationActivities: nil)
         if let popover = avc.popoverPresentationController { popover.barButtonItem = shareButton }
         present(avc, animated: true)
-    }
-
-    private func showInputError() {
-        let ac = UIAlertController(
-            title: "Invalid Input".localized(),
-            message: "Please enter valid positive numbers for all fields.".localized(),
-            preferredStyle: .alert
-        )
-        ac.addAction(UIAlertAction(title: "OK".localized(), style: .cancel))
-        present(ac, animated: true)
     }
 
     // MARK: - Helpers
@@ -298,9 +265,12 @@ class LoanCalculatorViewController: UIViewController {
             l.font = UIFont.systemFont(ofSize: 16)
             l.textColor = .secondaryLabel
         }
+        let tapOverlay = UIButton()
+        tapOverlay.addTarget(field, action: #selector(UIResponder.becomeFirstResponder), for: .touchUpInside)
         row.addSubview(titleLabel)
         row.addSubview(unitLabel)
         row.addSubview(field)
+        row.addSubview(tapOverlay)
         titleLabel.snp.makeConstraints { make in
             make.left.equalToSuperview().offset(16)
             make.centerY.equalToSuperview()
@@ -315,6 +285,7 @@ class LoanCalculatorViewController: UIViewController {
             make.left.greaterThanOrEqualTo(titleLabel.snp.right).offset(8)
             make.width.greaterThanOrEqualTo(80)
         }
+        tapOverlay.snp.makeConstraints { $0.edges.equalToSuperview() }
         return row
     }
 
