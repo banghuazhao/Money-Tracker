@@ -44,6 +44,7 @@ class AddOrEditTransactionViewController: UIViewController {
             let absValue = fabs(enteredAmount)
             amountTextView.text = absValue > 0 ? absValue.cleanZero : ""
             updateAmountPlaceholder()
+            saveButton.isEnabled = enteredAmount != 0
             descriptionTextField.text = transaction.title
         }
     }
@@ -193,6 +194,7 @@ class AddOrEditTransactionViewController: UIViewController {
 
         setupView()
         updateCategoryUI(name: selectedCategory)
+        saveButton.isEnabled = false
         setupKeyboardObservers()
         hideKeyboardWhenTappedAround()
     }
@@ -599,6 +601,7 @@ extension AddOrEditTransactionViewController: UITextViewDelegate {
             let abs = fabs(enteredAmount)
             textView.text = abs > 0 ? abs.cleanZero : ""
         }
+        saveButton.isEnabled = enteredAmount != 0
     }
 
     func textViewDidEndEditing(_ textView: UITextView) {
@@ -610,6 +613,7 @@ extension AddOrEditTransactionViewController: UITextViewDelegate {
             textView.text = ""
         }
         updateAmountPlaceholder()
+        saveButton.isEnabled = enteredAmount != 0
     }
 }
 
