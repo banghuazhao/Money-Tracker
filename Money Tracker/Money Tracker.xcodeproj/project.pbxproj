@@ -77,7 +77,10 @@
 		B7F310591F09A63D5026074A /* UserCategory+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 683E582BB3F62F04F8E02A0D /* UserCategory+CoreDataClass.swift */; };
 		FA2040C8CFBE965D5FF61C5F /* TipCalculatorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B23F6C8A417C94D6D5336FA /* TipCalculatorViewController.swift */; };
 		FF21168013F287BE6F670752 /* SavingsGoalCalculatorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDD3DF3677C29788DFAC13C2 /* SavingsGoalCalculatorViewController.swift */; };
-/* End PBXBuildFile section */
+		4ED5FAAC7919482D97ACBC0E /* BackupManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B110587A39744BB685095DA6 /* BackupManager.swift */; };
+		A0E8F1A82D65406CA498C12C /* BackupDataViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0AA590835104C9990C7EDED /* BackupDataViewController.swift */; };
+		3A13A195E4C041A5B41C400A /* RestoreDataViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C7217FCC0304F6FB5069763 /* RestoreDataViewController.swift */; };
+		/* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		14B4379888E241348F26A43D /* CompoundInterestCalculatorViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompoundInterestCalculatorViewController.swift; sourceTree = "<group>"; };
@@ -150,7 +153,10 @@
 		E18D59E215CCCF0E05EB751A /* IAPStatusCell.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = IAPStatusCell.swift; sourceTree = "<group>"; };
 		F4AD549DEBA4856FA574B113 /* UserCategoryManager.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = UserCategoryManager.swift; sourceTree = "<group>"; };
 		FDD3DF3677C29788DFAC13C2 /* SavingsGoalCalculatorViewController.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = SavingsGoalCalculatorViewController.swift; sourceTree = "<group>"; };
-/* End PBXFileReference section */
+		B110587A39744BB685095DA6 /* BackupManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackupManager.swift; sourceTree = "<group>"; };
+		C0AA590835104C9990C7EDED /* BackupDataViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackupDataViewController.swift; sourceTree = "<group>"; };
+		0C7217FCC0304F6FB5069763 /* RestoreDataViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RestoreDataViewController.swift; sourceTree = "<group>"; };
+		/* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		999A68F12FEDD35F00960450 /* Config */ = {
@@ -295,6 +301,7 @@
 				99A93D3D2526B64C00E6C455 /* Color.swift */,
 				99A93D3C2526B64C00E6C455 /* Constants.swift */,
 				99A93D3E2526B64D00E6C455 /* CoreDataManager.swift */,
+				B110587A39744BB685095DA6 /* BackupManager.swift */,
 				99A93D3B2526B64C00E6C455 /* StoreReviewHelper.swift */,
 				99FD2B3C25B4279400D0AC0C /* InterstitialAdsRequestHelper.swift */,
 				99FD2B3F25B4279900D0AC0C /* Extensions */,
@@ -353,6 +360,8 @@
 				99A93DC4252A10C200E6C455 /* MenuViewController.swift */,
 				99FD2BD825B42BFC00D0AC0C /* FeedbackViewController.swift */,
 				99FD2BD925B42BFD00D0AC0C /* MoreAppsViewController.swift */,
+				C0AA590835104C9990C7EDED /* BackupDataViewController.swift */,
+				0C7217FCC0304F6FB5069763 /* RestoreDataViewController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -512,6 +521,9 @@
 				9930BFC1252CABA40035365F /* SingleCategoryViewController.swift in Sources */,
 				99FD2BD125B42BD300D0AC0C /* FeedbackItem.swift in Sources */,
 				99FD2BDA25B42BFD00D0AC0C /* FeedbackViewController.swift in Sources */,
+				A0E8F1A82D65406CA498C12C /* BackupDataViewController.swift in Sources */,
+				3A13A195E4C041A5B41C400A /* RestoreDataViewController.swift in Sources */,
+				4ED5FAAC7919482D97ACBC0E /* BackupManager.swift in Sources */,
 				9930BFA9252C997D0035365F /* PieChartCell.swift in Sources */,
 				9930BFA6252C97D30035365F /* PieChartViewController.swift in Sources */,
 				9930BFC4252CC5F30035365F /* UITextFieldWithPadding.swift in Sources */,

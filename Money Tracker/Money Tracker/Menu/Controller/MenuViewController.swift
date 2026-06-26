@@ -37,6 +37,7 @@ class MenuViewController: UIViewController, MFMailComposeViewControllerDelegate 
         let menuItems = [
             MyMenuItem(title: "Change currency symbol".localized(), icon: UIImage(systemName: "dollarsign.circle")),
             MyMenuItem(title: "Manage Categories".localized(), icon: UIImage(systemName: "tag")),
+            MyMenuItem(title: "Back up Data".localized(), icon: UIImage(systemName: "icloud.and.arrow.up")),
             MyMenuItem(title: "Feedback".localized(), icon: UIImage(systemName: "bubble.left")),
             MyMenuItem(title: "Rate this App".localized(), icon: UIImage(systemName: "star")),
             MyMenuItem(title: "Share this App".localized(), icon: UIImage(systemName: "square.and.arrow.up")),
@@ -47,6 +48,7 @@ class MenuViewController: UIViewController, MFMailComposeViewControllerDelegate 
         let menuItems = [
             MyMenuItem(title: "Change currency symbol".localized(), icon: UIImage(systemName: "dollarsign.circle")),
             MyMenuItem(title: "Manage Categories".localized(), icon: UIImage(systemName: "tag")),
+            MyMenuItem(title: "Back up Data".localized(), icon: UIImage(systemName: "icloud.and.arrow.up")),
             MyMenuItem(title: "Feedback".localized(), icon: UIImage(systemName: "bubble.left")),
             MyMenuItem(title: "Rate this App".localized(), icon: UIImage(systemName: "star")),
             MyMenuItem(title: "Share this App".localized(), icon: UIImage(systemName: "square.and.arrow.up")),
@@ -169,17 +171,21 @@ extension MenuViewController: UITableViewDelegate, UITableViewDataSource {
         }
 
         if row == 2 {
-            navigationController?.pushViewController(FeedbackViewController(), animated: true)
+            navigationController?.pushViewController(BackupDataViewController(), animated: true)
         }
 
         if row == 3 {
+            navigationController?.pushViewController(FeedbackViewController(), animated: true)
+        }
+
+        if row == 4 {
             if let reviewURL = URL(string: "https://itunes.apple.com/app/id\(Constants.AppID.moneyTrackerAppID)?action=write-review"),
                UIApplication.shared.canOpenURL(reviewURL) {
                 UIApplication.shared.open(reviewURL, options: [:], completionHandler: nil)
             }
         }
 
-        if row == 4 {
+        if row == 5 {
             let textToShare = "Money Tracker".localized()
             let image = UIImage(named: "appIcon_money_tracker")!
             if let myWebsite = URL(string: "http://itunes.apple.com/app/id\(Constants.appID)") {
@@ -195,7 +201,7 @@ extension MenuViewController: UITableViewDelegate, UITableViewDataSource {
         }
 
         #if !targetEnvironment(macCatalyst)
-            if row == 5 {
+            if row == 6 {
                 let alertController = UIAlertController(
                     title: "Support this App".localized(),
                     message: "\("Do you want to watch an advertisement to support this App".localized())?",
@@ -222,11 +228,11 @@ extension MenuViewController: UITableViewDelegate, UITableViewDataSource {
                 present(alertController, animated: true)
             }
 
-            if row == 6 {
+            if row == 7 {
                 navigationController?.pushViewController(MoreAppsViewController(), animated: true)
             }
         #else
-            if row == 5 {
+            if row == 6 {
                 navigationController?.pushViewController(MoreAppsViewController(), animated: true)
             }
         #endif

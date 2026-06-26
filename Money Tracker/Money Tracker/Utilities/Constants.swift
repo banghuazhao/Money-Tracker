@@ -36,6 +36,7 @@ struct Constants {
 
 extension Notification.Name {
     static let currencyDidChange = Notification.Name("currencyDidChange")
+    static let backupDidRestore = Notification.Name("backupDidRestore")
 }
 
 struct UserDefaultsKeys {
