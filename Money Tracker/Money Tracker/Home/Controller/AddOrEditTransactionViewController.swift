@@ -287,13 +287,13 @@ extension AddOrEditTransactionViewController {
             make.centerY.equalTo(categoryButton)
         }
         categoryIconView.snp.makeConstraints { make in
-            make.right.equalTo(categoryChevron.snp.left).offset(-6)
+            make.right.equalTo(categoryButton.snp.left).offset(-6)
             make.centerY.equalTo(categoryButton)
             make.size.equalTo(24)
         }
         categoryButton.snp.makeConstraints { make in
             make.top.equalTo(divider1.snp.bottom)
-            make.right.equalTo(categoryIconView.snp.left).offset(-6)
+            make.right.equalTo(categoryChevron.snp.left).offset(-4)
             make.height.equalTo(rowH)
             make.left.greaterThanOrEqualTo(categoryLabel.snp.right).offset(8)
         }
