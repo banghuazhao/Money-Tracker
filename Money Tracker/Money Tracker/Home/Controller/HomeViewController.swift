@@ -409,7 +409,8 @@ extension HomeViewController: AddOrEditTransactionViewControllerDelegate {
         tableView.reloadData()
 
         #if !targetEnvironment(macCatalyst)
-            if InterstitialAdsRequestHelper.increaseRequestAndCheckLoadInterstitialAd() {
+            if !IAPManager.shared.adsRemoved,
+               InterstitialAdsRequestHelper.increaseRequestAndCheckLoadInterstitialAd() {
                 Task { @MainActor in
                     try? await Task.sleep(for: .seconds(0.5))
                     guard let ad = interstitialAd else {

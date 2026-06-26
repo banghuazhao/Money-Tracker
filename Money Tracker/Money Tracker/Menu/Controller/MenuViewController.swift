@@ -9,6 +9,7 @@
 import MessageUI
 import SafariServices
 import SnapKit
+import StoreKit
 import Then
 import UIKit
 
@@ -38,6 +39,7 @@ class MenuViewController: UIViewController, MFMailComposeViewControllerDelegate 
             MyMenuItem(title: "Feedback".localized(), icon: UIImage(systemName: "bubble.left")),
             MyMenuItem(title: "Rate this App".localized(), icon: UIImage(systemName: "star")),
             MyMenuItem(title: "Share this App".localized(), icon: UIImage(systemName: "square.and.arrow.up")),
+            MyMenuItem(title: "Remove Ads Forever".localized(), icon: UIImage(systemName: "hand.raised")),
             MyMenuItem(title: "Support this App".localized(), icon: UIImage(systemName: "hand.thumbsup")),
             MyMenuItem(title: "More Apps".localized(), icon: UIImage(systemName: "ellipsis")),
         ]
@@ -60,18 +62,20 @@ class MenuViewController: UIViewController, MFMailComposeViewControllerDelegate 
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
         title = "Settings".localized()
 
         view.addSubview(tableView)
 
         #if !targetEnvironment(macCatalyst)
-            view.addSubview(bannerView)
-            bannerView.snp.makeConstraints { make in
-                make.bottom.equalTo(view.safeAreaLayoutGuide)
-                make.left.right.equalToSuperview()
-                make.height.equalTo(50)
+            if !IAPManager.shared.adsRemoved {
+                view.addSubview(bannerView)
+                bannerView.snp.makeConstraints { make in
+                    make.bottom.equalTo(view.safeAreaLayoutGuide)
+                    make.left.right.equalToSuperview()
+                    make.height.equalTo(50)
+                }
             }
+            IAPManager.shared.prefetchProduct()
         #endif
 
         tableView.snp.makeConstraints { make in
@@ -144,6 +148,10 @@ extension MenuViewController: UITableViewDelegate, UITableViewDataSource {
 
         #if !targetEnvironment(macCatalyst)
             if indexPath.row == 4 {
+                handleRemoveAdsTap()
+            }
+
+            if indexPath.row == 5 {
                 let alterController = UIAlertController(title: "Support this App".localized(), message: "\("Do you want to watch an advertisement to support this App".localized())?", preferredStyle: .alert)
                 let action1 = UIAlertAction(title: "Yes".localized(), style: .default) { [weak self] _ in
                     guard let self = self else { return }
@@ -169,7 +177,7 @@ extension MenuViewController: UITableViewDelegate, UITableViewDataSource {
                 present(alterController, animated: true)
             }
 
-            if indexPath.row == 5 {
+            if indexPath.row == 6 {
                 navigationController?.pushViewController(MoreAppsViewController(), animated: true)
             }
         #else
@@ -179,6 +187,86 @@ extension MenuViewController: UITableViewDelegate, UITableViewDataSource {
         #endif
     }
 }
+
+// MARK: - Remove Ads IAP
+
+#if !targetEnvironment(macCatalyst)
+    extension MenuViewController {
+        func handleRemoveAdsTap() {
+            if IAPManager.shared.adsRemoved {
+                let ac = UIAlertController(
+                    title: "Ads Removed".localized(),
+                    message: "You've already removed ads. Thank you for your support!".localized(),
+                    preferredStyle: .alert)
+                ac.addAction(UIAlertAction(title: "OK".localized(), style: .cancel))
+                present(ac, animated: true)
+                return
+            }
+
+            let priceStr = IAPManager.shared.localizedPrice.map { " (\($0))" } ?? ""
+            let ac = UIAlertController(
+                title: "Remove Ads Forever".localized(),
+                message: "Enjoy the app completely ad-free with a one-time purchase.".localized(),
+                preferredStyle: .alert)
+            ac.addAction(UIAlertAction(title: ("Purchase".localized() + priceStr), style: .default) { [weak self] _ in
+                self?.startPurchase()
+            })
+            ac.addAction(UIAlertAction(title: "Restore Purchase".localized(), style: .default) { [weak self] _ in
+                self?.startRestore()
+            })
+            ac.addAction(UIAlertAction(title: "Cancel".localized(), style: .cancel))
+            present(ac, animated: true)
+        }
+
+        private func startPurchase() {
+            ProgressHUD.show("Processing...".localized())
+            IAPManager.shared.onPurchaseComplete = { [weak self] in
+                ProgressHUD.dismiss()
+                self?.adsRemovedDidSucceed()
+            }
+            IAPManager.shared.onFailed = { [weak self] message in
+                ProgressHUD.dismiss()
+                self?.showIAPError(message)
+            }
+            IAPManager.shared.purchaseRemoveAds()
+        }
+
+        private func startRestore() {
+            ProgressHUD.show("Restoring...".localized())
+            IAPManager.shared.onRestoreComplete = { [weak self] in
+                ProgressHUD.dismiss()
+                self?.adsRemovedDidSucceed()
+            }
+            IAPManager.shared.onRestoreEmpty = { [weak self] in
+                ProgressHUD.dismiss()
+                self?.showIAPError("No previous purchase found for this Apple ID.".localized())
+            }
+            IAPManager.shared.onFailed = { [weak self] message in
+                ProgressHUD.dismiss()
+                self?.showIAPError(message)
+            }
+            IAPManager.shared.restorePurchases()
+        }
+
+        private func adsRemovedDidSucceed() {
+            // Remove the Settings banner from view.
+            bannerView.removeFromSuperview()
+            tableView.reloadData()
+            let ac = UIAlertController(
+                title: "Ads Removed!".localized(),
+                message: "Thank you! All ads have been removed.".localized(),
+                preferredStyle: .alert)
+            ac.addAction(UIAlertAction(title: "OK".localized(), style: .cancel))
+            present(ac, animated: true)
+        }
+
+        private func showIAPError(_ message: String) {
+            let ac = UIAlertController(title: "Purchase Failed".localized(), message: message, preferredStyle: .alert)
+            ac.addAction(UIAlertAction(title: "OK".localized(), style: .cancel))
+            present(ac, animated: true)
+        }
+    }
+#endif
 
 #if !targetEnvironment(macCatalyst)
     extension MenuViewController: GADFullScreenContentDelegate {

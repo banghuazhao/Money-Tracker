@@ -40,6 +40,8 @@ struct UserDefaultsKeys {
     static let timesToOpenInterstitialAds = "timesToOpenInterstitialAds"
     /// True while the only transactions are the first-run sample data.
     static let hasSampleData = "hasSampleData"
+    /// True once the user has paid to remove ads forever.
+    static let adsRemoved = "adsRemoved"
 }
 
 let categoryExpenses: [String] = [

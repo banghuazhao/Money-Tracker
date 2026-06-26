@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1C15B5BBB08C278B696FA52E /* IAPManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBEA9AF95B5BF95038211983 /* IAPManager.swift */; };
 		3B9155AE51A14700A56D47FF /* LoanCalculatorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CAEBD0B93BA4C9A9C83C30E /* LoanCalculatorViewController.swift */; };
 		3F1F3DBC35B1A7737E09C752 /* DebtPayoffCalculatorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A388A8D7987339238F333CBA /* DebtPayoffCalculatorViewController.swift */; };
 		4AC90F1A237B4D88983F7449 /* CompoundInterestCalculatorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14B4379888E241348F26A43D /* CompoundInterestCalculatorViewController.swift */; };
@@ -133,6 +134,7 @@
 		9C6AE4A9379FF75DF9622B8A /* RetirementCalculatorViewController.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = RetirementCalculatorViewController.swift; sourceTree = "<group>"; };
 		A388A8D7987339238F333CBA /* DebtPayoffCalculatorViewController.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = DebtPayoffCalculatorViewController.swift; sourceTree = "<group>"; };
 		BD9FD0B66D5A646BD44C0481 /* AppOpenAdManager.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = AppOpenAdManager.swift; sourceTree = "<group>"; };
+		CBEA9AF95B5BF95038211983 /* IAPManager.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = IAPManager.swift; sourceTree = "<group>"; };
 		FDD3DF3677C29788DFAC13C2 /* SavingsGoalCalculatorViewController.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = SavingsGoalCalculatorViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -271,6 +273,7 @@
 				99FD2B4025B427A200D0AC0C /* Class */,
 				99A93DB6252A0A8200E6C455 /* Other.swift */,
 				BD9FD0B66D5A646BD44C0481 /* AppOpenAdManager.swift */,
+				CBEA9AF95B5BF95038211983 /* IAPManager.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -517,6 +520,7 @@
 				3F1F3DBC35B1A7737E09C752 /* DebtPayoffCalculatorViewController.swift in Sources */,
 				FA2040C8CFBE965D5FF61C5F /* TipCalculatorViewController.swift in Sources */,
 				70F5857D54D80E0C14A9853E /* AppOpenAdManager.swift in Sources */,
+				1C15B5BBB08C278B696FA52E /* IAPManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -11,6 +11,7 @@ import CoreData
     import IQKeyboardManagerSwift
 #endif
 
+import StoreKit
 import SwiftDate
 import UIKit
 
@@ -23,10 +24,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // users east of UTC (e.g. "3/14" shown as "3/13" in UTC+8).
         SwiftDate.defaultRegion = Region.local
 
+        IAPManager.shared.startObserving()
+
         #if !targetEnvironment(macCatalyst)
             GADMobileAds.sharedInstance().start(completionHandler: nil)
             IQKeyboardManager.shared.enable = true
-            AppOpenAdManager.shared.loadAd()
+            if !IAPManager.shared.adsRemoved {
+                AppOpenAdManager.shared.loadAd()
+            }
         #endif
 
         StoreReviewHelper.incrementFetchCount()
@@ -76,7 +81,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Show an app-open ad only when the user returns after being away a while
         // (handled in the manager). Never interrupts the first cold start.
         #if !targetEnvironment(macCatalyst)
-            AppOpenAdManager.shared.showAdIfAvailable()
+            if !IAPManager.shared.adsRemoved {
+                AppOpenAdManager.shared.showAdIfAvailable()
+            }
         #endif
     }
 
