@@ -41,10 +41,6 @@ class CategoryListViewController: UIViewController {
         style: .plain, target: self, action: #selector(tapAdd)
     )
 
-    private lazy var filterButton = UIBarButtonItem(
-        image: UIImage(systemName: "line.3.horizontal.decrease.circle"),
-        style: .plain, target: self, action: #selector(tapFilter)
-    )
 
     // MARK: - Data
 
@@ -116,36 +112,13 @@ class CategoryListViewController: UIViewController {
     }
 
     private func updateBarButtons() {
-        var items: [UIBarButtonItem] = [filterButton]
-        if showingUser { items.insert(addButton, at: 0) }
-        navigationItem.rightBarButtonItems = items
+        navigationItem.rightBarButtonItems = showingUser ? [addButton] : []
     }
 
     @objc private func tapAdd() {
         let vc = CreateOrEditCategoryViewController(existing: nil, defaultIncome: filterIncome ?? false)
         vc.onSave = { [weak self] in self?.reloadData() }
         navigationController?.pushViewController(vc, animated: true)
-    }
-
-    @objc private func tapFilter() {
-        let ac = UIAlertController(title: "Show".localized(), message: nil, preferredStyle: .actionSheet)
-        ac.addAction(UIAlertAction(title: "Expense".localized(), style: .default) { [weak self] _ in
-            self?.filterIncome = false
-            self?.reloadData()
-        })
-        ac.addAction(UIAlertAction(title: "Income".localized(), style: .default) { [weak self] _ in
-            self?.filterIncome = true
-            self?.reloadData()
-        })
-        ac.addAction(UIAlertAction(title: "All".localized(), style: .default) { [weak self] _ in
-            self?.filterIncome = nil
-            self?.reloadData()
-        })
-        ac.addAction(UIAlertAction(title: "Cancel".localized(), style: .cancel))
-        if let popover = ac.popoverPresentationController {
-            popover.barButtonItem = filterButton
-        }
-        present(ac, animated: true)
     }
 }
 
