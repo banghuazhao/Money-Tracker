@@ -60,6 +60,16 @@ class SavingsGoalCalculatorViewController: UIViewController {
         shareButton.isEnabled = false
         navigationItem.rightBarButtonItem = shareButton
         setupViews()
+        calculateButton.isEnabled = false
+        [goalField, rateField, yearsField].forEach {
+            $0.addTarget(self, action: #selector(updateButtonState), for: .editingChanged)
+        }
+    }
+
+    @objc private func updateButtonState() {
+        calculateButton.isEnabled = [goalField, rateField, yearsField].allSatisfy {
+            !($0.text?.isEmpty ?? true)
+        }
     }
 
     // MARK: - Setup
@@ -204,8 +214,18 @@ class SavingsGoalCalculatorViewController: UIViewController {
     }
 
     @objc private func tapShare() {
+        let goal = convertDoubleToCurrency(amount: Double(goalField.text ?? "") ?? 0)
+        let current = convertDoubleToCurrency(amount: Double(currentField.text ?? "") ?? 0)
+        let rate = "\(rateField.text ?? "")%"
+        let years = "\(yearsField.text ?? "") \("yr".localized())"
         let text = """
         \("Savings Goal".localized())
+
+        \("Savings Goal".localized()): \(goal)
+        \("Current Savings".localized()): \(current)
+        \("Annual Rate (%)".localized()): \(rate)
+        \("Years".localized()): \(years)
+
         \("Monthly Contribution".localized()): \(monthlyLabel.text ?? "")
         \("Total Contributions".localized()): \(contributionsLabel.text ?? "")
         \("Interest Earned".localized()): \(interestLabel.text ?? "")

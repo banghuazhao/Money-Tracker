@@ -59,6 +59,16 @@ class DebtPayoffCalculatorViewController: UIViewController {
         shareButton.isEnabled = false
         navigationItem.rightBarButtonItem = shareButton
         setupViews()
+        calculateButton.isEnabled = false
+        [balanceField, rateField, paymentField].forEach {
+            $0.addTarget(self, action: #selector(updateButtonState), for: .editingChanged)
+        }
+    }
+
+    @objc private func updateButtonState() {
+        calculateButton.isEnabled = [balanceField, rateField, paymentField].allSatisfy {
+            !($0.text?.isEmpty ?? true)
+        }
     }
 
     // MARK: - Setup
@@ -193,8 +203,16 @@ class DebtPayoffCalculatorViewController: UIViewController {
     }
 
     @objc private func tapShare() {
+        let balance = convertDoubleToCurrency(amount: Double(balanceField.text ?? "") ?? 0)
+        let rate = "\(rateField.text ?? "")%"
+        let payment = convertDoubleToCurrency(amount: Double(paymentField.text ?? "") ?? 0)
         let text = """
         \("Debt Payoff".localized())
+
+        \("Current Balance".localized()): \(balance)
+        \("Annual Rate (APR %)".localized()): \(rate)
+        \("Monthly Payment".localized()): \(payment)
+
         \("Time to Pay Off".localized()): \(payoffTimeLabel.text ?? "")
         \("Total Interest".localized()): \(totalInterestLabel.text ?? "")
         \("Total Paid".localized()): \(totalPaidLabel.text ?? "")
