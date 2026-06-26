@@ -207,7 +207,7 @@ class BudgetCalculatorViewController: UIViewController {
     private func makeCard() -> UIView {
         UIView().then { v in
             v.backgroundColor = .secondarySystemBackground
-            v.layer.cornerRadius = 16
+            v.layer.cornerRadius = 20
             v.layer.cornerCurve = .continuous
         }
     }
@@ -229,7 +229,7 @@ class BudgetCalculatorViewController: UIViewController {
     ) -> UIView {
         let card = UIView().then { v in
             v.backgroundColor = .secondarySystemBackground
-            v.layer.cornerRadius = 16
+            v.layer.cornerRadius = 20
             v.layer.cornerCurve = .continuous
         }
 

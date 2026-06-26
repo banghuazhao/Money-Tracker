@@ -35,7 +35,7 @@ class AddOrEditTransactionViewController: UIViewController {
                   let category = transaction.category,
                   let date = transaction.date else { return }
             typeSegmentedControl.selectedSegmentIndex = transaction.amount < 0 ? 0 : 1
-            updateAmountSign()
+            updateAmountCardStyle()
             selectedCategory = category
             updateCategoryUI(name: category)
             selectedDate = date
@@ -56,15 +56,33 @@ class AddOrEditTransactionViewController: UIViewController {
         sv.alwaysBounceVertical = true
     }
 
-    private lazy var typeLabel = UILabel().then { l in
-        l.text = "Type".localized()
-        l.font = .systemFont(ofSize: 15, weight: .medium)
-        l.textColor = .label
+    // Hero amount card — stored so we can update its tint color
+    private lazy var amountCard = UIView().then { v in
+        v.layer.cornerRadius = 22
+        v.layer.cornerCurve = .continuous
     }
 
     private lazy var typeSegmentedControl = UISegmentedControl(items: ["Expense".localized(), "Income".localized()]).then { sc in
         sc.selectedSegmentIndex = 0
         sc.addTarget(self, action: #selector(tapTypeSegmentedControl(_:)), for: .valueChanged)
+    }
+
+    private lazy var amountTextView = UITextView().then { tv in
+        tv.font = UIFont.monospacedDigitSystemFont(ofSize: 44, weight: .regular)
+        tv.textAlignment = .center
+        tv.keyboardType = .decimalPad
+        tv.contentInset = UIEdgeInsets(top: 2, left: 0, bottom: 0, right: 0)
+        tv.text = ""
+        tv.backgroundColor = .clear
+        tv.inputAccessoryView = makeKeyboardToolbar()
+        tv.delegate = self
+    }
+
+    private lazy var amountPlaceholderLabel = UILabel().then { l in
+        l.text = "0.00"
+        l.font = UIFont.monospacedDigitSystemFont(ofSize: 44, weight: .regular)
+        l.textAlignment = .center
+        l.isUserInteractionEnabled = false
     }
 
     private lazy var categoryLabel = UILabel().then { l in
@@ -106,38 +124,9 @@ class AddOrEditTransactionViewController: UIViewController {
 
     private lazy var dateChevron = makeChevron()
 
-    private lazy var amountLabel = UILabel().then { l in
-        l.text = "Amount".localized() + " (−)"
-        l.font = .systemFont(ofSize: 15, weight: .medium)
-        l.textColor = .label
-    }
-
-    private lazy var amountTextView = UITextView().then { tv in
-        tv.layer.cornerRadius = 12
-        tv.layer.cornerCurve = .continuous
-        tv.font = UIFont.monospacedDigitSystemFont(ofSize: 24, weight: .regular)
-        tv.textAlignment = .center
-        tv.keyboardType = .decimalPad
-        tv.contentInset = UIEdgeInsets(top: 4, left: 0, bottom: 0, right: 0)
-        tv.text = ""
-        tv.backgroundColor = UIColor.systemBlue.withAlphaComponent(0.08)
-        tv.inputAccessoryView = makeKeyboardToolbar()
-        tv.delegate = self
-    }
-
-    private lazy var amountPlaceholderLabel = UILabel().then { l in
-        l.text = "0.00"
-        l.font = UIFont.monospacedDigitSystemFont(ofSize: 24, weight: .regular)
-        l.textColor = .tertiaryLabel
-        l.textAlignment = .center
-        l.isUserInteractionEnabled = false
-    }
-
     private lazy var descriptionTextField = UITextFieldPadding().then { tf in
-        tf.layer.cornerRadius = 14
-        tf.layer.cornerCurve = .continuous
         tf.placeholder = "Transaction Description".localized()
-        tf.backgroundColor = .secondarySystemBackground
+        tf.backgroundColor = .clear
         tf.font = .systemFont(ofSize: 15)
         tf.clearButtonMode = .whileEditing
         tf.returnKeyType = .done
@@ -194,6 +183,7 @@ class AddOrEditTransactionViewController: UIViewController {
 
         setupView()
         updateCategoryUI(name: selectedCategory)
+        updateAmountCardStyle()
         saveButton.isEnabled = false
         setupKeyboardObservers()
         hideKeyboardWhenTappedAround()
@@ -221,142 +211,152 @@ extension AddOrEditTransactionViewController {
         view.addSubview(scrollView)
         scrollView.snp.makeConstraints { $0.edges.equalToSuperview() }
 
-        let formCard = UIView().then { v in
+        let inset: CGFloat = 16
+        let rowH: CGFloat = 54
+
+        // ── Amount hero card ──────────────────────────────────
+        amountCard.addSubview(typeSegmentedControl)
+        amountCard.addSubview(amountTextView)
+        amountCard.addSubview(amountPlaceholderLabel)
+
+        typeSegmentedControl.snp.makeConstraints { make in
+            make.top.equalToSuperview().offset(18)
+            make.left.equalToSuperview().offset(inset)
+            make.right.equalToSuperview().offset(-inset)
+        }
+        amountTextView.snp.makeConstraints { make in
+            make.top.equalTo(typeSegmentedControl.snp.bottom).offset(16)
+            make.left.equalToSuperview().offset(inset)
+            make.right.equalToSuperview().offset(-inset)
+            make.bottom.equalToSuperview().offset(-20)
+            make.height.equalTo(60)
+        }
+        amountPlaceholderLabel.snp.makeConstraints { $0.edges.equalTo(amountTextView) }
+        updateAmountPlaceholder()
+
+        // ── Details card ─────────────────────────────────────
+        let detailsCard = UIView().then { v in
             v.backgroundColor = .secondarySystemBackground
-            v.layer.cornerRadius = 16
+            v.layer.cornerRadius = 22
             v.layer.cornerCurve = .continuous
         }
 
-        let divider1 = makeDivider()
-        let divider2 = makeDivider()
-        let divider3 = makeDivider()
-
-        formCard.addSubview(typeLabel)
-        formCard.addSubview(typeSegmentedControl)
-        formCard.addSubview(divider1)
-        formCard.addSubview(categoryLabel)
-        formCard.addSubview(categoryIconView)
-        formCard.addSubview(categoryButton)
-        formCard.addSubview(categoryChevron)
-        formCard.addSubview(divider2)
-        formCard.addSubview(dateLabel)
-        formCard.addSubview(dateButton)
-        formCard.addSubview(dateChevron)
-        formCard.addSubview(divider3)
-        formCard.addSubview(amountLabel)
-        formCard.addSubview(amountTextView)
-        formCard.addSubview(amountPlaceholderLabel)
-
-        scrollView.addSubview(formCard)
-        scrollView.addSubview(descriptionTextField)
-        scrollView.addSubview(saveButton)
-
-        let rowH: CGFloat = 54
-        let inset: CGFloat = 16
-
-        formCard.snp.makeConstraints { make in
-            make.top.equalToSuperview().offset(20)
-            make.left.equalTo(view).offset(16)
-            make.right.equalTo(view).offset(-16)
-        }
-
-        // Type row
-        typeLabel.snp.makeConstraints { make in
-            make.left.equalToSuperview().offset(inset)
-            make.centerY.equalTo(typeSegmentedControl)
-        }
-        typeSegmentedControl.snp.makeConstraints { make in
-            make.top.equalToSuperview().offset(10)
-            make.right.equalToSuperview().inset(inset)
-            make.height.equalTo(36)
-            make.width.equalTo(180)
-            make.left.greaterThanOrEqualTo(typeLabel.snp.right).offset(8)
-        }
-
-        divider1.snp.makeConstraints { make in
-            make.top.equalTo(typeSegmentedControl.snp.bottom).offset(10)
-            make.left.equalToSuperview().offset(inset)
-            make.right.equalToSuperview()
-            make.height.equalTo(0.5)
-        }
-
         // Category row
+        let categoryRow = UIView()
+        let categoryTapOverlay = UIButton()
+        categoryTapOverlay.addTarget(self, action: #selector(tapCategoryButton(_:)), for: .touchUpInside)
+        categoryRow.addSubview(categoryLabel)
+        categoryRow.addSubview(categoryIconView)
+        categoryRow.addSubview(categoryButton)
+        categoryRow.addSubview(categoryChevron)
+        categoryRow.addSubview(categoryTapOverlay)
+
         categoryLabel.snp.makeConstraints { make in
             make.left.equalToSuperview().offset(inset)
-            make.centerY.equalTo(categoryButton)
+            make.centerY.equalToSuperview()
         }
         categoryChevron.snp.makeConstraints { make in
             make.right.equalToSuperview().inset(inset)
-            make.centerY.equalTo(categoryButton)
+            make.centerY.equalToSuperview()
         }
         categoryIconView.snp.makeConstraints { make in
             make.right.equalTo(categoryButton.snp.left).offset(-6)
-            make.centerY.equalTo(categoryButton)
+            make.centerY.equalToSuperview()
             make.size.equalTo(24)
         }
         categoryButton.snp.makeConstraints { make in
-            make.top.equalTo(divider1.snp.bottom)
             make.right.equalTo(categoryChevron.snp.left).offset(-4)
-            make.height.equalTo(rowH)
+            make.centerY.equalToSuperview()
             make.left.greaterThanOrEqualTo(categoryLabel.snp.right).offset(8)
         }
+        categoryTapOverlay.snp.makeConstraints { $0.edges.equalToSuperview() }
 
-        divider2.snp.makeConstraints { make in
-            make.top.equalTo(categoryButton.snp.bottom)
-            make.left.equalToSuperview().offset(inset)
-            make.right.equalToSuperview()
-            make.height.equalTo(0.5)
-        }
+        let div1 = makeDivider()
 
         // Date row
+        let dateRow = UIView()
+        let dateTapOverlay = UIButton()
+        dateTapOverlay.addTarget(self, action: #selector(tapDateButton(_:)), for: .touchUpInside)
+        dateRow.addSubview(dateLabel)
+        dateRow.addSubview(dateButton)
+        dateRow.addSubview(dateChevron)
+        dateRow.addSubview(dateTapOverlay)
+
         dateLabel.snp.makeConstraints { make in
             make.left.equalToSuperview().offset(inset)
-            make.centerY.equalTo(dateButton)
+            make.centerY.equalToSuperview()
         }
         dateChevron.snp.makeConstraints { make in
             make.right.equalToSuperview().inset(inset)
-            make.centerY.equalTo(dateButton)
+            make.centerY.equalToSuperview()
         }
         dateButton.snp.makeConstraints { make in
-            make.top.equalTo(divider2.snp.bottom)
             make.right.equalTo(dateChevron.snp.left).offset(-4)
-            make.height.equalTo(rowH)
+            make.centerY.equalToSuperview()
             make.left.greaterThanOrEqualTo(dateLabel.snp.right).offset(8)
         }
+        dateTapOverlay.snp.makeConstraints { $0.edges.equalToSuperview() }
 
-        divider3.snp.makeConstraints { make in
-            make.top.equalTo(dateButton.snp.bottom)
+        let div2 = makeDivider()
+
+        // Description row (inside card, no border)
+        let descriptionRow = UIView()
+        descriptionRow.addSubview(descriptionTextField)
+        descriptionTextField.snp.makeConstraints { make in
+            make.top.equalToSuperview().offset(4)
+            make.bottom.equalToSuperview().offset(-4)
+            make.left.equalToSuperview().offset(inset - 8) // UITextFieldPadding adds 8
+            make.right.equalToSuperview().offset(-inset + 8)
+        }
+
+        detailsCard.addSubview(categoryRow)
+        detailsCard.addSubview(div1)
+        detailsCard.addSubview(dateRow)
+        detailsCard.addSubview(div2)
+        detailsCard.addSubview(descriptionRow)
+
+        categoryRow.snp.makeConstraints { make in
+            make.top.left.right.equalToSuperview()
+            make.height.equalTo(rowH)
+        }
+        div1.snp.makeConstraints { make in
+            make.top.equalTo(categoryRow.snp.bottom)
             make.left.equalToSuperview().offset(inset)
             make.right.equalToSuperview()
             make.height.equalTo(0.5)
         }
-
-        // Amount row
-        amountLabel.snp.makeConstraints { make in
+        dateRow.snp.makeConstraints { make in
+            make.top.equalTo(div1.snp.bottom)
+            make.left.right.equalToSuperview()
+            make.height.equalTo(rowH)
+        }
+        div2.snp.makeConstraints { make in
+            make.top.equalTo(dateRow.snp.bottom)
             make.left.equalToSuperview().offset(inset)
-            make.centerY.equalTo(amountTextView)
+            make.right.equalToSuperview()
+            make.height.equalTo(0.5)
         }
-        amountTextView.snp.makeConstraints { make in
-            make.top.equalTo(divider3.snp.bottom).offset(12)
-            make.right.equalToSuperview().inset(inset)
-            make.bottom.equalToSuperview().offset(-12)
-            make.height.equalTo(50)
-            make.width.equalTo(150)
-            make.left.greaterThanOrEqualTo(amountLabel.snp.right).offset(8)
+        descriptionRow.snp.makeConstraints { make in
+            make.top.equalTo(div2.snp.bottom)
+            make.left.right.equalToSuperview()
+            make.bottom.equalToSuperview()
+            make.height.equalTo(rowH)
         }
-        // Overlay the placeholder directly on top of the text view (not inside it,
-        // since UITextView is a scroll view and subviews shift with content offset).
-        amountPlaceholderLabel.snp.makeConstraints { make in
-            make.edges.equalTo(amountTextView)
-        }
-        updateAmountPlaceholder()
 
-        // Below card
-        descriptionTextField.snp.makeConstraints { make in
-            make.top.equalTo(formCard.snp.bottom).offset(16)
-            make.left.equalTo(view).offset(16)
-            make.right.equalTo(view).offset(-16)
-            make.height.equalTo(52)
+        // ── Assemble in scroll view ───────────────────────────
+        scrollView.addSubview(amountCard)
+        scrollView.addSubview(detailsCard)
+        scrollView.addSubview(saveButton)
+
+        amountCard.snp.makeConstraints { make in
+            make.top.equalToSuperview().offset(20)
+            make.left.equalTo(view).offset(inset)
+            make.right.equalTo(view).offset(-inset)
+        }
+        detailsCard.snp.makeConstraints { make in
+            make.top.equalTo(amountCard.snp.bottom).offset(16)
+            make.left.equalTo(view).offset(inset)
+            make.right.equalTo(view).offset(-inset)
         }
 
         #if !targetEnvironment(macCatalyst)
@@ -367,23 +367,23 @@ extension AddOrEditTransactionViewController {
         if !isAdd {
             scrollView.addSubview(deleteButton)
             saveButton.snp.makeConstraints { make in
-                make.top.equalTo(descriptionTextField.snp.bottom).offset(24)
-                make.left.equalTo(view).offset(16)
-                make.right.equalTo(view).offset(-16)
+                make.top.equalTo(detailsCard.snp.bottom).offset(24)
+                make.left.equalTo(view).offset(inset)
+                make.right.equalTo(view).offset(-inset)
                 make.height.equalTo(54)
             }
             deleteButton.snp.makeConstraints { make in
                 make.top.equalTo(saveButton.snp.bottom).offset(12)
-                make.left.equalTo(view).offset(16)
-                make.right.equalTo(view).offset(-16)
+                make.left.equalTo(view).offset(inset)
+                make.right.equalTo(view).offset(-inset)
                 make.height.equalTo(54)
             }
             lastAnchor = deleteButton.snp.bottom
         } else {
             saveButton.snp.makeConstraints { make in
-                make.top.equalTo(descriptionTextField.snp.bottom).offset(24)
-                make.left.equalTo(view).offset(16)
-                make.right.equalTo(view).offset(-16)
+                make.top.equalTo(detailsCard.snp.bottom).offset(24)
+                make.left.equalTo(view).offset(inset)
+                make.right.equalTo(view).offset(-inset)
                 make.height.equalTo(54)
             }
             lastAnchor = saveButton.snp.bottom
@@ -393,8 +393,8 @@ extension AddOrEditTransactionViewController {
             if showsBanner {
                 bannerView.snp.makeConstraints { make in
                     make.top.equalTo(lastAnchor).offset(20)
-                    make.left.equalTo(view).offset(16)
-                    make.right.equalTo(view).offset(-16)
+                    make.left.equalTo(view).offset(inset)
+                    make.right.equalTo(view).offset(-inset)
                     make.height.equalTo(60)
                     make.bottom.equalToSuperview().offset(-20)
                 }
@@ -430,6 +430,16 @@ extension AddOrEditTransactionViewController {
 
     func updateAmountPlaceholder() {
         amountPlaceholderLabel.isHidden = !(amountTextView.text?.isEmpty ?? true)
+    }
+
+    private func updateAmountCardStyle() {
+        let isExpense = typeSegmentedControl.selectedSegmentIndex == 0
+        let color: UIColor = isExpense ? .expenseRed : .incomeGreen
+        UIView.animate(withDuration: 0.25) {
+            self.amountCard.backgroundColor = color.withAlphaComponent(0.08)
+        }
+        amountTextView.textColor = color
+        amountPlaceholderLabel.textColor = color.withAlphaComponent(0.30)
     }
 
     private func updateCategoryUI(name: String) {
@@ -476,19 +486,14 @@ extension AddOrEditTransactionViewController {
             selectedCategory = "Salary"
             updateCategoryUI(name: "Salary")
         }
-        updateAmountSign()
+        updateAmountCardStyle()
         // Flip sign of any already-entered amount
         if enteredAmount != 0 {
             enteredAmount = sender.selectedSegmentIndex == 0 ? -fabs(enteredAmount) : fabs(enteredAmount)
         }
     }
 
-    private func updateAmountSign() {
-        let sign = typeSegmentedControl.selectedSegmentIndex == 0 ? "(−)" : "(+)"
-        amountLabel.text = "Amount".localized() + " \(sign)"
-    }
-
-    @objc private func tapCategoryButton(_ sender: UIButton) {
+    @objc private func tapCategoryButton(_ sender: Any) {
         UIImpactFeedbackGenerator(style: .light).impactOccurred()
         let isIncome = typeSegmentedControl.selectedSegmentIndex == 1
         let vc = CategoryListViewController(isSelectMode: true, filterIncome: isIncome)
@@ -496,7 +501,7 @@ extension AddOrEditTransactionViewController {
         navigationController?.pushViewController(vc, animated: true)
     }
 
-    @objc private func tapDateButton(_ sender: UIButton) {
+    @objc private func tapDateButton(_ sender: Any) {
         UIImpactFeedbackGenerator(style: .light).impactOccurred()
         let alert = UIAlertController(title: "Pick Date".localized(), message: "\n\n\n\n\n\n\n\n\n\n", preferredStyle: .alert)
         let datePicker = UIDatePicker()
@@ -513,7 +518,7 @@ extension AddOrEditTransactionViewController {
         ])
         alert.addAction(UIAlertAction(title: "Done".localized(), style: .default) { [weak self] _ in
             guard let self else { return }
-            sender.setTitle(datePicker.date.toFormat("yyyy-MM-dd"), for: .normal)
+            self.dateButton.setTitle(datePicker.date.toFormat("yyyy-MM-dd"), for: .normal)
             self.selectedDate = datePicker.date
         })
         alert.addAction(UIAlertAction(title: "Cancel".localized(), style: .cancel))

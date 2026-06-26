@@ -16,7 +16,7 @@ class LoanCalculatorViewController: UIViewController {
 
     // MARK: - Result labels
 
-    private lazy var monthlyPaymentValue = makeResultValue()
+    private lazy var monthlyPaymentValue = makeResultValue().then { $0.textColor = .themeColor }
     private lazy var totalInterestValue = makeResultValue()
     private lazy var totalAmountValue = makeResultValue()
 
@@ -31,8 +31,9 @@ class LoanCalculatorViewController: UIViewController {
     private lazy var resultCard: UIView = {
         let v = UIView()
         v.backgroundColor = .secondarySystemBackground
-        v.layer.cornerRadius = 16
+        v.layer.cornerRadius = 20
         v.layer.cornerCurve = .continuous
+        v.clipsToBounds = true
         return v
     }()
 
@@ -113,7 +114,7 @@ class LoanCalculatorViewController: UIViewController {
         }
 
         // Result card
-        let monthlyRow = makeResultRow(title: "Monthly Payment".localized(), value: monthlyPaymentValue)
+        let monthlyRow = makePrimaryResultRow(title: "Monthly Payment".localized(), value: monthlyPaymentValue)
         let rdiv1 = makeDivider()
         let interestRow = makeResultRow(title: "Total Interest".localized(), value: totalInterestValue)
         let rdiv2 = makeDivider()
@@ -127,7 +128,7 @@ class LoanCalculatorViewController: UIViewController {
 
         monthlyRow.snp.makeConstraints { make in
             make.top.left.right.equalToSuperview()
-            make.height.equalTo(54)
+            make.height.equalTo(92)
         }
         rdiv1.snp.makeConstraints { make in
             make.top.equalTo(monthlyRow.snp.bottom)
@@ -236,7 +237,7 @@ class LoanCalculatorViewController: UIViewController {
     private func makeCard() -> UIView {
         UIView().then { v in
             v.backgroundColor = .secondarySystemBackground
-            v.layer.cornerRadius = 16
+            v.layer.cornerRadius = 20
             v.layer.cornerCurve = .continuous
         }
     }
@@ -295,6 +296,33 @@ class LoanCalculatorViewController: UIViewController {
             l.textColor = .label
             l.textAlignment = .right
         }
+    }
+
+    private func makePrimaryResultRow(title: String, value: UILabel) -> UIView {
+        let accent = value.textColor ?? .label
+        value.font = UIFont.monospacedDigitSystemFont(ofSize: 30, weight: .bold)
+        value.textAlignment = .center
+        value.adjustsFontSizeToFitWidth = true
+        value.minimumScaleFactor = 0.6
+        let row = UIView()
+        row.backgroundColor = accent.withAlphaComponent(0.10)
+        let lbl = UILabel().then { l in
+            l.text = title.uppercased()
+            l.font = .systemFont(ofSize: 12, weight: .semibold)
+            l.textColor = accent
+            l.textAlignment = .center
+        }
+        row.addSubview(lbl)
+        row.addSubview(value)
+        lbl.snp.makeConstraints { make in
+            make.top.equalToSuperview().offset(16)
+            make.left.right.equalToSuperview().inset(16)
+        }
+        value.snp.makeConstraints { make in
+            make.top.equalTo(lbl.snp.bottom).offset(6)
+            make.left.right.equalToSuperview().inset(16)
+        }
+        return row
     }
 
     private func makeResultRow(title: String, value: UILabel) -> UIView {

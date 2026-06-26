@@ -33,8 +33,9 @@ class RetirementCalculatorViewController: UIViewController {
     private lazy var resultCard: UIView = {
         let v = UIView()
         v.backgroundColor = .secondarySystemBackground
-        v.layer.cornerRadius = 16
+        v.layer.cornerRadius = 20
         v.layer.cornerCurve = .continuous
+        v.clipsToBounds = true
         return v
     }()
 
@@ -116,7 +117,7 @@ class RetirementCalculatorViewController: UIViewController {
         }
 
         // Result card
-        let rr1 = makeResultRow(title: "Nest Egg at Retirement".localized(), value: nestEggLabel)
+        let rr1 = makePrimaryResultRow(title: "Nest Egg at Retirement".localized(), value: nestEggLabel)
         let rd1 = makeDivider()
         let rr2 = makeResultRow(title: "Total Contributions".localized(), value: contributionsLabel)
         let rd2 = makeDivider()
@@ -124,7 +125,7 @@ class RetirementCalculatorViewController: UIViewController {
 
         for sub in [rr1, rd1, rr2, rd2, rr3] { resultCard.addSubview(sub) }
         rr1.snp.makeConstraints { make in
-            make.top.left.right.equalToSuperview(); make.height.equalTo(54)
+            make.top.left.right.equalToSuperview(); make.height.equalTo(92)
         }
         rd1.snp.makeConstraints { make in
             make.top.equalTo(rr1.snp.bottom); make.left.equalToSuperview().offset(16); make.right.equalToSuperview(); make.height.equalTo(0.5)
@@ -230,7 +231,7 @@ class RetirementCalculatorViewController: UIViewController {
     private func makeCard() -> UIView {
         UIView().then { v in
             v.backgroundColor = .secondarySystemBackground
-            v.layer.cornerRadius = 16
+            v.layer.cornerRadius = 20
             v.layer.cornerCurve = .continuous
         }
     }
@@ -276,6 +277,33 @@ class RetirementCalculatorViewController: UIViewController {
             l.textColor = color
             l.textAlignment = .right
         }
+    }
+
+    private func makePrimaryResultRow(title: String, value: UILabel) -> UIView {
+        let accent = value.textColor ?? .label
+        value.font = UIFont.monospacedDigitSystemFont(ofSize: 30, weight: .bold)
+        value.textAlignment = .center
+        value.adjustsFontSizeToFitWidth = true
+        value.minimumScaleFactor = 0.6
+        let row = UIView()
+        row.backgroundColor = accent.withAlphaComponent(0.10)
+        let lbl = UILabel().then { l in
+            l.text = title.uppercased()
+            l.font = .systemFont(ofSize: 12, weight: .semibold)
+            l.textColor = accent
+            l.textAlignment = .center
+        }
+        row.addSubview(lbl)
+        row.addSubview(value)
+        lbl.snp.makeConstraints { make in
+            make.top.equalToSuperview().offset(16)
+            make.left.right.equalToSuperview().inset(16)
+        }
+        value.snp.makeConstraints { make in
+            make.top.equalTo(lbl.snp.bottom).offset(6)
+            make.left.right.equalToSuperview().inset(16)
+        }
+        return row
     }
 
     private func makeResultRow(title: String, value: UILabel) -> UIView {
