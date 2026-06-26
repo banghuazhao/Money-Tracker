@@ -199,11 +199,14 @@ class AddOrEditTransactionViewController: UIViewController {
         hideKeyboardWhenTappedAround()
     }
 
+    private var hasAppeared = false
+
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        if isAdd {
+        if isAdd && !hasAppeared {
             amountTextView.becomeFirstResponder()
         }
+        hasAppeared = true
     }
 
     deinit {
