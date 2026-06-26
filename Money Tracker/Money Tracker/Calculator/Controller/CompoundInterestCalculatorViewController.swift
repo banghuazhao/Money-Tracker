@@ -67,6 +67,16 @@ class CompoundInterestCalculatorViewController: UIViewController {
         shareButton.isEnabled = false
         navigationItem.rightBarButtonItem = shareButton
         setupViews()
+        calculateButton.isEnabled = false
+        [principalField, rateField, yearsField].forEach {
+            $0.addTarget(self, action: #selector(updateButtonState), for: .editingChanged)
+        }
+    }
+
+    @objc private func updateButtonState() {
+        calculateButton.isEnabled = [principalField, rateField, yearsField].allSatisfy {
+            !($0.text?.isEmpty ?? true)
+        }
     }
 
     // MARK: - Setup
@@ -236,8 +246,20 @@ class CompoundInterestCalculatorViewController: UIViewController {
     }
 
     @objc private func tapShare() {
+        let initial = convertDoubleToCurrency(amount: Double(principalField.text ?? "") ?? 0)
+        let rate = "\(rateField.text ?? "")%"
+        let years = "\(yearsField.text ?? "") \("yr".localized())"
+        let contribution = convertDoubleToCurrency(amount: Double(contributionField.text ?? "") ?? 0)
+        let frequency = frequencySegment.titleForSegment(at: frequencySegment.selectedSegmentIndex) ?? ""
         let text = """
         \("Compound Interest".localized())
+
+        \("Initial Amount".localized()): \(initial)
+        \("Annual Rate (%)".localized()): \(rate)
+        \("Years".localized()): \(years)
+        \("Monthly Contribution".localized()): \(contribution)
+        \("Compounding Frequency".localized()): \(frequency)
+
         \("Future Value".localized()): \(futureValueLabel.text ?? "")
         \("Total Contributions".localized()): \(totalContributionsLabel.text ?? "")
         \("Interest Earned".localized()): \(totalInterestLabel.text ?? "")

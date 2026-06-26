@@ -61,6 +61,12 @@ class BudgetCalculatorViewController: UIViewController {
         shareButton.isEnabled = false
         navigationItem.rightBarButtonItem = shareButton
         setupViews()
+        calculateButton.isEnabled = false
+        incomeField.addTarget(self, action: #selector(updateButtonState), for: .editingChanged)
+    }
+
+    @objc private func updateButtonState() {
+        calculateButton.isEnabled = !(incomeField.text?.isEmpty ?? true)
     }
 
     // MARK: - Setup
@@ -207,8 +213,12 @@ class BudgetCalculatorViewController: UIViewController {
     }
 
     @objc private func tapShare() {
+        let income = convertDoubleToCurrency(amount: Double(incomeField.text ?? "") ?? 0)
         let text = """
         \("Budget Planner".localized()) (50/30/20)
+
+        \("Monthly Income".localized()): \(income)
+
         \("Needs (50%)".localized()): \(needsAmountLabel.text ?? "")
         \("Wants (30%)".localized()): \(wantsAmountLabel.text ?? "")
         \("Savings & Debt (20%)".localized()): \(savingsAmountLabel.text ?? "")

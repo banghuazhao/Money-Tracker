@@ -171,3 +171,13 @@
 "Needs (50%)" = "必要支出（50%）";
 "Wants (30%)" = "想要支出（30%）";
 "Savings & Debt (20%)" = "储蓄与还债（20%）";
+
+// User categories
+"Common" = "常用";
+"User" = "自定义";
+"Manage Categories" = "管理类别";
+"Create Category" = "创建类别";
+"Edit Category" = "编辑类别";
+"Category Name" = "类别名称";
+"Please enter category name" = "请输入类别名称";
+"Show" = "显示";

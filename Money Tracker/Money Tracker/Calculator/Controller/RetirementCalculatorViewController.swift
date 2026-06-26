@@ -61,6 +61,16 @@ class RetirementCalculatorViewController: UIViewController {
         shareButton.isEnabled = false
         navigationItem.rightBarButtonItem = shareButton
         setupViews()
+        calculateButton.isEnabled = false
+        [currentAgeField, retireAgeField, rateField].forEach {
+            $0.addTarget(self, action: #selector(updateButtonState), for: .editingChanged)
+        }
+    }
+
+    @objc private func updateButtonState() {
+        calculateButton.isEnabled = [currentAgeField, retireAgeField, rateField].allSatisfy {
+            !($0.text?.isEmpty ?? true)
+        }
     }
 
     // MARK: - Setup
@@ -210,8 +220,18 @@ class RetirementCalculatorViewController: UIViewController {
     }
 
     @objc private func tapShare() {
+        let savings = convertDoubleToCurrency(amount: Double(savingsField.text ?? "") ?? 0)
+        let contribution = convertDoubleToCurrency(amount: Double(contributionField.text ?? "") ?? 0)
+        let rate = "\(rateField.text ?? "")%"
         let text = """
         \("Retirement".localized())
+
+        \("Current Age".localized()): \(currentAgeField.text ?? "")
+        \("Retirement Age".localized()): \(retireAgeField.text ?? "")
+        \("Annual Rate (%)".localized()): \(rate)
+        \("Current Savings".localized()): \(savings)
+        \("Monthly Contribution".localized()): \(contribution)
+
         \("Nest Egg at Retirement".localized()): \(nestEggLabel.text ?? "")
         \("Total Contributions".localized()): \(contributionsLabel.text ?? "")
         \("Interest Earned".localized()): \(interestLabel.text ?? "")

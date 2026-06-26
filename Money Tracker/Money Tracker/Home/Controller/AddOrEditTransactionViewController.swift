@@ -34,16 +34,17 @@ class AddOrEditTransactionViewController: UIViewController {
             guard let transaction = transaction,
                   let category = transaction.category,
                   let date = transaction.date else { return }
-            typeSegmentedControl.selectedSegmentIndex = categoryExpenses.contains(category) ? 0 : 1
+            typeSegmentedControl.selectedSegmentIndex = transaction.amount < 0 ? 0 : 1
             updateAmountSign()
             selectedCategory = category
-            categoryButton.setTitle(category.localized(), for: .normal)
+            updateCategoryUI(name: category)
             selectedDate = date
             dateButton.setTitle(date.toFormat("yyyy-MM-dd"), for: .normal)
             enteredAmount = transaction.amount
             let absValue = fabs(enteredAmount)
             amountTextView.text = absValue > 0 ? absValue.cleanZero : ""
             updateAmountPlaceholder()
+            saveButton.isEnabled = enteredAmount != 0
             descriptionTextField.text = transaction.title
         }
     }
@@ -78,6 +79,13 @@ class AddOrEditTransactionViewController: UIViewController {
         b.setTitleColor(.themeColor, for: .normal)
         b.titleLabel?.font = .systemFont(ofSize: 15, weight: .medium)
         b.contentHorizontalAlignment = .right
+    }
+
+    private lazy var categoryIconView = UIImageView().then { iv in
+        iv.contentMode = .scaleAspectFit
+        iv.layer.cornerRadius = 8
+        iv.layer.cornerCurve = .continuous
+        iv.clipsToBounds = true
     }
 
     private lazy var categoryChevron = makeChevron()
@@ -185,6 +193,8 @@ class AddOrEditTransactionViewController: UIViewController {
         title = isAdd ? "Add Transaction".localized() : "Edit Transaction".localized()
 
         setupView()
+        updateCategoryUI(name: selectedCategory)
+        saveButton.isEnabled = false
         setupKeyboardObservers()
         hideKeyboardWhenTappedAround()
     }
@@ -222,6 +232,7 @@ extension AddOrEditTransactionViewController {
         formCard.addSubview(typeSegmentedControl)
         formCard.addSubview(divider1)
         formCard.addSubview(categoryLabel)
+        formCard.addSubview(categoryIconView)
         formCard.addSubview(categoryButton)
         formCard.addSubview(categoryChevron)
         formCard.addSubview(divider2)
@@ -275,9 +286,14 @@ extension AddOrEditTransactionViewController {
             make.right.equalToSuperview().inset(inset)
             make.centerY.equalTo(categoryButton)
         }
+        categoryIconView.snp.makeConstraints { make in
+            make.right.equalTo(categoryChevron.snp.left).offset(-6)
+            make.centerY.equalTo(categoryButton)
+            make.size.equalTo(24)
+        }
         categoryButton.snp.makeConstraints { make in
             make.top.equalTo(divider1.snp.bottom)
-            make.right.equalTo(categoryChevron.snp.left).offset(-4)
+            make.right.equalTo(categoryIconView.snp.left).offset(-6)
             make.height.equalTo(rowH)
             make.left.greaterThanOrEqualTo(categoryLabel.snp.right).offset(8)
         }
@@ -412,6 +428,17 @@ extension AddOrEditTransactionViewController {
     func updateAmountPlaceholder() {
         amountPlaceholderLabel.isHidden = !(amountTextView.text?.isEmpty ?? true)
     }
+
+    private func updateCategoryUI(name: String) {
+        let isUser = UserCategoryManager.shared.category(forName: name) != nil
+        categoryButton.setTitle(isUser ? name : name.localized(), for: .normal)
+        if let userCat = UserCategoryManager.shared.category(forName: name),
+           let emoji = userCat.iconName {
+            categoryIconView.image = UIImage.emoji(emoji, size: 36)
+        } else {
+            categoryIconView.image = UIImage.categoryIcon(for: name)
+        }
+    }
 }
 
 // MARK: - Keyboard
@@ -441,10 +468,10 @@ extension AddOrEditTransactionViewController {
     @objc private func tapTypeSegmentedControl(_ sender: UISegmentedControl) {
         if sender.selectedSegmentIndex == 0 {
             selectedCategory = "Grocery"
-            categoryButton.setTitle("Grocery".localized(), for: .normal)
+            updateCategoryUI(name: "Grocery")
         } else {
             selectedCategory = "Salary"
-            categoryButton.setTitle("Salary".localized(), for: .normal)
+            updateCategoryUI(name: "Salary")
         }
         updateAmountSign()
         // Flip sign of any already-entered amount
@@ -460,23 +487,10 @@ extension AddOrEditTransactionViewController {
 
     @objc private func tapCategoryButton(_ sender: UIButton) {
         UIImpactFeedbackGenerator(style: .light).impactOccurred()
-
-        let categories = typeSegmentedControl.selectedSegmentIndex == 0 ? categoryExpenses : categoryIncomes
-        var items: [MenuItem] = categories.map {
-            SingleSelectItem(title: $0.localized(), isSelected: $0 == selectedCategory, image: UIImage.categoryIcon(for: $0))
-        }
-        items.append(CancelButton(title: "Cancel".localized()))
-
-        let menu = Menu(title: "Select a Category".localized(), items: items)
-        let sheet = menu.toActionSheet { [weak self] _, item in
-            guard let self = self else { return }
-            guard item.title != "Cancel".localized(), item.title != "Select a Category".localized() else { return }
-            if let index = items.firstIndex(where: { $0.title == item.title }), index < categories.count {
-                self.selectedCategory = categories[index]
-                self.categoryButton.setTitle(item.title, for: .normal)
-            }
-        }
-        sheet.present(in: self, from: sender)
+        let isIncome = typeSegmentedControl.selectedSegmentIndex == 1
+        let vc = CategoryListViewController(isSelectMode: true, filterIncome: isIncome)
+        vc.delegate = self
+        navigationController?.pushViewController(vc, animated: true)
     }
 
     @objc private func tapDateButton(_ sender: UIButton) {
@@ -587,6 +601,7 @@ extension AddOrEditTransactionViewController: UITextViewDelegate {
             let abs = fabs(enteredAmount)
             textView.text = abs > 0 ? abs.cleanZero : ""
         }
+        saveButton.isEnabled = enteredAmount != 0
     }
 
     func textViewDidEndEditing(_ textView: UITextView) {
@@ -598,6 +613,16 @@ extension AddOrEditTransactionViewController: UITextViewDelegate {
             textView.text = ""
         }
         updateAmountPlaceholder()
+        saveButton.isEnabled = enteredAmount != 0
+    }
+}
+
+// MARK: - CategoryListViewControllerDelegate
+
+extension AddOrEditTransactionViewController: CategoryListViewControllerDelegate {
+    func categoryList(_ vc: CategoryListViewController, didSelect name: String) {
+        selectedCategory = name
+        updateCategoryUI(name: name)
     }
 }
 

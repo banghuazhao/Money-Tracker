@@ -15,14 +15,21 @@ class TransactionCell: UITableViewCell {
         didSet {
             guard let transaction = transaction, let category = transaction.category else { return }
 
-            let color = UIColor.categoryColor(for: category)
+            let userCat = UserCategoryManager.shared.category(forName: category)
+            let color: UIColor = userCat != nil
+                ? (transaction.amount < 0 ? .expenseRed : .incomeGreen)
+                : UIColor.categoryColor(for: category)
             iconBackground.backgroundColor = color.withAlphaComponent(0.15)
-            categoryImageView.image = UIImage.categoryIcon(for: category)
+            if let emoji = userCat?.iconName {
+                categoryImageView.image = UIImage.emoji(emoji, size: 36)
+            } else {
+                categoryImageView.image = UIImage.categoryIcon(for: category)
+            }
 
             categoryLabel.attributedText = nil
             titleLabel.attributedText = nil
 
-            categoryLabel.text = transaction.category?.localized()
+            categoryLabel.text = userCat != nil ? category : category.localized()
             titleLabel.text = transaction.title
 
             let hasTitle = !(transaction.title ?? "").isEmpty
@@ -30,10 +37,9 @@ class TransactionCell: UITableViewCell {
             categoryLabelCenterConstraint?.isActive = !hasTitle
             categoryLabelTopConstraint?.isActive = hasTitle
 
-            let isExpense = categoryExpenses.contains(category)
             let amount = transaction.amount
             amountLabel.text = convertDoubleToCurrency(amount: amount)
-            amountLabel.textColor = isExpense ? .expenseRed : .incomeGreen
+            amountLabel.textColor = amount < 0 ? .expenseRed : .incomeGreen
 
             dateLabel.text = transaction.date?.toFormat("MMM d, yyyy")
         }

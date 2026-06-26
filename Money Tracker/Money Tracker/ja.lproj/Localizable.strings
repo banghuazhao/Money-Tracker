@@ -171,3 +171,13 @@
 "Needs (50%)" = "必需品（50%）";
 "Wants (30%)" = "欲しいもの（30%）";
 "Savings & Debt (20%)" = "貯蓄・返済（20%）";
+
+// User categories
+"Common" = "共通";
+"User" = "カスタム";
+"Manage Categories" = "カテゴリ管理";
+"Create Category" = "カテゴリ作成";
+"Edit Category" = "カテゴリ編集";
+"Category Name" = "カテゴリ名";
+"Please enter category name" = "カテゴリ名を入力してください";
+"Show" = "表示";

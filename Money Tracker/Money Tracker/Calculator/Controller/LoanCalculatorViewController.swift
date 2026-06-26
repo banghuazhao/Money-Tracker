@@ -59,6 +59,16 @@ class LoanCalculatorViewController: UIViewController {
         shareButton.isEnabled = false
         navigationItem.rightBarButtonItem = shareButton
         setupViews()
+        calculateButton.isEnabled = false
+        [principalField, rateField, termField].forEach {
+            $0.addTarget(self, action: #selector(updateButtonState), for: .editingChanged)
+        }
+    }
+
+    @objc private func updateButtonState() {
+        calculateButton.isEnabled = [principalField, rateField, termField].allSatisfy {
+            !($0.text?.isEmpty ?? true)
+        }
     }
 
     // MARK: - Setup
@@ -223,8 +233,16 @@ class LoanCalculatorViewController: UIViewController {
     }
 
     @objc private func tapShare() {
+        let principal = convertDoubleToCurrency(amount: Double(principalField.text ?? "") ?? 0)
+        let rate = "\(rateField.text ?? "")%"
+        let term = "\(termField.text ?? "") \("yr".localized())"
         let text = """
         \("Loan Calculator".localized())
+
+        \("Principal Amount".localized()): \(principal)
+        \("Annual Rate (%)".localized()): \(rate)
+        \("Loan Term (Years)".localized()): \(term)
+
         \("Monthly Payment".localized()): \(monthlyPaymentValue.text ?? "")
         \("Total Interest".localized()): \(totalInterestValue.text ?? "")
         \("Total Payment".localized()): \(totalAmountValue.text ?? "")

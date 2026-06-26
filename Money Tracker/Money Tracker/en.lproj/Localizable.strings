@@ -172,3 +172,13 @@
 "Wants (30%)" = "Wants (30%)";
 "Savings & Debt (20%)" = "Savings & Debt (20%)";
 
+// User categories
+"Common" = "Common";
+"User" = "User";
+"Manage Categories" = "Manage Categories";
+"Create Category" = "Create Category";
+"Edit Category" = "Edit Category";
+"Category Name" = "Category Name";
+"Please enter category name" = "Please enter category name";
+"Show" = "Show";
+

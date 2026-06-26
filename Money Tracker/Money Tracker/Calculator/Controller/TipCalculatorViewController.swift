@@ -18,7 +18,7 @@ class TipCalculatorViewController: UIViewController {
     private lazy var tipSegment: UISegmentedControl = {
         let sc = UISegmentedControl(items: tipOptions.map { "\($0)%" })
         sc.selectedSegmentIndex = 3 // 20%
-        sc.addTarget(self, action: #selector(tapCalculate), for: .valueChanged)
+        sc.addTarget(self, action: #selector(tipSegmentChanged), for: .valueChanged)
         return sc
     }()
 
@@ -67,6 +67,18 @@ class TipCalculatorViewController: UIViewController {
         shareButton.isEnabled = false
         navigationItem.rightBarButtonItem = shareButton
         setupViews()
+        calculateButton.isEnabled = false
+        billField.addTarget(self, action: #selector(updateButtonState), for: .editingChanged)
+    }
+
+    @objc private func tipSegmentChanged() {
+        // Auto-calculate only when bill is already filled
+        guard let text = billField.text, !text.isEmpty, Double(text) != nil else { return }
+        tapCalculate()
+    }
+
+    @objc private func updateButtonState() {
+        calculateButton.isEnabled = !(billField.text?.isEmpty ?? true)
     }
 
     // MARK: - Setup
@@ -206,8 +218,16 @@ class TipCalculatorViewController: UIViewController {
     }
 
     @objc private func tapShare() {
+        let bill = convertDoubleToCurrency(amount: Double(billField.text ?? "") ?? 0)
+        let tipPct = "\(tipOptions[tipSegment.selectedSegmentIndex])%"
+        let people = peopleField.text.flatMap { Int($0) }.map { "\($0)" } ?? "1"
         let text = """
         \("Tip Calculator".localized())
+
+        \("Bill Amount".localized()): \(bill)
+        \("Tip Percentage".localized()): \(tipPct)
+        \("Split Between".localized()): \(people)
+
         \("Tip Amount".localized()): \(tipAmountLabel.text ?? "")
         \("Total".localized()): \(totalLabel.text ?? "")
         \("Per Person".localized()): \(perPersonLabel.text ?? "")

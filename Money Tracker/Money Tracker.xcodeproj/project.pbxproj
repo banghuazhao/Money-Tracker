@@ -8,11 +8,15 @@
 
 /* Begin PBXBuildFile section */
 		1C15B5BBB08C278B696FA52E /* IAPManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBEA9AF95B5BF95038211983 /* IAPManager.swift */; };
+		2D9DC564AD1E7C2449B4946D /* UserCategory+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FB8CCEB675F82B868C2EE03 /* UserCategory+CoreDataProperties.swift */; };
 		3B9155AE51A14700A56D47FF /* LoanCalculatorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CAEBD0B93BA4C9A9C83C30E /* LoanCalculatorViewController.swift */; };
 		3F1F3DBC35B1A7737E09C752 /* DebtPayoffCalculatorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A388A8D7987339238F333CBA /* DebtPayoffCalculatorViewController.swift */; };
 		4AC90F1A237B4D88983F7449 /* CompoundInterestCalculatorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14B4379888E241348F26A43D /* CompoundInterestCalculatorViewController.swift */; };
+		4B20B937DE0AA5368A415E00 /* CategoryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADD3CEA20FD2E11EB92FBA9B /* CategoryCell.swift */; };
+		57DECB1D1ED6D2C99E7F5E44 /* CategoryListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 519854D8F694C0DD126E5F78 /* CategoryListViewController.swift */; };
 		5E1F16D2FB0D71E431D19DBE /* RetirementCalculatorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C6AE4A9379FF75DF9622B8A /* RetirementCalculatorViewController.swift */; };
 		6651E55C0CC24130A4BB5ABC /* BudgetCalculatorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F0D8872169842B4BEE15065 /* BudgetCalculatorViewController.swift */; };
+		68CC7605F70EA1999DBE9B6A /* UserCategoryManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4AD549DEBA4856FA574B113 /* UserCategoryManager.swift */; };
 		70F5857D54D80E0C14A9853E /* AppOpenAdManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD9FD0B66D5A646BD44C0481 /* AppOpenAdManager.swift */; };
 		903059304E714DCB82D00092 /* CalculatorsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 859FE77CD5964D7C835DAA0A /* CalculatorsViewController.swift */; };
 		9930BFA3252C72A30035365F /* ListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9930BFA2252C72A30035365F /* ListViewController.swift */; };
@@ -69,14 +73,20 @@
 		99FD2BDB25B42BFD00D0AC0C /* MoreAppsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99FD2BD925B42BFD00D0AC0C /* MoreAppsViewController.swift */; };
 		99FD2BDF25B42C7300D0AC0C /* UIFont+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99FD2BDE25B42C7300D0AC0C /* UIFont+Extension.swift */; };
 		9BBD4D1A09E2AF7CEFF7CA0F /* IAPStatusCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E18D59E215CCCF0E05EB751A /* IAPStatusCell.swift */; };
+		AD4B773C3435FA89AF241AE9 /* CreateOrEditCategoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B17241DC7541F777D7BE746 /* CreateOrEditCategoryViewController.swift */; };
+		B7F310591F09A63D5026074A /* UserCategory+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 683E582BB3F62F04F8E02A0D /* UserCategory+CoreDataClass.swift */; };
 		FA2040C8CFBE965D5FF61C5F /* TipCalculatorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B23F6C8A417C94D6D5336FA /* TipCalculatorViewController.swift */; };
 		FF21168013F287BE6F670752 /* SavingsGoalCalculatorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDD3DF3677C29788DFAC13C2 /* SavingsGoalCalculatorViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		14B4379888E241348F26A43D /* CompoundInterestCalculatorViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompoundInterestCalculatorViewController.swift; sourceTree = "<group>"; };
+		1B17241DC7541F777D7BE746 /* CreateOrEditCategoryViewController.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CreateOrEditCategoryViewController.swift; sourceTree = "<group>"; };
+		1FB8CCEB675F82B868C2EE03 /* UserCategory+CoreDataProperties.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = "UserCategory+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		2B23F6C8A417C94D6D5336FA /* TipCalculatorViewController.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = TipCalculatorViewController.swift; sourceTree = "<group>"; };
 		2CAEBD0B93BA4C9A9C83C30E /* LoanCalculatorViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoanCalculatorViewController.swift; sourceTree = "<group>"; };
+		519854D8F694C0DD126E5F78 /* CategoryListViewController.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CategoryListViewController.swift; sourceTree = "<group>"; };
+		683E582BB3F62F04F8E02A0D /* UserCategory+CoreDataClass.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = "UserCategory+CoreDataClass.swift"; sourceTree = "<group>"; };
 		859FE77CD5964D7C835DAA0A /* CalculatorsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalculatorsViewController.swift; sourceTree = "<group>"; };
 		8F0D8872169842B4BEE15065 /* BudgetCalculatorViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BudgetCalculatorViewController.swift; sourceTree = "<group>"; };
 		9930BFA2252C72A30035365F /* ListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListViewController.swift; sourceTree = "<group>"; };
@@ -134,9 +144,11 @@
 		99FD2BE125B46D0300D0AC0C /* Money Tracker.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Money Tracker.entitlements"; sourceTree = "<group>"; };
 		9C6AE4A9379FF75DF9622B8A /* RetirementCalculatorViewController.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = RetirementCalculatorViewController.swift; sourceTree = "<group>"; };
 		A388A8D7987339238F333CBA /* DebtPayoffCalculatorViewController.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = DebtPayoffCalculatorViewController.swift; sourceTree = "<group>"; };
+		ADD3CEA20FD2E11EB92FBA9B /* CategoryCell.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CategoryCell.swift; sourceTree = "<group>"; };
 		BD9FD0B66D5A646BD44C0481 /* AppOpenAdManager.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = AppOpenAdManager.swift; sourceTree = "<group>"; };
 		CBEA9AF95B5BF95038211983 /* IAPManager.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = IAPManager.swift; sourceTree = "<group>"; };
 		E18D59E215CCCF0E05EB751A /* IAPStatusCell.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = IAPStatusCell.swift; sourceTree = "<group>"; };
+		F4AD549DEBA4856FA574B113 /* UserCategoryManager.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = UserCategoryManager.swift; sourceTree = "<group>"; };
 		FDD3DF3677C29788DFAC13C2 /* SavingsGoalCalculatorViewController.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = SavingsGoalCalculatorViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -174,6 +186,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		63A6BCE32FBCDCD91BFBA635 /* Category */ = {
+			isa = PBXGroup;
+			children = (
+				ADD3CEA20FD2E11EB92FBA9B /* CategoryCell.swift */,
+			);
+			name = Category;
+			path = Category;
+			sourceTree = "<group>";
+		};
 		9930BFAB252C99810035365F /* Home */ = {
 			isa = PBXGroup;
 			children = (
@@ -236,6 +257,8 @@
 			children = (
 				99A93D492526BA9600E6C455 /* UserTransaction.swift */,
 				9930BFB2252C9CEE0035365F /* TransactionCategory.swift */,
+				683E582BB3F62F04F8E02A0D /* UserCategory+CoreDataClass.swift */,
+				1FB8CCEB675F82B868C2EE03 /* UserCategory+CoreDataProperties.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -245,6 +268,7 @@
 			children = (
 				9930BFAB252C99810035365F /* Home */,
 				9930BFBE252CA0D40035365F /* PieChart */,
+				63A6BCE32FBCDCD91BFBA635 /* Category */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -259,6 +283,8 @@
 				99EC95662568B3E000126971 /* BarChartViewController.swift */,
 				9930BFC0252CABA40035365F /* SingleCategoryViewController.swift */,
 				9930BFC7252D5DC80035365F /* CurrencyViewController.swift */,
+				519854D8F694C0DD126E5F78 /* CategoryListViewController.swift */,
+				1B17241DC7541F777D7BE746 /* CreateOrEditCategoryViewController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -276,6 +302,7 @@
 				99A93DB6252A0A8200E6C455 /* Other.swift */,
 				BD9FD0B66D5A646BD44C0481 /* AppOpenAdManager.swift */,
 				CBEA9AF95B5BF95038211983 /* IAPManager.swift */,
+				F4AD549DEBA4856FA574B113 /* UserCategoryManager.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -525,6 +552,12 @@
 				70F5857D54D80E0C14A9853E /* AppOpenAdManager.swift in Sources */,
 				1C15B5BBB08C278B696FA52E /* IAPManager.swift in Sources */,
 				9BBD4D1A09E2AF7CEFF7CA0F /* IAPStatusCell.swift in Sources */,
+				B7F310591F09A63D5026074A /* UserCategory+CoreDataClass.swift in Sources */,
+				2D9DC564AD1E7C2449B4946D /* UserCategory+CoreDataProperties.swift in Sources */,
+				68CC7605F70EA1999DBE9B6A /* UserCategoryManager.swift in Sources */,
+				57DECB1D1ED6D2C99E7F5E44 /* CategoryListViewController.swift in Sources */,
+				AD4B773C3435FA89AF241AE9 /* CreateOrEditCategoryViewController.swift in Sources */,
+				4B20B937DE0AA5368A415E00 /* CategoryCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -9,6 +9,8 @@ xcuserdata/
 # Copy Config/Release.xcconfig.example to Config/Release.xcconfig and fill in.
 Release.xcconfig
 
-# Fastlane secrets — API key IDs, Apple ID, team ID
-fastlane/.env
-fastlane/.env.*
+# Fastlane — not part of this project
+fastlane/
+
+# Xcode workspace shared data (scheme containers, etc.)
+Money Tracker/Money Tracker.xcworkspace/xcshareddata/
