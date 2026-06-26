@@ -52,7 +52,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         calcNav.setBackground(color: .systemBackground)
         calcNav.setTintColor(color: .themeColor)
         calcNav.tabBarItem = UITabBarItem(
-            title: "Calculators".localized(),
+            title: "Financial Calculators".localized(),
             image: UIImage(systemName: "function"),
             selectedImage: nil
         )
