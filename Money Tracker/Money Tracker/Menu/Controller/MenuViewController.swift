@@ -29,17 +29,16 @@ class MenuViewController: UIViewController, MFMailComposeViewControllerDelegate 
         }()
 
         var userDidEarn = false
-
         var rewardedAd: GADRewardedAd?
     #endif
 
+    // Section 1 items — "Remove Ads Forever" lives in section 0, not here.
     #if !targetEnvironment(macCatalyst)
         let menuItems = [
             MyMenuItem(title: "Change currency symbol".localized(), icon: UIImage(systemName: "dollarsign.circle")),
             MyMenuItem(title: "Feedback".localized(), icon: UIImage(systemName: "bubble.left")),
             MyMenuItem(title: "Rate this App".localized(), icon: UIImage(systemName: "star")),
             MyMenuItem(title: "Share this App".localized(), icon: UIImage(systemName: "square.and.arrow.up")),
-            MyMenuItem(title: "Remove Ads Forever".localized(), icon: UIImage(systemName: "hand.raised")),
             MyMenuItem(title: "Support this App".localized(), icon: UIImage(systemName: "hand.thumbsup")),
             MyMenuItem(title: "More Apps".localized(), icon: UIImage(systemName: "ellipsis")),
         ]
@@ -57,7 +56,10 @@ class MenuViewController: UIViewController, MFMailComposeViewControllerDelegate 
         tv.delegate = self
         tv.dataSource = self
         tv.register(MenuCell.self, forCellReuseIdentifier: "MenuCell")
-        tv.rowHeight = 54
+        #if !targetEnvironment(macCatalyst)
+            tv.register(IAPStatusCell.self, forCellReuseIdentifier: "IAPStatusCell")
+        #endif
+        tv.rowHeight = UITableView.automaticDimension
     }
 
     override func viewDidLoad() {
@@ -76,6 +78,9 @@ class MenuViewController: UIViewController, MFMailComposeViewControllerDelegate 
                 }
             }
             IAPManager.shared.prefetchProduct()
+            IAPManager.shared.onProductFetched = { [weak self] in
+                self?.tableView.reloadRows(at: [IndexPath(row: 0, section: 0)], with: .none)
+            }
         #endif
 
         tableView.snp.makeConstraints { make in
@@ -96,64 +101,100 @@ class MenuViewController: UIViewController, MFMailComposeViewControllerDelegate 
 }
 
 extension MenuViewController: UITableViewDelegate, UITableViewDataSource {
+
+    func numberOfSections(in tableView: UITableView) -> Int {
+        #if !targetEnvironment(macCatalyst)
+            return 2
+        #else
+            return 1
+        #endif
+    }
+
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        #if !targetEnvironment(macCatalyst)
+            if section == 0 { return 1 }
+        #endif
         return menuItems.count
     }
 
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        #if !targetEnvironment(macCatalyst)
+            if indexPath.section == 0 { return 70 }
+        #endif
         return 62
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        #if !targetEnvironment(macCatalyst)
+            if indexPath.section == 0 {
+                let cell = tableView.dequeueReusableCell(withIdentifier: "IAPStatusCell", for: indexPath) as! IAPStatusCell
+                cell.configure(purchased: IAPManager.shared.adsRemoved, price: IAPManager.shared.localizedPrice)
+                return cell
+            }
+        #endif
         let cell = tableView.dequeueReusableCell(withIdentifier: "MenuCell", for: indexPath) as! MenuCell
-
         cell.menuItem = menuItems[indexPath.row]
         return cell
+    }
+
+    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        #if !targetEnvironment(macCatalyst)
+            if section == 0 {
+                return IAPManager.shared.adsRemoved ? "Pro Member".localized() : "Upgrade".localized()
+            }
+        #endif
+        return nil
     }
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
 
-        if indexPath.row == 0 {
+        #if !targetEnvironment(macCatalyst)
+            if indexPath.section == 0 {
+                handleRemoveAdsTap()
+                return
+            }
+        #endif
+
+        let row = indexPath.row
+
+        if row == 0 {
             navigationController?.pushViewController(CurrencyViewController(), animated: true)
         }
 
-        if indexPath.row == 1 {
+        if row == 1 {
             navigationController?.pushViewController(FeedbackViewController(), animated: true)
         }
 
-        if indexPath.row == 2 {
-            if let reviewURL = URL(string: "https://itunes.apple.com/app/id\(Constants.AppID.moneyTrackerAppID)?action=write-review"), UIApplication.shared.canOpenURL(reviewURL) {
+        if row == 2 {
+            if let reviewURL = URL(string: "https://itunes.apple.com/app/id\(Constants.AppID.moneyTrackerAppID)?action=write-review"),
+               UIApplication.shared.canOpenURL(reviewURL) {
                 UIApplication.shared.open(reviewURL, options: [:], completionHandler: nil)
             }
         }
 
-        if indexPath.row == 3 {
+        if row == 3 {
             let textToShare = "Money Tracker".localized()
-
             let image = UIImage(named: "appIcon_money_tracker")!
-
             if let myWebsite = URL(string: "http://itunes.apple.com/app/id\(Constants.appID)") {
                 let objectsToShare = [textToShare, myWebsite, image] as [Any]
                 let activityVC = UIActivityViewController(activityItems: objectsToShare, applicationActivities: nil)
-
-                if let popoverController = activityVC.popoverPresentationController {
-                    popoverController.sourceRect = CGRect(x: view.bounds.midX, y: view.bounds.midY, width: 0, height: 0)
-                    popoverController.sourceView = view
-                    popoverController.permittedArrowDirections = UIPopoverArrowDirection(rawValue: 0)
+                if let popover = activityVC.popoverPresentationController {
+                    popover.sourceRect = CGRect(x: view.bounds.midX, y: view.bounds.midY, width: 0, height: 0)
+                    popover.sourceView = view
+                    popover.permittedArrowDirections = UIPopoverArrowDirection(rawValue: 0)
                 }
-                present(activityVC, animated: true, completion: nil)
+                present(activityVC, animated: true)
             }
         }
 
         #if !targetEnvironment(macCatalyst)
-            if indexPath.row == 4 {
-                handleRemoveAdsTap()
-            }
-
-            if indexPath.row == 5 {
-                let alterController = UIAlertController(title: "Support this App".localized(), message: "\("Do you want to watch an advertisement to support this App".localized())?", preferredStyle: .alert)
-                let action1 = UIAlertAction(title: "Yes".localized(), style: .default) { [weak self] _ in
+            if row == 4 {
+                let alertController = UIAlertController(
+                    title: "Support this App".localized(),
+                    message: "\("Do you want to watch an advertisement to support this App".localized())?",
+                    preferredStyle: .alert)
+                alertController.addAction(UIAlertAction(title: "Yes".localized(), style: .default) { [weak self] _ in
                     guard let self = self else { return }
                     ProgressHUD.show("Loading the advertisement".localized())
                     GADRewardedAd.load(withAdUnitID: Constants.rewardAdUnitID, request: GADRequest()) { [weak self] ad, error in
@@ -170,18 +211,16 @@ extension MenuViewController: UITableViewDelegate, UITableViewDataSource {
                         })
                         self.rewardedAd = ad
                     }
-                }
-                let action2 = UIAlertAction(title: "Cancel".localized(), style: .cancel, handler: nil)
-                alterController.addAction(action1)
-                alterController.addAction(action2)
-                present(alterController, animated: true)
+                })
+                alertController.addAction(UIAlertAction(title: "Cancel".localized(), style: .cancel))
+                present(alertController, animated: true)
             }
 
-            if indexPath.row == 6 {
+            if row == 5 {
                 navigationController?.pushViewController(MoreAppsViewController(), animated: true)
             }
         #else
-            if indexPath.row == 4 {
+            if row == 4 {
                 navigationController?.pushViewController(MoreAppsViewController(), animated: true)
             }
         #endif
@@ -195,7 +234,7 @@ extension MenuViewController: UITableViewDelegate, UITableViewDataSource {
         func handleRemoveAdsTap() {
             if IAPManager.shared.adsRemoved {
                 let ac = UIAlertController(
-                    title: "Ads Removed".localized(),
+                    title: "Ad-Free Pro".localized(),
                     message: "You've already removed ads. Thank you for your support!".localized(),
                     preferredStyle: .alert)
                 ac.addAction(UIAlertAction(title: "OK".localized(), style: .cancel))
@@ -249,7 +288,6 @@ extension MenuViewController: UITableViewDelegate, UITableViewDataSource {
         }
 
         private func adsRemovedDidSucceed() {
-            // Remove the Settings banner from view.
             bannerView.removeFromSuperview()
             tableView.reloadData()
             let ac = UIAlertController(
@@ -272,9 +310,11 @@ extension MenuViewController: UITableViewDelegate, UITableViewDataSource {
     extension MenuViewController: GADFullScreenContentDelegate {
         func adDidDismissFullScreenContent(_ ad: GADFullScreenPresentingAd) {
             if userDidEarn {
-                let ac = UIAlertController(title: "\("Thanks for Your Support".localized())!", message: "\("We will constantly optimize and maintain our App and make sure users have the best experience".localized()).", preferredStyle: .alert)
-                let action1 = UIAlertAction(title: "Cancel".localized(), style: .cancel, handler: nil)
-                ac.addAction(action1)
+                let ac = UIAlertController(
+                    title: "\("Thanks for Your Support".localized())!",
+                    message: "\("We will constantly optimize and maintain our App and make sure users have the best experience".localized()).",
+                    preferredStyle: .alert)
+                ac.addAction(UIAlertAction(title: "Cancel".localized(), style: .cancel))
                 present(ac, animated: true)
             }
             userDidEarn = false

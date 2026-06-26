@@ -20,6 +20,10 @@ class LoanCalculatorViewController: UIViewController {
     private lazy var totalInterestValue = makeResultValue()
     private lazy var totalAmountValue = makeResultValue()
 
+    private lazy var shareButton = UIBarButtonItem(
+        image: UIImage(systemName: "square.and.arrow.up", withConfiguration: UIImage.SymbolConfiguration(weight: .bold)),
+        style: .plain, target: self, action: #selector(tapShare))
+
     private lazy var resultCard: UIView = {
         let v = UIView()
         v.backgroundColor = .secondarySystemBackground
@@ -52,6 +56,8 @@ class LoanCalculatorViewController: UIViewController {
         navigationItem.largeTitleDisplayMode = .never
         view.backgroundColor = .systemGroupedBackground
         hideKeyboardWhenTappedAround()
+        shareButton.isEnabled = false
+        navigationItem.rightBarButtonItem = shareButton
         setupViews()
     }
 
@@ -204,6 +210,7 @@ class LoanCalculatorViewController: UIViewController {
 
         totalAmountValue.textColor = .expenseRed
 
+        shareButton.isEnabled = true
         if resultCard.isHidden {
             resultCard.isHidden = false
             scrollView.layoutIfNeeded()
@@ -213,6 +220,20 @@ class LoanCalculatorViewController: UIViewController {
                 scrollView.setContentOffset(CGPoint(x: 0, y: offset), animated: true)
             }
         }
+    }
+
+    @objc private func tapShare() {
+        let text = """
+        \("Loan Calculator".localized())
+        \("Monthly Payment".localized()): \(monthlyPaymentValue.text ?? "")
+        \("Total Interest".localized()): \(totalInterestValue.text ?? "")
+        \("Total Payment".localized()): \(totalAmountValue.text ?? "")
+
+        via Money Tracker
+        """
+        let avc = UIActivityViewController(activityItems: [text], applicationActivities: nil)
+        if let popover = avc.popoverPresentationController { popover.barButtonItem = shareButton }
+        present(avc, animated: true)
     }
 
     private func showInputError() {

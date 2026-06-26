@@ -23,6 +23,10 @@ class BudgetCalculatorViewController: UIViewController {
     private lazy var wantsAmountLabel = makeResultAmount(color: .systemPurple)
     private lazy var savingsAmountLabel = makeResultAmount(color: .systemGreen)
 
+    private lazy var shareButton = UIBarButtonItem(
+        image: UIImage(systemName: "square.and.arrow.up", withConfiguration: UIImage.SymbolConfiguration(weight: .bold)),
+        style: .plain, target: self, action: #selector(tapShare))
+
     private lazy var resultStack: UIStackView = {
         let sv = UIStackView()
         sv.axis = .vertical
@@ -54,6 +58,8 @@ class BudgetCalculatorViewController: UIViewController {
         navigationItem.largeTitleDisplayMode = .never
         view.backgroundColor = .systemGroupedBackground
         hideKeyboardWhenTappedAround()
+        shareButton.isEnabled = false
+        navigationItem.rightBarButtonItem = shareButton
         setupViews()
     }
 
@@ -188,6 +194,7 @@ class BudgetCalculatorViewController: UIViewController {
         wantsAmountLabel.text = convertDoubleToCurrency(amount: income * 0.30)
         savingsAmountLabel.text = convertDoubleToCurrency(amount: income * 0.20)
 
+        shareButton.isEnabled = true
         if resultStack.isHidden {
             resultStack.isHidden = false
             scrollView.layoutIfNeeded()
@@ -197,6 +204,20 @@ class BudgetCalculatorViewController: UIViewController {
                 scrollView.setContentOffset(CGPoint(x: 0, y: offset), animated: true)
             }
         }
+    }
+
+    @objc private func tapShare() {
+        let text = """
+        \("Budget Planner".localized()) (50/30/20)
+        \("Needs (50%)".localized()): \(needsAmountLabel.text ?? "")
+        \("Wants (30%)".localized()): \(wantsAmountLabel.text ?? "")
+        \("Savings & Debt (20%)".localized()): \(savingsAmountLabel.text ?? "")
+
+        via Money Tracker
+        """
+        let avc = UIActivityViewController(activityItems: [text], applicationActivities: nil)
+        if let popover = avc.popoverPresentationController { popover.barButtonItem = shareButton }
+        present(avc, animated: true)
     }
 
     // MARK: - Helpers

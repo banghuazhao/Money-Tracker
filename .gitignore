@@ -8,3 +8,7 @@ xcuserdata/
 # AdMob production config — contains real release ad unit IDs, keep out of git.
 # Copy Config/Release.xcconfig.example to Config/Release.xcconfig and fill in.
 Release.xcconfig
+
+# Fastlane secrets — API key IDs, Apple ID, team ID
+fastlane/.env
+fastlane/.env.*
