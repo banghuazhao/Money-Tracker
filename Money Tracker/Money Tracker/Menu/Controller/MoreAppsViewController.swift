@@ -1,9 +1,6 @@
 //
 //  MoreAppsViewController.swift
-//  Financial Statements Go
-//
-//  Created by Banghua Zhao on 1/1/21.
-//  Copyright © 2021 Banghua Zhao. All rights reserved.
+//  Money Tracker
 //
 
 #if !targetEnvironment(macCatalyst)
@@ -22,71 +19,86 @@ class MoreAppsViewController: UIViewController {
             bannerView.load(GADRequest())
             return bannerView
         }()
-
-        let appItems = [
-            AppItem(
-                title: "Countdown Days".localized(),
-                detail: "Events, Anniversary & Big Days".localized(),
-                icon: UIImage(named: "appIcon_countdown_days"),
-                url: URL(string: "http://itunes.apple.com/app/id\(Constants.AppID.countdownDaysAppID)")),
-            AppItem(
-                title: "Finance Go".localized(),
-                detail: "Financial Reports & Investing".localized(),
-                icon: UIImage(named: "appIcon_finance_go"),
-                url: URL(string: "http://itunes.apple.com/app/id\(Constants.AppID.financeGoAppID)")),
-            AppItem(
-                title: "Financial Ratios Go".localized(),
-                detail: "Finance, Ratios, Investing".localized(),
-                icon: UIImage(named: "appIcon_financial_ratios_go"),
-                url: URL(string: "http://itunes.apple.com/app/id\(Constants.AppID.financialRatiosGoAppID)")),
-            AppItem(
-                title: "More Apps".localized(),
-                detail: "Check out more Apps made by us".localized(),
-                icon: UIImage(named: "appIcon_appStore"),
-                url: URL(string: "https://apps.apple.com/developer/banghua-zhao/id1288052561#see-all")),
-        ]
-    #else
-        let appItems = [
-            AppItem(
-                title: "Ratios Go (macOS App)".localized(),
-                detail: "Finance, Ratios, Investing".localized(),
-                icon: UIImage(named: "appIcon_financial_ratios_go"),
-                url: URL(string: "http://itunes.apple.com/app/id\(Constants.AppID.finanicalRatiosGoMacOSAppID)")),
-            AppItem(
-                title: "Countdown Days".localized(),
-                detail: "Events, Anniversary & Big Days".localized(),
-                icon: UIImage(named: "appIcon_countdown_days"),
-                url: URL(string: "http://itunes.apple.com/app/id\(Constants.AppID.countdownDaysAppID)")),
-            AppItem(
-                title: "Finance Go".localized(),
-                detail: "Financial Reports & Investing".localized(),
-                icon: UIImage(named: "appIcon_finance_go"),
-                url: URL(string: "http://itunes.apple.com/app/id\(Constants.AppID.financeGoAppID)")),
-            AppItem(
-                title: "Financial Ratios Go".localized(),
-                detail: "Finance, Ratios, Investing".localized(),
-                icon: UIImage(named: "appIcon_financial_ratios_go"),
-                url: URL(string: "http://itunes.apple.com/app/id\(Constants.AppID.financialRatiosGoAppID)")),
-            AppItem(
-                title: "More Apps".localized(),
-                detail: "Check out more Apps made by us".localized(),
-                icon: UIImage(named: "appIcon_appStore"),
-                url: URL(string: "https://apps.apple.com/developer/banghua-zhao/id1288052561#see-all")),
-        ]
-
     #endif
+
+    let appItems = [
+        AppItem(
+            title: "SwiftSum".localized(),
+            detail: "Math Solver & Calculator App".localized(),
+            icon: UIImage(named: "appIcon_swiftsum"),
+            url: URL(string: "http://itunes.apple.com/app/id\(Constants.AppID.swiftSumAppID)")),
+        AppItem(
+            title: "Shows".localized(),
+            detail: "Movie, TV Show Tracker".localized(),
+            icon: UIImage(named: "appIcon_shows"),
+            url: URL(string: "http://itunes.apple.com/app/id\(Constants.AppID.showsAppID)")),
+        AppItem(
+            title: "Trip Mark".localized(),
+            detail: "Travel Journal & Trip Planner".localized(),
+            icon: UIImage(named: "appIcon_small"),
+            url: URL(string: "http://itunes.apple.com/app/id\(Constants.AppID.tripMarkAppID)")),
+        AppItem(
+            title: "Falling Block Puzzle".localized(),
+            detail: "Retro".localized(),
+            icon: UIImage(named: "appIcon_falling_block_puzzle"),
+            url: URL(string: "http://itunes.apple.com/app/id\(Constants.AppID.fallingBlockPuzzleAppID)")),
+        AppItem(
+            title: "CalmCanvas".localized(),
+            detail: "Meditation, Relaxing".localized(),
+            icon: UIImage(named: "appIcon_relaxing_up"),
+            url: URL(string: "http://itunes.apple.com/app/id\(Constants.AppID.calmCanvasAppID)")),
+        AppItem(
+            title: "We Play Piano".localized(),
+            detail: "Piano Keyboard".localized(),
+            icon: UIImage(named: "appIcon_we_play_piano"),
+            url: URL(string: "http://itunes.apple.com/app/id\(Constants.AppID.wePlayPianoAppID)")),
+        AppItem(
+            title: "ClassicReads".localized(),
+            detail: "Novels & Fiction".localized(),
+            icon: UIImage(named: "appIcon_novels_Hub"),
+            url: URL(string: "http://itunes.apple.com/app/id\(Constants.AppID.novelsHubAppID)")),
+        AppItem(
+            title: "World Weather Live".localized(),
+            detail: "All Cities".localized(),
+            icon: UIImage(named: "appIcon_world_weather_live"),
+            url: URL(string: "http://itunes.apple.com/app/id\(Constants.AppID.worldWeatherLiveAppID)")),
+        AppItem(
+            title: "Minesweeper Z".localized(),
+            detail: "Minesweeper App".localized(),
+            icon: UIImage(named: "appIcon_minesweeper"),
+            url: URL(string: "http://itunes.apple.com/app/id\(Constants.AppID.minesweeperZAppID)")),
+        AppItem(
+            title: "Sudoku Lover".localized(),
+            detail: "Sudoku Puzzles".localized(),
+            icon: UIImage(named: "appIcon_sudoku_lover"),
+            url: URL(string: "http://itunes.apple.com/app/id\(Constants.AppID.sudokuLoverAppID)")),
+        AppItem(
+            title: "BMI Diary".localized(),
+            detail: "Fitness, Weight Loss & Health".localized(),
+            icon: UIImage(named: "appIcon_bmiDiary"),
+            url: URL(string: "http://itunes.apple.com/app/id\(Constants.AppID.BMIDiaryAppID)")),
+        AppItem(
+            title: "Countdown Days".localized(),
+            detail: "Events, Anniversary & Big Days".localized(),
+            icon: UIImage(named: "appIcon_countdown_days"),
+            url: URL(string: "http://itunes.apple.com/app/id\(Constants.AppID.countdownDaysAppID)")),
+        AppItem(
+            title: "More Apps".localized(),
+            detail: "Check out more Apps made by us".localized(),
+            icon: UIImage(named: "appIcon_appStore"),
+            url: URL(string: "https://apps.apple.com/us/developer/%E7%92%90%E7%92%98-%E6%9D%A8/id1599035519")),
+    ]
 
     lazy var tableView = UITableView().then { tv in
         tv.delegate = self
         tv.dataSource = self
         tv.register(AppItemCell.self, forCellReuseIdentifier: "AppItemCell")
         tv.separatorInset = UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 20)
-        tv.tableFooterView = UIView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: 80))
+        tv.tableFooterView = UIView(frame: CGRect(x: 0, y: 0, width: 0, height: 80))
     }
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
         title = "More Apps".localized()
 
         view.addSubview(tableView)
@@ -106,19 +118,13 @@ class MoreAppsViewController: UIViewController {
     }
 }
 
-extension MoreAppsViewController {
-    @objc func backToHome() {
-        dismiss(animated: true, completion: nil)
-    }
-}
-
 extension MoreAppsViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return appItems.count
+        appItems.count
     }
 
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 50 + 16 + 16
+        82
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {

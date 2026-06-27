@@ -14,11 +14,19 @@ struct Constants {
     static let facebookPageID = "104357371640600"
 
     struct AppID {
-        static let financeGoAppID = "1519476344"
-        static let finanicalRatiosGoMacOSAppID = "1486184864"
-        static let financialRatiosGoAppID = "1481582303"
         static let countdownDaysAppID = "1525084657"
         static let moneyTrackerAppID = "1534244892"
+        static let tripMarkAppID = "6464474080"
+        static let BMIDiaryAppID = "1521281509"
+        static let novelsHubAppID = "1528820845"
+        static let swiftSumAppID = "1610829871"
+        static let showsAppID = "1624910011"
+        static let fallingBlockPuzzleAppID = "1609440799"
+        static let calmCanvasAppID = "1618712178"
+        static let wePlayPianoAppID = "1625018611"
+        static let worldWeatherLiveAppID = "1612773646"
+        static let minesweeperZAppID = "1621899572"
+        static let sudokuLoverAppID = "1620749798"
     }
 
     // Ad unit IDs injected per build configuration via xcconfig (Info.plist):
