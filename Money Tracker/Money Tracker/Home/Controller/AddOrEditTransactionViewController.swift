@@ -631,6 +631,7 @@ extension AddOrEditTransactionViewController: CategoryListViewControllerDelegate
     func categoryList(_ vc: CategoryListViewController, didSelect name: String) {
         selectedCategory = name
         updateCategoryUI(name: name)
+        saveButton.isEnabled = enteredAmount != 0
     }
 }
 
