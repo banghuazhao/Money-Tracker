@@ -96,6 +96,16 @@ class MenuViewController: UIViewController, MFMailComposeViewControllerDelegate 
         print("MenuController deinit")
     }
 
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        #if !targetEnvironment(macCatalyst)
+            tableView.reloadSections(IndexSet(integer: 0), with: .none)
+            if IAPManager.shared.adsRemoved {
+                bannerView.removeFromSuperview()
+            }
+        #endif
+    }
+
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         #if !targetEnvironment(macCatalyst)
@@ -155,7 +165,9 @@ extension MenuViewController: UITableViewDelegate, UITableViewDataSource {
 
         #if !targetEnvironment(macCatalyst)
             if indexPath.section == 0 {
-                handleRemoveAdsTap()
+                if !IAPManager.shared.adsRemoved {
+                    navigationController?.pushViewController(RemoveAdsViewController(), animated: true)
+                }
                 return
             }
         #endif
@@ -239,84 +251,7 @@ extension MenuViewController: UITableViewDelegate, UITableViewDataSource {
     }
 }
 
-// MARK: - Remove Ads IAP
-
-#if !targetEnvironment(macCatalyst)
-    extension MenuViewController {
-        func handleRemoveAdsTap() {
-            if IAPManager.shared.adsRemoved {
-                let ac = UIAlertController(
-                    title: "Ad-Free Pro".localized(),
-                    message: "You've already removed ads. Thank you for your support!".localized(),
-                    preferredStyle: .alert)
-                ac.addAction(UIAlertAction(title: "OK".localized(), style: .cancel))
-                present(ac, animated: true)
-                return
-            }
-
-            let priceStr = IAPManager.shared.localizedPrice.map { " (\($0))" } ?? ""
-            let ac = UIAlertController(
-                title: "Remove Ads Forever".localized(),
-                message: "Enjoy the app completely ad-free with a one-time purchase.".localized(),
-                preferredStyle: .alert)
-            ac.addAction(UIAlertAction(title: ("Purchase".localized() + priceStr), style: .default) { [weak self] _ in
-                self?.startPurchase()
-            })
-            ac.addAction(UIAlertAction(title: "Restore Purchase".localized(), style: .default) { [weak self] _ in
-                self?.startRestore()
-            })
-            ac.addAction(UIAlertAction(title: "Cancel".localized(), style: .cancel))
-            present(ac, animated: true)
-        }
-
-        private func startPurchase() {
-            ProgressHUD.show("Processing...".localized())
-            IAPManager.shared.onPurchaseComplete = { [weak self] in
-                ProgressHUD.dismiss()
-                self?.adsRemovedDidSucceed()
-            }
-            IAPManager.shared.onFailed = { [weak self] message in
-                ProgressHUD.dismiss()
-                self?.showIAPError(message)
-            }
-            IAPManager.shared.purchaseRemoveAds()
-        }
-
-        private func startRestore() {
-            ProgressHUD.show("Restoring...".localized())
-            IAPManager.shared.onRestoreComplete = { [weak self] in
-                ProgressHUD.dismiss()
-                self?.adsRemovedDidSucceed()
-            }
-            IAPManager.shared.onRestoreEmpty = { [weak self] in
-                ProgressHUD.dismiss()
-                self?.showIAPError("No previous purchase found for this Apple ID.".localized())
-            }
-            IAPManager.shared.onFailed = { [weak self] message in
-                ProgressHUD.dismiss()
-                self?.showIAPError(message)
-            }
-            IAPManager.shared.restorePurchases()
-        }
-
-        private func adsRemovedDidSucceed() {
-            bannerView.removeFromSuperview()
-            tableView.reloadData()
-            let ac = UIAlertController(
-                title: "Ads Removed!".localized(),
-                message: "Thank you! All ads have been removed.".localized(),
-                preferredStyle: .alert)
-            ac.addAction(UIAlertAction(title: "OK".localized(), style: .cancel))
-            present(ac, animated: true)
-        }
-
-        private func showIAPError(_ message: String) {
-            let ac = UIAlertController(title: "Purchase Failed".localized(), message: message, preferredStyle: .alert)
-            ac.addAction(UIAlertAction(title: "OK".localized(), style: .cancel))
-            present(ac, animated: true)
-        }
-    }
-#endif
+// MARK: - Remove Ads (handled by RemoveAdsViewController)
 
 #if !targetEnvironment(macCatalyst)
     extension MenuViewController: GADFullScreenContentDelegate {
